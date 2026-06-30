@@ -57,7 +57,7 @@ async function handleSubscribe(event) {
     status.textContent = "";
 
     try {
-        const res = await fetch("https://www.rumicat.com/api/subscribe/partijgedrag", {
+        const res = await fetch("https://www.rumicat.com/api/subscribe/partijgedragbe", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email }),
