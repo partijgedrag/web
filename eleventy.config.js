@@ -133,14 +133,14 @@ export default async function (eleventyConfig) {
 
   // Collections.
   eleventyConfig.addCollection("members", function (collectionApi) {
-    return [];
+    // return [];
     return collectionApi.items[0].data.members.members.map((member) => ({
       ...member,
     }));
   });
 
   eleventyConfig.addCollection("votes", function (collectionApi) {
-    return [];
+    // return [];
     const votes = collectionApi.items[0].data.votes.votes.map((vote) => ({
       ...vote,
     }));
@@ -152,12 +152,12 @@ export default async function (eleventyConfig) {
   });
 
   eleventyConfig.addCollection("commissions", function (collectionApi) {
-    return [];
+    // return [];
     return collectionApi.items[0].data.commissions;
   });
 
   eleventyConfig.addCollection("fractions", function (collectionApi) {
-    return [];
+    // return [];
     return collectionApi.items[0].data.fractions;
   });
 
@@ -191,21 +191,21 @@ export default async function (eleventyConfig) {
   });
 
   eleventyConfig.addCollection("commissionMeetings", function (collectionApi) {
-    return [];
+    // return [];
     return collectionApi.items[0].data.meetings.meetings
       .filter((meeting) => meeting.type === "commission")
       .map((meeting) => ({ ...meeting }));
   });
 
   eleventyConfig.addCollection("dossiers", function (collectionApi) {
-    return [];
+    // return [];
     return collectionApi.items[0].data.dossiers.dossiers.map((dossier) => ({
       ...dossier,
     }));
   });
 
   eleventyConfig.addCollection("mainTopics", function (collectionApi) {
-    return [];
+    // return [];
     const topicsData = collectionApi.items[0].data.topics;
 
     return Object.keys(topicsData).map((mainTopicKey) => {
