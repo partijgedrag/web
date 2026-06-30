@@ -26,7 +26,7 @@ jobs:
         with:
           repository: partijgedrag/data
           path: data
-          token: ${{ secrets.CORE_REPO_TOKEN }}
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
 
       - name: 🔗 Link into src
         run: |
