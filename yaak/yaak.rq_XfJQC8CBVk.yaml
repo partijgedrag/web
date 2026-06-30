@@ -1,0 +1,41 @@
+type: http_request
+model: http_request
+id: rq_XfJQC8CBVk
+createdAt: 2026-06-10T08:36:34.074555
+updatedAt: 2026-06-10T08:37:35.140304
+workspaceId: wk_9ZA8qTzfD6
+folderId: null
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "message": "MALICIOUS TEST"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: ZI4TPIrYEv
+method: POST
+name: ''
+sortPriority: -1781080594073.0
+url: https://partijgedrag.be/api/feedback
+urlParameters: []
+settingSendCookies:
+  enabled: false
+  value: true
+settingStoreCookies:
+  enabled: false
+  value: true
+settingValidateCertificates:
+  enabled: false
+  value: true
+settingFollowRedirects:
+  enabled: false
+  value: true
+settingRequestTimeout:
+  enabled: false
+  value: 0

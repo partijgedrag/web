@@ -1,0 +1,52 @@
+<section id="header">
+    <nav class="center-grid primary">
+        <div class="center-grid-content">
+            <div class="flex-row space-between width:100%">
+                <!-- LOGO -->
+                <div class="bold flex-row align-items:center gap-small margin:0" id="logo">
+                    <a href="/" style="text-decoration: none; border-bottom: 0;">Partijgedrag</a>
+                </div>
+
+                <div class="flex-row align-items:center">
+                    <div class="flex-row gap align-items:center">
+                        <!-- BLOG LINK -->
+                        <section id="blog" class="desktop-only">
+                            <a href="/blog/" class="nav-link">
+                                <span class="capitalize" data-i18n="blog">blog</span>
+                            </a>
+                        </section>
+
+                        <!-- NEWSLETTER LINK -->
+                        <section id="newsletter" class="desktop-only">
+                            <a href="/newsletter/" class="nav-link">
+                                <span class="capitalize" data-i18n="newsletter">newsletter</span>
+                            </a>
+                        </section>
+
+                        <!-- FEEDBACK BUTTON -->
+                        <section id="feedback" class="desktop-only">
+                            <a href="/feedback/" class="button secondary">
+                                <span class="flex-row align-items:center margin:0">{% icon "lucide:message-square-text", { "stroke": "var(--color-on-secondary)" } %}</span>
+                                <span class="capitalize" data-i18n="feedback">feedback</span>
+                            </a>
+                        </section>
+
+                        <!-- SEARCH BOX -->
+                        <section id="search">
+                            <pagefind-config instance="site-search" base-url="/" excerpt-length="20"></pagefind-config>
+                            <pagefind-modal-trigger instance="site-search" placeholder="Zoek"></pagefind-modal-trigger>
+                            <pagefind-modal instance="site-search" show-sub-results></pagefind-modal>
+                        </section>
+
+                        <!-- LANGUAGE DROPDOWN -->
+                        <select class="button surface lang-select" aria-label="Language">
+                            <option value="nl">NL</option>
+                            <option value="fr">FR</option>
+                            <option value="en">EN</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</section>

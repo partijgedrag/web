@@ -1,0 +1,15 @@
+---
+layout: layouts/base.njk
+sitemap: true
+templateEngineOverride: njk,md
+---
+
+{% include "components/page-header.njk" %}
+
+<main class="center-grid">
+    <div class="center-grid-content">
+        <article>
+            {{ content | safe }}
+        </article>
+    </div>
+</main>

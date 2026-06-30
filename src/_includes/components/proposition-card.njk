@@ -1,0 +1,119 @@
+{%- from "./vote-card-proposition.njk" import voteCardProposition -%}
+
+{% macro propositionCard(params) %}
+
+<div class="card">
+    <!-- TITLE CARD -->
+    <div id='proposition-{{ params.proposition.proposition_id }}' class="card-section">
+        <!-- PAGEFIND -->
+        <h3 id="proposition-{{ params.proposition.proposition_id }}" style="position:absolute; visibility:hidden; pointer-events:none;">
+            Voorstel: {{ params.proposition.title_nl }}
+            {% if params.proposition.dossier_id and params.proposition.document_id %}
+            ({{ params.proposition.dossier_id }}/{{ params.proposition.document_id }})
+            {% endif %}
+        </h3>
+
+        <!-- DOCUMENT TYPE + STATUS -->
+        <div class="flex row">
+            {% if params.proposition.document_type %}
+            <div class="category capitalize-first">
+                <span data-i18n="{{ params.proposition.document_type | lowercase }}"></span>
+            </div>
+            {% if params.proposition.status == "Aangenomen" %}
+            <div data-i18n="passed" class="category on-positive"></div>
+            {% elseif params.proposition.status == "Verworpen" %}
+            <div data-i18n="failed" class="category on-negative">}</div>
+            {% elseif params.proposition.status == "ZonderVoorwerp" %}
+            <div data-i18n="withoutSubject" class="category on-neutral"></div>
+            {% endif %}
+            {% endif %}
+        </div>
+
+        <!-- BODY -->
+        <div class="padding flex-col gap">
+            <!-- TITLE -->
+            <p class="bold">
+                <span class="{% if params.proposition.title_summary_nl %}hide-when-summary{% endif %}">{{ params.proposition.title_nl }}</span>
+                {% if params.proposition.title_summary_nl %}
+                <span class="flex-row gap align-items:center summarized highlight show-when-summary">{{ params.proposition.title_summary_nl }} <span class="tooltip" style="height: 16px;">{% lucide "bot-message-square" %}<span class="tooltip-text" data-i18n="topicSummaryExplanation">summaryExplanation</span></span></span>
+                {% endif %}
+                {% if params.proposition.dossier_id and params.proposition.document_id %}
+                ({{ params.proposition.dossier_id }}/{{ params.proposition.document_id }})
+                {% endif %}
+            </p>
+
+            <!-- AUTHORS -->
+            {% if params.hideAuthors !== "true" %}
+            {% if (params.proposition.authors | length) > 1 %}
+                <div class="flex-col">
+                    <p>Ingediend door</p>
+                    <p>
+                        {% for author in params.proposition.authors %}
+                        {% set fraction = author.fraction | lower %}
+                        {% set primaryColor = params.fractionColors[fraction].primary or '#95a5a6' %}
+                        {% set secondaryColor = params.fractionColors[fraction].secondary or '#95a5a6' %}
+                        <a href="/fractions/{{ author.fraction | slugify }}/" class="badge bold" style="--bg: {{ secondaryColor }}; color: {{ primaryColor }}; background-color: {{ secondaryColor }};">{{ author.fraction | normaliseFraction }}</a>
+                        <span><a href="/members/{{ author.name | slugify }}/">{{ author.name }}</a></span><br>
+                        {% endfor %}
+                    </p>
+                </div>
+            {% elseif (params.proposition.authors | length) > 0 %}
+                <div class="flex-col">
+                    <p>Ingediend door</p>
+                    <p>
+                        {% set author = params.proposition.authors[0] %}
+                        {% set fraction = author.fraction | lower %}
+                        {% set primaryColor = params.fractionColors[fraction].primary or '#95a5a6' %}
+                        {% set secondaryColor = params.fractionColors[fraction].secondary or '#95a5a6' %}
+                        {% if author.name == "government" %}
+                        <span><a href="/government/" data-i18n="government">overheid</a></span><br>
+                        {% else %}
+                        <a href="/fractions/{{ author.fraction | slugify }}/" class="badge bold" style="--bg: {{ secondaryColor }}; color: {{ primaryColor }}; background-color: {{ secondaryColor }};">{{ author.fraction | normaliseFraction }}</a>
+                        <span><a href="/members/{{ author.name | slugify }}/">{{ author.name }}</a></span><br>
+                        {% endif %}
+                    </p>
+                </div>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- VOTES TOGGLE -->
+    {% if params.proposition.votes and params.proposition.votes.length > 0 %}
+    <div class="card-section padded">
+        <div class="flex-row gap">
+            <p>{{ params.proposition.votes.length }} stemming{% if (params.proposition.votes.length | int) > 1 %}en{% endif %}</p>
+            <button
+                class="show-more"
+                data-target="votes-{{ params.proposition.proposition_id }}">
+                {% lucide "chevron-down" %}
+            </button>
+        </div>
+    </div>
+
+    <!-- VOTES CARDS -->
+    <div  id="votes-{{ params.proposition.proposition_id }}" class="card-section hidden votes-block">
+        {% for vote in params.proposition.votes %}
+        <div class="card-section">
+            {{ voteCardProposition({ proposition: params.proposition, vote: vote }) }}
+        </div>
+
+        <!-- VOTE LINK -->
+        <a href="/sessions/{{ vote.session_id }}/meetings/P{{ vote.meeting_id }}/votes/{{ vote.vote_id }}/" class="flex-row justify-content:space-between card-section padded">
+            <p>Bekijk stemmingsdetails</p>
+            {% lucide "chevron-right" %}
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- DOSSIER LINK -->
+    {% if params.proposition.dossier_id %}
+    <a href="/sessions/{{ params.proposition.session_id }}/dossiers/{{ params.proposition.dossier_id }}/" class="flex-row justify-content:space-between card-section padded">
+        <p>Bekijk dossier {{ params.proposition.dossier_id }}</p>
+        {% lucide "chevron-right" %}
+    </a>
+    {% endif %}
+</div>
+
+{% endmacro %}

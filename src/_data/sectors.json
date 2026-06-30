@@ -1,0 +1,74 @@
+{
+  "Gezondheid & Farmacie": {
+    "name": "Gezondheid & Farmacie",
+    "icon": "💊"
+  },
+  "Chemie & Energie": {
+    "name": "Chemie & Energie",
+    "icon": "\uD83E\uDDEA"
+  },
+  "Milieu, Duurzaamheid en Landbouw": {
+    "name": "Milieu, Duurzaamheid en Landbouw",
+    "icon": "🌱"
+  },
+  "Voeding & Dranken": {
+    "name": "Voeding & Dranken",
+    "icon": "🍽️"
+  },
+  "Technologie & Digitale Sector": {
+    "name": "Technologie & Digitale Sector",
+    "icon": "💻"
+  },
+  "Transport, Logistiek & Mobiliteit": {
+    "name": "Transport, Logistiek & Mobiliteit",
+    "icon": "🚚"
+  },
+  "Financiële Diensten": {
+    "name": "Financiële Diensten",
+    "icon": "\uD83D\uDCB0️"
+  },
+  "Juridische Diensten": {
+    "name": "Juridische Diensten",
+    "icon": "⚖️"
+  },
+  "Bouw, Vastgoed & Infrastructuur": {
+    "name": "Bouw, Vastgoed & Infrastructuur",
+    "icon": "🏗️"
+  },
+  "Media, Communicatie & Public Affairs": {
+    "name": "Media, Communicatie & Public Affairs",
+    "icon": "🗞️"
+  },
+  "NGOs, Internationale Solidariteit & Mensenrechten": {
+    "name": "NGO’s, Internationale Solidariteit & Mensenrechten",
+    "icon": "🌍"
+  },
+  "Onderwijs, Opleiding & Kennisinstellingen": {
+    "name": "Onderwijs, Opleiding & Kennisinstellingen",
+    "icon": "🎓"
+  },
+  "Detailhandel, Diensten & KMO’s": {
+    "name": "Detailhandel, Diensten & KMO’s",
+    "icon": "🏪"
+  },
+  "Veiligheid & Beveiliging": {
+    "name": "Veiligheid & Beveiliging",
+    "icon": "🛡️"
+  },
+  "Sociale Economie & Werk": {
+    "name": "Sociale Economie & Werk",
+    "icon": "👥"
+  },
+  "Kunst, Cultuur & Religie": {
+    "name": "Kunst, Cultuur & Religie",
+    "icon": "🎨"
+  },
+  "Kansspelen & Entertainment": {
+    "name": "Kansspelen & Entertainment",
+    "icon": "🎰"
+  },
+  "Andere": {
+    "name": "Andere",
+    "icon": "❓"
+  }
+}

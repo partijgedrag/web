@@ -1,0 +1,68 @@
+<!-- COMPONENTS -->
+{%- from "components/plenary-news-item.njk" import plenaryNewsItem -%}
+
+{% set plenaries = meetings.meetings | activePlenaries %}
+{% set plenary = plenaries[0] %}
+{% set plenary2 = plenaries[1] %}
+{% set commission = (meetings.meetings | filter("type", "commission"))[0] %}
+
+{% set attendance = plenary.attendance %}
+{% set attendance2 = plenary2.attendance %}
+
+<h2 data-i18n="newsTitle">Nieuws uit De Kamer</h2>
+<p data-i18n="newsSubtitle">Bekijk recente plenaire vergaderingen en commissievergaderingen.</p>
+
+<!-- NEWS CARDS -->
+<div class="swipeable-row">
+
+    {{ plenaryNewsItem({ meeting: plenary, sessionId: 56 }) }}
+    {{ plenaryNewsItem({ meeting: plenary2, sessionId: 56 }) }}
+
+   <!-- COMMISSION NEWS ITEM -->
+    <div class="swipeable-item card" style="height: fit-content;">
+        <div class="card-section">
+            <div class="category align-items:center flex-row">
+                <span>Nieuwe commissievergadering op {{ (commission.date) | date }}</span>
+            </div>
+            <div class="padding-tight">
+                {% set ctype = commission.commission_type | default('', true) %}
+                {% set c = commissions[ctype] or {} %}
+                <p>{{ c.name or ctype }}</p>
+                <p>Voorgezeten door <a href="/members/{{ commission.chairs[0].name | slugify }}/">{{
+                    commission.chairs[0].name }}</a>
+                </p>
+            </div>
+        </div>
+        <a href="/sessions/56/meetings/C{{ commission.meeting_id }}/"
+           class="card-section padded flex space-between align-center">
+            <p data-i18n="seeMeetingDetails">seeMeetingDetails</p>
+            {% lucide "chevron-right" %}
+        </a>
+    </div>
+</div>
+
+<div class="swipe-indicator">
+    <span class="dot neutral active"></span>
+    <span class="dot neutral"></span>
+    <span class="dot neutral"></span>
+</div>
+
+<script>
+    const row = document.querySelector('.swipeable-row');
+    const dots = document.querySelectorAll('.dot');
+    const items = document.querySelectorAll('.swipeable-item');
+    row.addEventListener('scroll', () => {
+        let index = 0;
+        let minDiff = Infinity;
+
+        items.forEach((item, i) => {
+            const diff = Math.abs(item.getBoundingClientRect().left - row.getBoundingClientRect().left);
+            if (diff < minDiff) {
+                minDiff = diff;
+                index = i;
+            }
+        });
+        dots.forEach(dot => dot.classList.remove('active'));
+        if (dots[index]) dots[index].classList.add('active');
+    });
+</script>

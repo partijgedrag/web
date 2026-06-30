@@ -1,0 +1,82 @@
+<section id="calendar">
+    <h2 data-i18n="calendarTitle">Kalender</h2>
+    <p data-i18n="calendarSubtitle">Een overzicht van wanneer de leden van de kamer samen zijn gekomen in 2026 tijdens plenaire -of commissievergaderingen.</p>
+
+    <div>
+        <div id="calendars">
+            <div class="calendar">
+                <ul class="months">
+                    <li>jan</li>
+                    <li>feb</li>
+                    <li>mrt</li>
+                    <li>apr</li>
+                    <li>mei</li>
+                    <li>jun</li>
+                    <li>jul</li>
+                    <li>aug</li>
+                    <li>sep</li>
+                    <li>oct</li>
+                    <li>nov</li>
+                    <li>dec</li>
+                </ul>
+                <ul class="days">
+                    <li>ma</li>
+                    <li>di</li>
+                    <li>wo</li>
+                    <li>do</li>
+                    <li>vr</li>
+                    <li>za</li>
+                    <li>zo</li>
+                </ul>
+
+                <ul class="squares">
+                    {% for i in range(0, 3) %}
+                        <li class="empty"></li>
+                    {% endfor %}
+
+                    {% for day in range(0, 365) %}
+                    {% set cGroup = meetings.commissionsByDay[day] %}
+                    {% set mGroup = meetings.meetingsByDay[day] %}
+
+                        {% if cGroup %}
+                        <li class="commission"
+                            data-level="{{ cGroup | length }}"
+                            title='{{ cGroup | length }} commissievergaderingen op {{ cGroup[0].date | date("YYYY-MM-DD") }}'></li>
+                        {% elif mGroup %}
+                        <li class="meeting"
+                            data-level="{{ mGroup | length }}"
+                            title='{{ mGroup | length }} plenaire vergaderingen op {{ mGroup[0].date | date("YYYY-MM-DD") }}'></li>
+                        {% else %}
+                        <li data-level="0"></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- LEGEND -->
+            <div class="legend-row flex-row align-items:center"margin-top: 2rem;">
+                <span style="margin-right: 0.4rem;" data-i18n="less">minder</span>
+                <ul>
+                    <li></li>
+                    <li class="meeting" data-level="1"></li>
+                    <li class="meeting" data-level="2"></li>
+                    <li class="meeting" data-level="3"></li>
+                </ul>
+                <span style="margin-left: 0.4rem"><span data-i18n="more">meer</span> <span data-i18n="plenaryMeetings">plenaire vergaderingen</span></span>
+            </div>
+            <div class="legend-row flex-row align-items:center">
+                <span style="margin-right: 0.4rem;" data-i18n="less">minder</span>
+                <ul>
+                    <li></li>
+                    <li class="commission" data-level="1"></li>
+                    <li class="commission" data-level="2"></li>
+                    <li class="commission" data-level="3"></li>
+                </ul>
+                <span style="margin-left: 0.4rem"><span data-i18n="more">meer</span> <span data-i18n="commissionMeetings">commissievergaderingen</span></span>
+            </div>
+        </div>
+
+        <p data-i18n="calendarPlenaryExplanation">calendarPlenaryExplanation</p>
+        <p data-i18n="calendarCommissionExplanation">calendarCommissionExplanation</p>
+    </div>
+</section>

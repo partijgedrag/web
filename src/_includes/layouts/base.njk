@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="nl">
+    <!-- HEAD -->
+    <head>
+        {% include "head.njk" %}
+    </head>
+
+    <!-- BODY -->
+	<body>
+        <!-- NAVBAR -->
+        {% include "header.njk" %}
+
+        <!-- CONTENT -->
+		{{ content | safe }}
+
+        <!-- FOOTER -->
+        {% include "footer.njk" %}
+
+        <!-- SUMMARY MODE -->
+        {% include "summary-mode.njk" %}
+	</body>
+</html>

@@ -1,0 +1,212 @@
+{
+  "landsverdediging": {
+    "name": "Commissie Landsverdediging",
+    "secondary": "#ffe0e0",
+    "primary": "#d62728",
+    "icon": "🪖"
+  },
+  "justitie": {
+    "name": "Commissie Justitie",
+    "secondary": "#caeaff",
+    "primary": "#1f77b4",
+    "icon": "⚖️"
+  },
+  "buitenlandse betrekkingen": {
+    "name": "Commissie Buitenlandse Betrekkingen",
+    "secondary": "#e0f7ff",
+    "primary": "#17becf",
+    "icon": "🌐"
+  },
+  "financiën en begroting": {
+    "name": "Commissie Financiën en Begroting",
+    "secondary": "#fff0d0",
+    "primary": "#bcbd22",
+    "icon": "💰"
+  },
+  "sociale zaken, werk en pensioenen": {
+    "name": "Commissie Sociale Zaken, Werk en Pensioenen",
+    "secondary": "#f0e6ff",
+    "primary": "#9467bd",
+    "icon": "👥"
+  },
+  "grondwet en institutionele vernieuwing": {
+    "name": "Commissie Grondwet en Institutionele Vernieuwing",
+    "secondary": "#fef9e7",
+    "primary": "#ff7f0e",
+    "icon": "📜"
+  },
+  "binnenlandse zaken, veiligheid, migratie en bestuurszaken": {
+    "name": "Commissie Binnenlandse Zaken, Veiligheid, Migratie en Bestuurszaken",
+    "secondary": "#e8f5e9",
+    "primary": "#2ca02c",
+    "icon": "🏛️"
+  },
+  "economie, consumentenbescherming en digitalisering": {
+    "name": "Commissie Economie, Consumentenbescherming en Digitalisering",
+    "secondary": "#f3e5f5",
+    "primary": "#8e44ad",
+    "icon": "💻"
+  },
+  "mobiliteit, overheidsbedrijven en federale instellingen": {
+    "name": "Commissie Mobiliteit, Overheidsbedrijven en Federale Instellingen",
+    "secondary": "#e3f2fd",
+    "primary": "#1e88e5",
+    "icon": "🚆"
+  },
+  "gezondheid en gelijke kansen": {
+    "name": "Commissie Gezondheid en Gelijke Kansen",
+    "secondary": "#e8f5e9",
+    "primary": "#43a047",
+    "icon": "🏥"
+  },
+  "energie, leefmilieu en klimaat": {
+    "name": "Commissie Energie, Leefmilieu en Klimaat",
+    "secondary": "#f1f8e9",
+    "primary": "#388e3c",
+    "icon": "🌱"
+  },
+  "comptabiliteit": {
+    "name": "Commissie Comptabiliteit",
+    "secondary": "#f9f0e6",
+    "primary": "#d2691e",
+    "icon": "📊"
+  },
+  "naturalisaties": {
+    "name": "Commissie Naturalisaties",
+    "secondary": "#f0f8ff",
+    "primary": "#4682b4",
+    "icon": "📝"
+  },
+  "verzoekschriften": {
+    "name": "Commissie Verzoekschriften",
+    "secondary": "#fff5e6",
+    "primary": "#ff8c00",
+    "icon": "📄"
+  },
+  "vervolgingen": {
+    "name": "Commissie Vervolgingen",
+    "secondary": "#ffe6e6",
+    "primary": "#c00000",
+    "icon": "⚖️"
+  },
+  "reglement en hervorming van de parlementaire werkzaamheden": {
+    "name": "Commissie Reglement en Hervorming van de Parlementaire Werkzaamheden",
+    "secondary": "#f0f0f5",
+    "primary": "#4b0082",
+    "icon": "📜"
+  },
+  "controle betreffende de verkiezingsuitgaven en de boekhouding van de politieke partijen": {
+    "name": "Commissie Controle Verkiezingsuitgaven en Boekhouding Politieke Partijen",
+    "secondary": "#e6f0ff",
+    "primary": "#1f77b4",
+    "icon": "💶"
+  },
+  "vast comité p en i": {
+    "name": "Vast Comité P en I",
+    "secondary": "#f2f2f2",
+    "primary": "#808080",
+    "icon": "🏛️"
+  },
+  "parlementaire overlegcommissie": {
+    "name": "Parlementaire Overlegcommissie",
+    "secondary": "#f0fff0",
+    "primary": "#32cd32",
+    "icon": "🤝"
+  },
+  "legeraankopen en -verkopen": {
+    "name": "Commissie Legeraankopen en -verkopen",
+    "secondary": "#fff0f5",
+    "primary": "#ff1493",
+    "icon": "🪖"
+  },
+  "opvolging van de militaire missies": {
+    "name": "Commissie Opvolging van de Militaire Missies",
+    "secondary": "#f0f8ff",
+    "primary": "#4169e1",
+    "icon": "✈️"
+  },
+  "parlementaire onderzoekscommissie 'operatie kelk'": {
+    "name": "Parlementaire Onderzoekscommissie 'Operatie Kelk'",
+    "secondary": "#fffaf0",
+    "primary": "#ff4500",
+    "icon": "🔎"
+  },
+  "europese aangelegenheden": {
+    "name": "Commissie Europese Aangelegenheden",
+    "secondary": "#f0f8ff",
+    "primary": "#4682b4",
+    "icon": "🇪🇺"
+  },
+  "maatschappelijke emancipatie": {
+    "name": "Commissie Maatschappelijke Emancipatie",
+    "secondary": "#ffe6f0",
+    "primary": "#c71585",
+    "icon": "♀️"
+  },
+  "wetenschappelijke en technologische vraagstukken": {
+    "name": "Commissie Wetenschappelijke en Technologische Vraagstukken",
+    "secondary": "#f0f0f5",
+    "primary": "#8b0000",
+    "icon": "🔬"
+  },
+  "rekenhof": {
+    "name": "Commissie Rekenkhof",
+    "secondary": "#f0fff0",
+    "primary": "#006400",
+    "icon": "📊"
+  },
+  "nucleaire veiligheid": {
+    "name": "Commissie Nucleaire Veiligheid",
+    "secondary": "#fff5e6",
+    "primary": "#ff8c00",
+    "icon": "☢️"
+  },
+  "politieke partijen": {
+    "name": "Commissie Politieke Partijen",
+    "secondary": "#f5f5f5",
+    "primary": "#696969",
+    "icon": "🏛️"
+  },
+  "vermoeden van fraude bij het ocmw van anderlecht": {
+    "name": "Commissie Vermoeden van Fraude bij het OCMW van Anderlecht",
+    "secondary": "#ffe6e6",
+    "primary": "#b22222",
+    "icon": "⚠️"
+  },
+  "benelux interparlementaire assemblee": {
+    "name": "Benelux Interparlementaire Assemblee",
+    "secondary": "#e6f0ff",
+    "primary": "#1f77b4",
+    "icon": "🇧🇪🇳🇱🇱🇺"
+  },
+  "parlementaire vergadering van de raad van europa": {
+    "name": "Parlementaire Vergadering van de Raad van Europa",
+    "secondary": "#f0f8ff",
+    "primary": "#4682b4",
+    "icon": "🇪🇺"
+  },
+  "parlementaire vergadering van de organisatie voor de veiligheid en de samenwerking in europa": {
+    "name": "Parlementaire Vergadering van de OSCE",
+    "secondary": "#fffaf0",
+    "primary": "#ff6347",
+    "icon": "🌍"
+  },
+  "parlementaire assemblee unie middellandse zee": {
+    "name": "Parlementaire Assemblee Unie Middellandse Zee",
+    "secondary": "#f0fff0",
+    "primary": "#32cd32",
+    "icon": "🌊"
+  },
+  "navo-parlementaire assemblee": {
+    "name": "NAVO-Parlementaire Assemblee",
+    "secondary": "#f0f8ff",
+    "primary": "#1e90ff",
+    "icon": "🛡️"
+  },
+  "europol controlegroep": {
+    "name": "Europol Controlegroep",
+    "secondary": "#fff0f0",
+    "primary": "#ff4500",
+    "icon": "🕵️"
+  }
+}

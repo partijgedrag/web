@@ -1,0 +1,21 @@
+---
+layout: layouts/base.njk
+---
+
+{% include "components/page-header.njk" %}
+
+<main class="center-grid">
+    <div class="center-grid-content page-layout">
+        <article>
+            {{ content | safe }}
+        </article>
+
+        <aside id="table-of-contents">
+
+            <nav>
+                <h2>Inhoud</h2>
+                {{ content | toc | safe }}
+            </nav>
+        </aside>
+    </div>
+</main>

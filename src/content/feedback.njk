@@ -1,0 +1,104 @@
+---
+layout: layouts/page
+permalink: "feedback/"
+sitemap: true
+title: "Feedback"
+description: "Heb je een vraag, opmerking of fout gevonden? Stuur ons je feedback en help mee om Partijgedrag te verbeteren."
+i18nHeader: "feedbackHeader"
+i18nSubheader: "feedbackSubheader"
+---
+
+<section id="feedback">
+    <p data-i18n="feedbackInstruction">Heeft u feedback, ideeen of suggesties voor deze website? Geef dit dan hieronder anoniem door. Indien u wenst gecontacteerd te worden, laat dan uw email achter in het bericht.</p>
+
+    <form id="feedback-form">
+        <label for="message" data-i18n="yourFeedback">Uw feedback</label>
+
+        <textarea
+            id="message"
+            name="message"
+            required
+            maxlength="1000"
+            placeholder="Schrijf hier uw feedback..."
+        ></textarea>
+
+        <footer>
+            <div class="flex-row flex-wrap align-items:center gap">
+                <button type="submit" id="submit-btn" disabled class="capitalize" data-i18n="send">Versturen</button>
+                <span id="char-count">0 / 1000</span>
+                <div
+                class="cf-turnstile"
+                data-sitekey="0x4AAAAAADhiaQb7k6IpajyZ"
+                data-theme="auto"
+                data-size="flexible"
+                data-callback="onTurnstileSuccess"
+                data-error-callback="onTurnstileError"
+                data-expired-callback="onTurnstileExpired"
+                ></div>
+            </div>
+        </footer>
+    </form>
+
+    <p id="status" class="status"></p>
+</section>
+
+<script>
+
+let turnstileToken = null;
+  function onTurnstileSuccess(token) {
+    turnstileToken = token;
+    document.getElementById("submit-btn").disabled = false;
+  }
+  function onTurnstileError(errorCode) {
+    turnstileToken = null;
+    document.getElementById("submit-btn").disabled = true;
+  }
+  function onTurnstileExpired() {
+    turnstileToken = null;
+    document.getElementById("submit-btn").disabled = true;
+  }
+</script>
+
+<script>
+const form = document.getElementById("feedback-form");
+const textarea = document.getElementById("message");
+const status = document.getElementById("status");
+const charCount = document.getElementById("char-count");
+
+textarea.addEventListener("input", () => {
+charCount.textContent = `${textarea.value.length} / 1000`;
+});
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const message = textarea.value;
+
+  const res = await fetch("/api/feedback", {
+      method: "POST",
+      headers: {
+      "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: textarea.value,
+        turnstileToken
+      })
+  });
+
+  if (res.ok) {
+      status.textContent = "Bedankt voor uw feedback.";
+      status.className = "status success";
+      form.reset();
+      charCount.textContent = "0 / 1000";
+      turnstileToken = null;
+      document.getElementById("submit-btn").disabled = true;
+      turnstile.reset();
+  } else {
+      status.textContent = "Verzenden mislukt.";
+      status.className = "status error";
+      turnstileToken = null;
+      document.getElementById("submit-btn").disabled = true;
+      turnstile.reset();
+  }
+});
+</script>

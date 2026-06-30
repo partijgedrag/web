@@ -1,0 +1,73 @@
+---
+layout: layouts/page
+permalink: "dossiers/"
+sitemap: true
+redirect_from: "/sessions/56/dossiers/"
+title: "Dossiers"
+description: "Overzicht van alle parlementaire dossiers in de Belgische Kamer. Volg wetgeving van indiening tot eindstemming."
+i18nHeader: "dossiersHeader"
+i18nSubheader: "dossiersSubheader"
+---
+
+<section id="dossiers">
+    <!-- BENTO -->
+    <div class="bento">
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ dossiers.dossiers | length }}</h2>
+            <p data-i18n="dossiers">dossiers</p>
+        </div>
+    </div>
+
+    <h2 data-i18n="allDossiers" class="capitalize-first">Alle dossiers</h2>
+
+    <!-- FAQ -->
+    <ul class="faq-list">
+        <li class="card padded flex-col">
+            <details>
+                <summary>Wat zijn dossiers?</summary>
+                <p>De commissies bereiden het werk van de plenaire vergadering voor, zodat die sneller en efficiënter kan werken.</p>
+                <p>Ze behandelen wetsontwerpen en voorstellen, bespreken en stemmen over eventuele wijzigingen. Het eindverslag gaat daarna naar de plenaire vergadering.</p>
+                <p>Daarnaast controleren commissies de regering via interpellaties en mondelinge vragen.</p>
+            </details>
+        </li>
+    </ul>
+
+    <!-- GRID -->
+    <div class="item-grid">
+    {% for dossier in dossiers.dossiers | sortDate("submission_date", "desc") %}
+        <a class="card flex-col" href='/sessions/{{ dossier.session_id }}/dossiers/{{ dossier.dossier_id }}'>
+            <!-- HEADER -->
+            <div class="flex-row justify-content:space-between align-items:start">
+                <div class="category capitalize-first" style="max-width:50%;" data-i18n="{{ dossier.document_type | lowercase }}"></div>
+                <div class="flex-col align-items:end" style="padding: 0.4rem; padding-bottom: 0;">
+                  <p class="bold margin:0">{{ dossier.submission_date | date }}</p>
+                </div>
+            </div>
+
+            <!-- BODY -->
+            <div class="flex-col justify-content:space-between flex-grow">
+                <div class="flex-row gap padded justify-content:space-between align-items:center">
+                    <div class="flex-col gap">
+                        <p>{{ dossier.title }}</p>
+                    </div>
+                    {% icon "lucide:chevron-right" %}
+                </div>
+
+                <div class="flex-row gap-small flex-wrap padded" style="margin-top: auto;">
+                    <!-- STATUS -->
+                    {% if dossier.status == "Aangenomen" %}
+                    <span class="badge on-positive" data-i18n="passed">passed</span>
+                    {% elseif dossier.status == "Verworpen" %}
+                    <span class="badge on-negative" data-i18n="failed">failed</span>
+                    {% endif%}
+
+                    <!-- SUMMARY -->
+                    {% if dossier.summary %}
+                    <span class="badge color-summarized" data-i18n="summarized">samengevat</span>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+    </div>
+</section>

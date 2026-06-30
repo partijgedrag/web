@@ -1,0 +1,114 @@
+---
+layout: layouts/page
+permalink: "about/"
+sitemap: true
+title: "Over ons"
+description: "Wilt u meer weten over Partijgedrag? Ontdek hoe de data verzameld wordt en wat de bedoeling is van deze website."
+i18nHeader: "aboutHeader"
+i18nSubheader: "aboutSubheader"
+---
+
+<section id="about">
+    <!-- ABOUT -->
+    <p>
+        De Belgische Kamer van Volksvertegenwoordigers is een belangrijk orgaan in de Belgische democratie. Ze vertegenwoordigt de bevolking en speelt een centrale rol in het wetgevingsproces.
+    </p>
+    <p>
+        Hoewel de Kamer informatie publiceert, is het niet altijd duidelijk hoe parlementsleden stemmen of hoe stemmingen verlopen.</p>
+    </p>
+    <p>
+        Deze website bundelt gegevens uit officiële bronnen en biedt helder inzicht in de werking van de Kamer en haar leden.
+    </p>
+    <p>
+        Partijgedrag.be is een <span class="bold">volledig onafhankelijke website</span>. Er is geen samenwerking met De Kamer, er wordt geen gebruik gemaakt van subsidies en dit is een puur niet-commercieel project.
+    </p>
+
+    <!-- BENTO -->
+    <div class="bento">
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ meetings.meetings | length }}</h2>
+            <p data-i18n="meetings">vergaderingen</p>
+        </div>
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ dossiers.dossiers | length }}</h2>
+            <p data-i18n="dossiers">dossiers</p>
+        </div>
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ questions.questions | length }}</h2>
+            <p data-i18n="questions">questions</p>
+        </div>
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ votes.votes | length }}</h2>
+            <p data-i18n="votes">votes</p>
+        </div>
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ propositions.propositions | length }}</h2>
+            <p data-i18n="propositions">propositions</p>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <h2 data-i18n="qanda" class="capitalize-first">Vraag en Antwoord</h2>
+    <ul class="faq-list">
+        <li class="card padded flex-col">
+            <details>
+                <summary>Wat is partijgedrag.be?</summary>
+                <p>Partijgedrag heeft als doel de werking van de Belgische kamer te verduidelijken en overzichtelijker te maken.</p>
+            </details>
+        </li>
+
+        <li class="card padded flex-col">
+            <details>
+                <summary>Waar komt de informatie vandaan?</summary>
+                <p>De officiële website <a href="https://dekamer.be" target="_blank">dekamer.be</a> van de overheid publiceert info over de werking van de Belgische Kamer van Volksvertegenwoordigers.</p>
+                <p>Deze info is vaak verspreid over meerdere pagina's, moeilijk te verstaan en/of onoverzichtelijk.</p>
+                <p>Om de werking van De Kamer transparanter te maken, verzamelt partijgedrag deze info op de site waar u zich nu op bevindt.</p>
+            </details>
+        </li>
+
+        <li class="card padded flex-col">
+          <details>
+              <summary>Gebruik van artificiële intelligentie</summary>
+              <p>Sommige pagina's hebben de optie om een 'beknopte versie' weer te geven. Deze versie toont teksten die zijn samengevat met behulp van artificële intelligentie.</p>
+              <p>De samengevatte teksten zijn geen uitspraken van echte mensen. De tekst kan foutief zijn en/of aan nuanceverlies lijden ten opzichte van de originele tekst.</p>
+              <p>Alle tekst die is samengevat door artificiële intelligentie wordt <span class="highlight">onderlijnd in het paars</span> of wordt op een andere manier duidelijk gemaakt.</p>
+          </details>
+        </li>
+
+         <li class="card padded flex-col">
+            <details>
+                <summary>Ik heb een fout gezien op partijgedrag.be of ik denk dat de data niet correct is</summary>
+                <p>Laat dit weten via <a href="/feedback">de feedbackpagina</a>.</p>
+            </details>
+         </li>
+
+         <li class="card padded flex-col">
+            <details>
+                <summary>Ik heb een idee over hoe deze site verbeterd zou kunnen worden</summary>
+                <p>Laat dit weten via <a href="/feedback">de feedbackpagina</a>.</p>
+            </details>
+         </li>
+
+          <li class="card padded flex-col">
+            <details>
+                <summary>Een andere vraag?</summary>
+                <p>Laat dit weten via <a href="/feedback">de feedbackpagina</a>.</p>
+            </details>
+          </li>
+    </ul>
+
+    <!-- DATA -->
+    <h2>Data- en gebruiksvoorwaarden</h2>
+    <p data-i18n="sourceDisclaimer"></p>
+    <p data-i18n="accuracyDisclaimer"></p>
+    <p>Het grootste deel van de data op deze website is afkomstig van de website van de kamer. De volgende gebruiksvoorwaarden zijn te vinden op <a href="https://dekamer.be" target="_blank">dekamer.be</a>.</p>
+    <p class="italic">
+        Overeenkomstig artikel XI.172, § 2, van het Wetboek Economisch Recht bestaat er geen auteursrecht op de officiële akten van de overheid. Parlementaire documenten die officiële akten uitmaken — zoals wetten, wetsontwerpen, wetsvoorstellen en rondgedeelde verslagen — mogen vrij gereproduceerd worden. Wij raden aan om altijd de website van de Kamer te vermelden om gebruikers zo goed mogelijk te informeren over de herkomst van de data.
+    </p>
+    <p class="italic">
+        Publicaties van de Kamer, zoals infobrochures en de website zelf, worden niet beschouwd als officiële akten en mogen niet zonder toestemming van de Kamer gereproduceerd worden. Dit geldt ook voor werken die de Kamer bij derden bestelt of van derden verkrijgt.
+    </p>
+    <p class="italic">
+        Daarnaast mogen redevoeringen tijdens vergaderingen en zittingen van de Kamer vrij worden gereproduceerd en aan het publiek worden medegedeeld. Echter, alleen de spreker heeft het exclusieve recht om deze redevoeringen afzonderlijk uit te geven; daarvoor is zijn of haar toestemming vereist.
+    </p>
+</section>

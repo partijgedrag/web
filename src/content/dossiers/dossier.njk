@@ -1,0 +1,326 @@
+---
+layout: layouts/meeting
+permalink: "sessions/{{ dossier.session_id }}/dossiers/{{ dossier.dossier_id }}/"
+pagination:
+    data: collections.dossiers
+    size: 1
+    alias: dossier
+    addAllPagesToCollections: true
+eleventyComputed:
+    title: "Dossier {{ dossier.dossier_id }} {{ ' over ' + dossier.eurovoc_main_descriptor | lowercase if dossier.eurovoc_main_descriptor }}"
+    description: "Volg parlementair dossier {{ dossier.dossier_id }}: bekijk stemmingen, betrokken parlementsleden en de behandeling in de plenaire vergadering."
+    i18nHeader: "dossierHeader"
+    i18nHeaderVars: {
+        title: "{{ dossier.title }}"
+    }
+    i18nSubheader: "dossierSubHeader"
+    i18nSubheaderVars: {
+      id: "{{ dossier.dossier_id }}"
+    }
+---
+
+<!-- COMPONENTS -->
+{%- from "components/vote-card.njk" import voteCard -%}
+
+<!-- VARIABLES -->
+{% set document_id = "56K" + (dossier.dossier_id | padLeft(4, '0')) %}
+
+<!-- PAGEFIND METADATA -->
+<span style="display:none" data-pagefind-meta="title">Dossier ingediend op {{ dossier.submission_date | date }} ({{ document_id }})</span>
+<span style="display:none" data-pagefind-body>{{ dossier.title }}</span>
+
+<section id="dossier" class="flex-col gap">
+    <!-- INFO -->
+    <div class="card">
+        <div class="card-section padded flex-col gap-small">
+            <!-- HEADER -->
+            <div class="flex-row justify-content:space-between">
+                <h2 id="overzicht">Overzicht</h2>
+                <a href="https://www.dekamer.be/kvvcr/showpage.cfm?section=/flwb&language=nl&cfm=/site/wwwcfm/flwb/flwbn.cfm?lang=N&legislat={{ dossier.session_id }}&dossierID={{ dossier.dossier_id }}" target="_blank" class="flex-row gap-small align-items:center outlined padded-tight rounded">
+                    {% lucide "external-link" %}
+                    <span>Bron</span>
+                </a>
+            </div>
+
+            <div class="flex-col gap">
+                <!-- SUMMARY -->
+                {% if dossier.summary %}
+                    <div class="argument summary">
+                        <p class="flex-row gap bold align-items:center margin:0">
+                            Waarover gaat dit dossier? <span class="tooltip" style="height: 16px;">{% lucide "bot-message-square" %}<span class="tooltip-text" data-i18n="dossierSummaryExplanation">summaryExplanation</span></span>
+                        </p>
+                        <div>
+                            <p>{{ dossier.summary }}</p>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>Dit dossier gaat over "{{ dossier.title }}"</p>
+                {% endif %}
+
+                <!-- EUROVOC DESCRIPTORS -->
+                <div class="flex-row gap-small flex-wrap">
+                    {% if dossier.eurovoc_main_descriptor %}
+                    <span class="badge secondary capitalize-first">{{ dossier.eurovoc_main_descriptor }}</span>
+                    {% endif %}
+                    {% for descriptor in dossier.eurovoc_descriptors %}
+                        <span class="badge secondary capitalize-first">{{ descriptor }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- DETAILS -->
+        <div class="card-section padded">
+            <div class="flex-col gap">
+                <div class="flex-row flex-wrap gap align-items:center">
+                    <!-- DOSSIER ID -->
+                    <div class="flex-row align-items:center">
+                        <span class="icon-muted">{% icon "lucide:file-text" %}</span>
+                        <span class="text-muted">{{ document_id }}</span>
+                    </div>
+
+                    <!-- AUTHORS -->
+                    <div class="flex-row align-items:center">
+                        <span class="icon-muted">{% icon "lucide:users" %}</span>
+                        <span class="text-muted">
+                            Ingediend door
+                            {% set seen = [] %}
+                            {% for author in dossier.authors %}
+                                {% if author.name == "government" %}
+                                    {% if "regering" not in seen %}
+                                        {% set seen = (seen.push("regering"), seen) %}
+                                        Regering
+                                    {% endif %}
+                                {% elseif author.name == "Commission/Commissie (AUTEUR)" %}
+                                    {% if "commissie" not in seen %}
+                                        {% set seen = (seen.push("commissie"), seen) %}
+                                        Commissie
+                                    {% endif %}
+                                {% elseif author.name == "Sénat/Senaat (AUTEUR)" %}
+                                    {% if "senaat" not in seen %}
+                                        {% set seen = (seen.push("senaat"), seen) %}
+                                        Senaat
+                                    {% endif %}
+                                {% else %}
+                                    {% if author.fraction not in seen %}
+                                        {% set seen = (seen.push(author.fraction), seen) %}
+                                        {% set fraction = author.fraction | lower %}
+                                        {% set primaryColor = fractionColors[fraction].primary or '#95a5a6' %}
+                                        {% set secondaryColor = fractionColors[fraction].secondary or '#95a5a6' %}
+                                        <a href="/fractions/{{ author.fraction | slugify }}/">
+                                            <span class="badge bold" style="--bg: {{ secondaryColor }}; color: {{ primaryColor }}; background-color: {{ secondaryColor }};">{{ author.fraction | normaliseFraction }}</span>
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </span>
+                    </div>
+
+                    <!-- SUBMISSION DATE -->
+                    <div class="flex-row align-items:center">
+                        <span class="icon-muted">{% icon "lucide:calendar" %}</span>
+                        <span class="text-muted">Ingediend {{ dossier.submission_date | date }}</span>
+                    </div>
+
+                    <!-- STATUS -->
+                    <div class="flex-row align-items:center">
+                        <span class="icon-muted">{% icon "lucide:vote" %}</span>
+                        <span class="text-muted">{% if dossier.status == "Aangenomen" %}Aangenomen{% elseif dossier.status == "Verworpen" %}Verworpen{% endif %} {{ dossier.vote_date | date }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ARGUMENTS -->
+    {% if dossier.arguments %}
+    <div>
+        <h2 id="argumenten" class="capitalize-first" data-i18n="arguments">Argumenten</h2>
+        <p data-i18n="argumentsDescription">Bekijk de argumenten voor/tegen van de verschillende fracties.</p>
+        <div class="flex-col gap">
+            <!--<div class="argument summary">
+                <p class="flex-row gap bold align-items:center margin:0">
+                    Verslag van het debat <span class="tooltip" style="height: 16px;">{% lucide "info" %}<span class="tooltip-text" data-i18n="discussionSummaryExplanation">summaryExplanation</span></span>
+                </p>
+                <div>
+                    <p>{{ dossier.arguments.debate_summary }}</p>
+                </div>
+            </div>-->
+
+            {% if dossier.arguments.arguments_pro.length %}
+            <div>
+                <h4 class="flex-row gap align-items:center highlight">
+                    Argumenten voor <span class="tooltip" style="height: 16px;">{% lucide "bot-message-square" %}<span class="tooltip-text" data-i18n="argumentsExplanation">argumentsExplanation</span></span>
+                </h4>
+                <ul class="arguments">
+                    {% for arg in dossier.arguments.arguments_pro %}
+                        <li class="argument pro">
+                            <p class="fractions">{{ arg.fractions }}</p>
+                            <ul>
+                                {% for point in arg.arguments %}
+                                    <li><p>{{ point }}</p></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="flex-row gap align-items:center highlight">
+                    Argumenten tegen <span class="tooltip" style="height: 16px;">{% lucide "bot-message-square" %}<span class="tooltip-text" data-i18n="argumentsExplanation">argumentsExplanation</span></span>
+                </h4>
+                <ul class="arguments">
+                    {% for arg in dossier.arguments.arguments_contra %}
+                        <li class="argument contra">
+                            <p class="fractions">{{ arg.fractions }}</p>
+                            <ul>
+                                {% for point in arg.arguments %}
+                                    <li><p>{{ point }}</p></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="flex-row gap align-items:center highlight">
+                    Additionele bedenkingen <span class="tooltip" style="height: 16px;">{% lucide "bot-message-square" %}<span class="tooltip-text" data-i18n="argumentsExplanation">argumentsExplanation</span></span>
+                </h4>
+                <ul class="arguments">
+                    {% for arg in dossier.arguments.arguments_neutral %}
+                        <li class="argument technical">
+                            <p class="fractions">{{ arg.fractions }}</p>
+                            <ul>
+                                {% for point in arg.arguments %}
+                                    <li><p>{{ point }}</p></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- PLENARY VOTE -->
+    <div>
+        <h2 id="stemresultaten" class="capitalize" data-i18n="voteResults">Stemresultaten</h2>
+        {% set vote = dossier.plenaryVote %}
+        {% if dossier.vote_date %}
+            <p>Dit dossier werd
+            {% if dossier.status == "Aangenomen" %}
+            <span class="badge on-positive" data-i18n="passed">passed</span>
+            {% elseif dossier.status == "Verworpen" %}
+            <span class="badge on-negative" data-i18n="failed">failed</span>
+            {% endif%}
+            tijdens <a href='/sessions/56/meetings/P{{ vote.meeting_id }}'>de plenaire vergadering op {{ dossier.vote_date | date }}</a>.</p>
+
+            {{ voteCard({ vote: vote, fractionColors: fractionColors, federalGovernment: federalGovernment }) }}
+        {% else %}
+            <p>Nog geen aangenomen artikelen</p>
+        {% endif %}
+    </div>
+
+    <!-- HISTORY -->
+    <div>
+        <h2 id="historiek" class="capitalize" data-i18n="history">Historiek</h2>
+        {% if dossier.subdocuments.length %}
+        <p>Bekijk de volledige historiek van dit dossier.</p>
+        <div class="timeline">
+            <ul class="timeline-list">
+                <!-- VOTE DATE -->
+                {% if dossier.vote_date %}
+                <li class="dossier-event is-done">
+                    <span class="dot-icon">{% icon "lucide:vote" %}</span>
+                    <div class="info">
+                        <p><span class="bold">Stemming in de kamer</span></p>
+                        <p style="font-size: small;">{{ dossier.vote_date | date }}</p>
+                        {% if dossier.status == "Aangenomen" %}
+                        <span class="badge on-positive" data-i18n="passed">passed</span>
+                        {% elseif dossier.status == "Verworpen" %}
+                        <span class="badge on-negative" data-i18n="failed">failed</span>
+                        {% endif%}
+                    </div>
+                </li>
+                {% endif %}
+
+                <!-- SUBDOCUMENTS -->
+                {% for doc in dossier.subdocuments | reverse(true) %}
+                <li class="dossier-event is-done">
+                    {% if doc.type == "Amendement" %}
+                    <span class="dot-icon">{% icon "lucide:git-pull-request-arrow" %}</span>
+                    {% else %}
+                    <span class="dot-icon">{% icon "lucide:paperclip" %}</span>
+                    {% endif%}
+
+                    <div class="info">
+                        <div class="flex-row align-items:center gap-small">{{ doc.id | padLeft(3, '0') }}.<p class="capitalize-first"><span class="bold" data-i18n="{{ doc.type | lowercase }}"></span> (<a href="https://www.dekamer.be/FLWB/PDF/{{ dossier.session_id }}/{{ dossier.dossier_id | padLeft(4, '0') }}/{{ dossier.session_id }}K{{ dossier.dossier_id | padLeft(4, '0') }}{{ doc.id }}.pdf" target="_blank">{{ dossier.session_id }}K{{ dossier.dossier_id | padLeft(4, '0') }}{{ doc.id }}</a>)</p></div>
+                        <p style="font-size: small;">{{ doc.date | date }}</p>
+                        <p style="font-size: small;"></p>
+
+                        <!-- AUTHORS -->
+                        {% if (doc.authors | length) > 1 %}
+                        <div class="flex-col">
+                            <p>Auteurs</p>
+                            <p>
+                                {% for author in doc.authors %}
+                                {% set fraction = author.fraction | lower %}
+                                {% set primaryColor = fractionColors[fraction].primary or '#95a5a6' %}
+                                {% set secondaryColor = fractionColors[fraction].secondary or '#95a5a6' %}
+                                {% if author.name == "government" %}
+                                <span><a href="/government/" data-i18n="government"></a></span><br>
+                                {% else %}
+                                <a href="/fractions/{{ author.fraction | slugify }}/" class="badge bold" style="--bg: {{ secondaryColor }}; color: {{ primaryColor }}; background-color: {{ secondaryColor }};">{{ author.fraction | normaliseFraction }}</a>
+                                <span><a href="/members/{{ author.name | slugify }}/">{{ author.name }}</a></span><br>
+                                {% endif %}
+                                {% endfor %}
+                            </p>
+                        </div>
+                        {% endif %}
+
+                        <!-- VOTE -->
+                        {% if doc.votes[0] %}
+                        {{ voteCard({
+                            vote: doc.votes[0],
+                            fractionColors: fractionColors,
+                            federalGovernment: federalGovernment
+                        }) }}
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+
+                <!-- Initial Submission -->
+                <li class="dossier-event is-done">
+                    <span class="dot-icon">{% icon "lucide:inbox" %}</span>
+                    <div class="info">
+                        <div class="flex-row align-items:center gap-small">001.<p class="bold capitalize-first"><span data-i18n="{{ dossier.document_type | lowercase }}"></span></p></div>
+                        <p style="font-size: small;">{{ dossier.submission_date | date }}</p>
+                        <ul style="display: flex; flex-direction: column; gap: 0.2rem;">
+                            {% for author in dossier.authors %}
+                                {% if author.name == "government" %}
+                                    <span><a href="/government/" data-i18n="government"></a></span><br>
+                                    {% elseif author.name == "Commission/Commissie (AUTEUR)" %}
+                                    <span>Commissie</span><br>
+                                    {% elseif author.name == "Sénat/Senaat (AUTEUR)" %}
+                                    <span>Senaat</span><br>
+                                    {% else %}
+                                    {% set fraction = author.fraction | lower %}
+                                    {% set primaryColor = fractionColors[fraction].primary or '#95a5a6' %}
+                                    {% set secondaryColor = fractionColors[fraction].secondary or '#95a5a6' %}
+                                    <li class="gap" style="display: flex; margin-left: 0; width: 100%;"><a href="/fractions/{{ author.fraction | slugify }}/"><span class="badge" style="color: {{ primaryColor }}; background-color: {{ secondaryColor }};">{{ author.fraction }}</span></a><a href="/members/{{ author.name | slugify }}/">{{ author.name }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        {% else %}
+        <p>Er werden geen subdocumenten gevonden voor dit dossier.</p>
+        {% endif %}
+    </div>
+</section>

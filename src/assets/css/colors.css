@@ -1,0 +1,84 @@
+:root {
+    /* COLORS */
+    --color-surface: #ffffff;
+    --color-on-surface: #000000;
+
+    --color-surface-container: #e0e0e0;
+
+    --color-primary: #1d70b8;
+    --color-on-primary: #ffffff;
+
+    --color-secondary: #d1eaff;
+    --color-on-secondary: #084062;
+
+    --color-tertiary: #d1eaff;
+    --color-on-tertiary: #000000;
+
+    --color-muted: #e0e0e0;
+    --color-on-muted: #797979;
+
+    --color-summarized: #e7d5ff;
+    --color-on-summarized: #c783ff;
+    --color-translated: #4db6ff;
+
+    --color-positive: #e1f7d5;
+    --color-on-positive: #28a745;
+    --color-warning: #ffedca;
+    --color-on-warning: orange;
+    --color-negative: #ffe9e8;
+    --color-on-negative: #dc3545;
+    --color-informational: #d5e1f7;
+    --color-on-informational: #1d70b8;
+    --color-neutral: #afafaf;
+    --color-on-neutral: #afafaf;
+}
+
+.secondary {
+    background-color: var(--color-secondary);
+    color: var(--color-on-secondary);
+}
+
+.positive {
+    background-color: var(--color-positive);
+    color: var(--color-on-positive);
+}
+
+.color-summarized {
+    background-color: var(--color-summarized);
+    color: var(--color-on-summarized);
+}
+
+.on-positive {
+    background-color: var(--color-on-positive);
+    color: var(--color-surface);
+}
+
+.on-negative {
+    background-color: var(--color-on-negative);
+    color: var(--color-surface);
+}
+
+.on-neutral {
+    background-color: var(--color-on-neutral);
+    color: var(--color-surface);
+}
+
+.warning {
+    background-color: var(--color-warning);
+    color: var(--color-on-warning);
+}
+
+.negative {
+    background-color: var(--color-negative);
+    color: var(--color-on-negative);
+}
+
+.informational {
+    background-color: var(--color-informational);
+    color: var(--color-on-informational);
+}
+
+.neutral {
+    background-color: var(--color-neutral);
+    color: var(--color-on-neutral);
+}

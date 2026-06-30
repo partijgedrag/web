@@ -1,0 +1,244 @@
+---
+layout: layouts/meeting
+permalink: "sessions/{{ meeting.session_id }}/meetings/P{{ meeting.meeting_id }}/"
+sitemap: true
+pagination:
+    data: collections.plenaryMeetings
+    size: 1
+    alias: meeting
+    addAllPagesToCollections: true
+eleventyComputed:
+    title: "Plenaire vergadering van {{ meeting.date | date }} ({{ meeting.start_time }}): vragen en stemmingen"
+    description: "{{ meeting | meetingDescription }}"
+    i18nHeader: "plenaryMeetingHeader"
+    i18nHeaderVars: {
+      date: "{{ meeting.date | date }}"
+    }
+    i18nSubheader: "plenaryMeetingSubHeader"
+    i18nSubheaderVars: {
+      date: "{{ meeting.date | date }}",
+      time_of_day: "{{ meeting.time_of_day | translate }}"
+    }
+---
+
+<!-- COMPONENTS -->
+{%- from "components/question-card.njk" import questionCard -%}
+{%- from "components/proposition-card.njk" import propositionCard -%}
+{%- from "components/notice-card.njk" import noticeCard -%}
+{%- from "components/vote-card.njk" import voteCard -%}
+
+<!-- VARIABLES -->
+{% set document_id = "IP" + (meeting.meeting_id | padLeft(3, '0')) + "X" %}
+
+<!-- PAGEFIND METADATA -->
+<span style="display:none" data-pagefind-meta="title">Plenaire vergadering op {{ meeting.date | date }} ({{ document_id }})</span>
+<span style="display:none" data-pagefind-body>Alle vragen, voorstellen en stemmingen van vergadering {{ document_id }}.</span>
+
+<section id="plenary-meeting">
+    <div class="flex-col gap">
+        <!-- INFO -->
+        <div class="card">
+            <div class="card-section padded flex-col gap-small">
+                <!-- HEADER -->
+                <div class="flex-row justify-content:space-between">
+                    <h2 id="overzicht">Overzicht</h2>
+                    <a href="https://www.dekamer.be/doc/PCRI/html/{{ meeting.session_id }}/ip{{ meeting.meeting_id | padLeft(3, '0') }}x.html" target="_blank" class="flex-row gap-small align-items:center outlined padded-tight rounded">
+                        {% lucide "external-link" %}
+                        <span>Bron</span>
+                    </a>
+                </div>
+
+                <div class="flex-col gap">
+                    <!-- SUMMARY -->
+                    <p>
+                        {{ meeting | meetingDescription }}
+                    </p>
+
+                    <!-- ATTENDANCE -->
+                    {% set attendance = meeting.attendance %}
+                    {% set attendanceColor = "var(--color-on-negative)" %}
+                    {% if attendance.ratio >= 0.85 %}
+                    {% set attendanceColor = "var(--color-on-positive)" %}
+                    {% elif attendance.ratio >= 0.65 %}
+                    {% set attendanceColor = "var(--color-on-warning)" %}
+                    {% endif %}
+
+                    <div class="flex-row align-items:center justify-content:space-between">
+                        <p class="bold capitalize-first" data-i18n="attendance"></p>
+                        {% if  meeting.allVotes.length > 0 %}
+                        <p>{{ attendance.count }}/150 ({{ (attendance.ratio * 100) | round(0, 'floor') }}%)</p>
+                        {% else %}
+                        <p>onbekend</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="progress-bar rounded">
+                        <div style="
+                                width: {{ (attendance.ratio * 100) | round(0, 'floor') }}%;
+                                height: 100%;
+                                background-color: {{ attendanceColor }};
+                            ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DETAILS -->
+            <div class="card-section padded">
+                <div class="flex-col gap">
+                    <div class="flex-row flex-wrap gap align-items:center">
+                        <!-- MEETING ID -->
+                        <div class="flex-row align-items:center">
+                            <span class="icon-muted">{% icon "lucide:file-text" %}</span>
+                            <span class="text-muted">{{ document_id }}</span>
+                        </div>
+
+                        <!-- DURATION -->
+                        <div class="flex-row align-items:center">
+                            <span class="icon-muted">{% icon "lucide:clock" %}</span>
+                            <span class="text-muted capitalize-first"><span data-i18n="from">van</span> {{ meeting.start_time }} <span data-i18n="until"></span> {{ meeting.end_time }} ({{ meeting.start_time | duration(meeting.end_time)}})</span>
+                        </div>
+                    </div>
+
+                    <div class="flex-row flex-wrap gap align-items:center">
+                        <!-- QUESTIONS -->
+                        <div class="flex-row align-items:center">
+                            <span class="icon-muted">{% icon "lucide:message-circle-question" %}</span>
+                            <span class="text-muted">{{ meeting.questions.length }} {{ 'vraag' if meeting.questions.length == 1 else 'vragen' }}</span>
+                        </div>
+
+                        <!-- PROPOSITIONS -->
+                        <div class="flex-row align-items:center">
+                            <span class="icon-muted">{% icon "lucide:lightbulb" %}</span>
+                            <span class="text-muted">{{ meeting.propositions.length }} {{ 'voorstel' if meeting.propositions.length == 1 else 'voorstellen' }}</span>
+                        </div>
+
+                        <!-- VOTES -->
+                        <div class="flex-row align-items:center">
+                            <span class="icon-muted">{% icon "lucide:vote" %}</span>
+                            <span class="text-muted">{{ meeting.allVotes.length }} {{ 'stemming' if meeting.allVotes.length == 1 else 'stemmingen' }}</span>
+                        </div>
+
+                        <!-- NOTICES -->
+                        <div class="flex-row align-items:center">
+                            <span class="icon-muted">{% icon "lucide:message-square-text" %}</span>
+                            <span class="text-muted">{{ meeting.notices.length }} {{ 'mededeling' if meeting.notices.length == 1 else 'mededelingen' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABSENTEES -->
+    {% if meeting.absentees.length == 0 %}
+    {% else %}
+    {% if meeting.absentees.length == 150 %}
+    <h2 id="afwezigen" class="capitalize-first" data-i18n="absentees">Afwezigen</h2>
+    Tenminste de eerste naamstemming was anoniem. Hierdoor kan niet geschat worden welke kamerleden afwezig waren.
+    {% else %}
+    <h2 id="afwezigen" class="capitalize-first" data-i18n="absentees">Afwezigen</h2>
+    <p>De volgende {{ meeting.absentees.length }} kamerleden waren afwezig bij tenminste de eerste naamstemming. Het is mogelijk dat deze kamerleden alsnog aanwezig waren vanaf de tweede naamstemming of later. Het is ook mogelijk dat de kamerleden uitgesloten waren bij de eerste stemming voor een legitieme reden.</p>
+    <p>
+        {% for absentee in meeting.absentees %}
+        {% set fraction = absentee.fraction | lower %}
+        {% set primaryColor = fractionColors[fraction].primary or '#95a5a6' %}
+        {% set secondaryColor = fractionColors[fraction].secondary or '#95a5a6' %}
+        <a href="/fractions/{{ absentee.fraction | slugify }}/"><span class="badge bold" style="--bg: {{ secondaryColor }}; color: {{ primaryColor }}; background-color: {{ secondaryColor }};">{{ absentee.fraction | normaliseFraction }}</span></a>
+        <span ><a href="/members/{{ absentee.name | slugify }}/">{{ absentee.name }}</a></span><br>
+        {% endfor %}
+    </p>
+    {% endif %}
+    {% endif %}
+
+    <section data-pagefind-body>
+        <!-- QUESTIONS -->
+        <h2 id="mondelinge vragen" class="capitalize-first" data-i18n="oralQuestions">Mondelinge vragen</h2>
+        {% if meeting.questions.length == 0 %}
+            <p data-i18n="noQuestions">noQuestions</p>
+        {% else %}
+            <p data-i18n="questionsDescription">De vragen die gesteld werden tijdens deze vergadering.</p>
+            <ul class="flex-col gap padding:0">
+                {% for question in meeting.questions %}
+                {% set topicCounts = [question] | countTopics(topics) %}
+                {% set topic = topicCounts[0][0] %}
+                <li class="question-container">
+                    {{ questionCard({question: question, topic: topic, topics: topics, functions: functions, fractionColors: fractionColors, nolink: true }) }}
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <!-- PROPOSITIONS -->
+        <h2 id="voorstellen" class="capitalize-first" data-18n="propositions">Voorstellen</h2>
+        {% if meeting.propositions.length == 0 %}
+            <p data-i18n="noPropositions">noPropositions</p>
+        {% else %}
+            <p data-i18n="propositionsDescription">De voorstellen en wetsontwerpen die besproken werden tijdens deze vergadering en de bijbehorende stemmingen.</p>
+            <ul class="flex-col gap padding:0">
+                {% for proposition in meeting.propositions %}
+                <li class="proposition-container">
+                    {{ propositionCard({proposition: proposition, fractionColors: fractionColors, federalGovernment: federalGovernment }) }}
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <!-- NOTICES -->
+        <h2 id="mededelingen" class="capitalize-first" data-18n="notices">Mededelingen</h2>
+        {% if meeting.notices.length == 0 %}
+            <p data-i18n="noNotices">noNotices</p>
+        {% else %}
+            <p data-i18n="noticesDescription"></p>
+            <ul class="flex-col gap padding:0">
+                {% for notice in meeting.notices %}
+                <li>
+                    {{ noticeCard({notice: notice, fractionColors: fractionColors }) }}
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <!-- VOTES -->
+        <h2 id="stemmingen" class="capitalize-first" data-18n="votes">Stemmingen</h2>
+        {% if meeting.allVotes.length == 0 %}
+            <p data-i18n="noVotes">noVotes</p>
+        {% else %}
+            <p data-i18n="votesDescription">De voorstellen en wetsontwerpen die besproken werden tijdens deze vergadering en de bijbehorende stemmingen.</p>
+            <ul class="flex-col gap padding:0">
+                {% for vote in meeting.votes %}
+                    {{ voteCard({ vote: vote, fractionColors: fractionColors, federalGovernment: federalGovernment }) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <!-- PREVIOUS / NEXT MEETINGS -->
+        {% if meeting.previousMeeting or meeting.nextMeeting %}
+            <h2 class="capitalize-first">Vorige vergaderingen</h2>
+            <div class="flex-row gap">
+                {% if meeting.previousMeeting %}
+                    <a
+                        class="card padded flex-col gap-small"
+                          style="flex: 1 1 100%; width: 100%;"
+                        href="/sessions/{{ meeting.previousMeeting.session_id }}/meetings/P{{ meeting.previousMeeting.meeting_id | padLeft(3, '0') }}/"
+                    >
+                        <span class="text-muted">← Vorige vergadering</span>
+                        <span class="bold">{{ meeting.previousMeeting.date | date }}</span>
+                    </a>
+                {% endif %}
+
+                {% if meeting.nextMeeting %}
+                    <a
+                        class="card padded flex-col gap-small"
+                          style="flex: 1 1 100%; width: 100%;"
+                        href="/sessions/{{ meeting.nextMeeting.session_id }}/meetings/P{{ meeting.nextMeeting.meeting_id | padLeft(3, '0') }}/"
+                    >
+                        <span class="text-muted">Volgende vergadering →</span>
+                        <span class="bold">{{ meeting.nextMeeting.date | date }}</span>
+                    </a>
+                {% endif %}
+
+            </div>
+        {% endif %}
+    </section>
+</section>

@@ -1,0 +1,70 @@
+---
+layout: layouts/page
+permalink: "/commissions/"
+sitemap: true
+title: "Commissies"
+description: "Bekijk een overzicht van alle plenaire commissies in het Belgische parlement. Ontdek wie de voorzitters en leden zijn."
+i18nHeader: "commissionsHeader"
+i18nSubheader: "commissionsSubheader"
+---
+
+<section id="commissions">
+    <!-- BENTO -->
+    <div class="bento">
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ commissions.commissions | length }}</h2>
+            <p data-i18n="commissions"></p>
+        </div>
+    </div>
+
+  {% set commissionsByType = commissions.commissions | groupBy("type") %}
+  {% for type, commissions in commissionsByType %}
+  <h2 class="capitalize">{{ type }}</h2>
+  <div class="flex-col gap-small">
+    {% for commission in commissions %}
+    <div class="card padded flex-col gap">
+        <!-- COMMISSION NAME-->
+        <h3>
+            {{ commissionsMetadata[commission.name].name }}
+        </h3>
+
+        <!-- CHAIRS -->
+        {% for role in ["chairs", "subchairs"] %}
+            {% if commission[role] | length > 0 %}
+            <div class="flex-col gap-small">
+            <p class="uppercase">
+                {% if role == "chairs" %}Voorzitters{% else %}Ondervoorzitters{% endif %}
+            </p>
+            <ul class="flex-wrap gap-small">
+                {% for member in commission[role] %}
+                <li>
+                    <p>
+                        <a href="/members/{{ member.name | slugify }}/">{{ member.name }}</a>
+                    </p>
+                </li>
+                {% endfor %}
+            </ul>
+            </div>
+            {% endif %}
+        {% endfor %}
+
+        <!-- MEMBERS -->
+        {% if commission.permanent_members | length > 0 %}
+        <div class="flex-col gap-small">
+            <p class="uppercase">Vaste leden</p>
+            <ul class="flex-wrap gap-small">
+                {% for member in commission.permanent_members %}
+                <li>
+                    <p>
+                        <a href="/members/{{ member.name | slugify }}/">{{ member.name }}</a>
+                    </p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</section>

@@ -1,0 +1,44 @@
+{% set crumbs = page.url | breadcrumbs %}
+
+<section id="breadcrumbs">
+    <header class="center-grid">
+        <div class="center-grid-content">
+            <nav aria-label="Breadcrumb">
+                <ol style="list-style:none; padding:0; margin:0; display:flex; align-items:center; flex-wrap: wrap; row-gap: 1rem;">
+                    <li>
+                        <a href="/" data-i18n="home">Home</a>
+                    </li>
+                    {% for crumb in crumbs %}
+                        <li class="breadcrumb-item">
+                            {% if loop.last %}
+                                <span aria-current="page" data-i18n="{{ crumb.key }}">{{ crumb.name }}</span>
+                            {% else %}
+                                <a href="{{ crumb.url }}" data-i18n="{{ crumb.key }}">{{ crumb.name }}</a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ol>
+            </nav>
+
+            <h1 class="capitalize-first"
+            {% if i18nHeader %}
+                data-i18n-template="{{ i18nHeader }}"
+                {% if i18nHeaderVars %}
+                data-i18n-vars='{{ i18nHeaderVars | dump }}'
+                {% endif %}
+            {% endif %}>
+            {{ header or title }}
+            </h1>
+
+            <p
+            {% if i18nSubheader %}
+                data-i18n-template="{{ i18nSubheader }}"
+                {% if i18nSubheaderVars %}
+                data-i18n-vars='{{ i18nSubheaderVars | dump }}'
+                {% endif %}
+            {% endif %}>
+                {{ subheader or description }}
+            </p>
+        </div>
+    </header>
+</section>

@@ -1,0 +1,35 @@
+---
+layout: layouts/page
+permalink: "blog/"
+sitemap: true
+title: "Partijgedrag blog"
+description: "Wilt u meer weten over de werking van De Belgische Kamer van Volksvertegenwoordigers? Lees dan de blog van Partijgedrag."
+i18nHeader: "blogHeader"
+i18nSubheader: "blogSubheader"
+---
+
+<section id="blog">
+    {% set posts = collections.posts %}
+    {% for post in posts %}
+    <a class="card flex-col" style="position: relative;" href="{{ post.url }}">
+        <div class="card-section flex-col flex-grow">
+            <div class="flex-row justify-content:space-between align-items:start padded">
+                <p class="bold">{{ post.data.title }}</p>
+                <div class="flex-col align-items:end">
+                    <p>{{ post.date | date }}</p>
+                </div>
+            </div>
+
+            <div class="flex-col justify-content:space-between flex-grow">
+                <div class="flex-col gap padded" style="margin-right: 4rem;">
+                    <p>{{ post.data.subtitle }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- CHEVRON -->
+        <div style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">
+            {% icon "lucide:chevron-right" %}
+        </div>
+    </a>
+    {% endfor %}
+</section>

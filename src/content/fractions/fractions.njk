@@ -1,0 +1,149 @@
+---
+layout: layouts/page
+permalink: "fractions/"
+sitemap: true
+title: "Fracties"
+description: "Overzicht van alle fracties in het Belgische parlement. Vergelijk het stemgedrag en parlementair werk van elke fractie."
+i18nHeader: "fractionsHeader"
+i18nSubheader: "fractionsSubheader"
+---
+
+<section id="fractions">
+    <!-- BENTO -->
+    <div class="bento">
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ members.members | filter("active", "true") | length }}</h2>
+            <p data-i18n="chamberMembers">chamberMembers</p>
+        </div>
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ fractions | length }}</h2>
+            <p data-i18n="fractions">fractions</p>
+        </div>
+        <div class="card padded flex-col gap-small bento-item-2" >
+            <h3 class="capitalize margin:0" data-i18n="seatDistribution">zetelverdeling</h3>
+            <div id="parliamentChart">
+                <svg></svg>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="capitalize-first" data-i18n="allFractions">Alle fracties</h2>
+
+    <!-- FAQ -->
+    <ul class="faq-list">
+        <li class="card padded flex-col">
+            <details>
+                <summary>Wat zijn fracties?</summary>
+                <p>De Kamer is politiek ingedeeld in fracties.</p>
+            </details>
+        </li>
+    </ul>
+
+    <!-- GRID -->
+    <div class="item-grid-2">
+        {% for fraction in fractions %}
+        <a class="card padded" href="/fractions/{{ fraction.name | slugify }}/">
+            <div class="flex-row justify-content:space-between align-items:center">
+                <p>{{ fraction.name }}</p>
+                {% icon "lucide:chevron-right" %}
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="/assets/js/parliament-chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    let fractionColors = {{fractionColors | dump | safe}};
+
+    const margin = {top: 10, right: 0, bottom: 20, left: 0};
+    const container = document.getElementById("parliamentChart");
+    const width = container.clientWidth - margin.left - margin.right;
+    const height = width / 2;
+    const partyStats = {};
+    const data = {{ members.fractions | dump | safe}};
+
+    const legendItemHeight = 20;
+    const columns = 3;  // Number of columns
+    const itemWidth = 100;  // Width allocated to each column
+    let i = 0;
+
+    // Populate the partyStats object by iterating over the data
+    data.forEach(partyData => {
+        if (!partyStats[partyData.name]) {
+            partyStats[partyData.name] = {seats: 0, color: partyData.color};
+        }
+        partyStats[partyData.name].seats += partyData.seats;  // Sum up the seats for each party
+    });
+
+    // Convert the partyStats object to an array of {name, seats, color}
+    const partyStatsArray = Object.keys(partyStats).map(partyName => ({
+        name: partyName,
+        seats: partyStats[partyName].seats,
+        color: partyStats[partyName].color
+    }));
+
+    // Sort parties by seat count (descending)
+    partyStatsArray.sort((a, b) => b.seats - a.seats);
+
+    const legendRows = Math.ceil(partyStatsArray.length / columns);
+    const legendHeight = legendRows * (legendItemHeight + 5) + 20; // 20px padding
+
+    const svg = d3.select("#parliamentChart svg")
+        .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + legendHeight + margin.bottom}`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .style("width", "100%")
+        .style("height", "auto");
+
+
+    const g = svg.append("g")
+          .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+    svg.append("text")
+        .attr("x", width / 2) // Horizontally center it
+        .attr("y", height) // Vertically center it
+        .attr("text-anchor", "middle")  // Centers the text
+        .attr("dominant-baseline", "bottom") // Vertically centers the text
+        .attr("font-size", "2rem")  // Font size
+        .attr("font-weight", "bold")  // Font weight
+        .attr("fill", "black") // Text color
+        .text("150");  // Text content
+
+    const chart = d3.parliamentChart()
+        .width(width)
+        .seatRadius(6)
+        .rowHeight(13)
+        .sections(1)
+        .aggregatedData(data);
+
+    const legend = svg.append("g")
+        .attr("transform", `translate(${margin.left}, ${height + margin.top + 20})`);
+
+    // Create legend items in 3 columns
+    partyStatsArray.forEach((party, index) => {
+        const columnIndex = index % columns;  // Calculate the column index
+        const rowIndex = Math.floor(index / columns);  // Calculate the row index
+
+        // Append the circle for the party
+        legend.append("circle")
+            .attr("cx", columnIndex * itemWidth + 10)  // X position based on column
+            .attr("cy", rowIndex * (legendItemHeight + 5))  // Y position based on row
+            .attr("r", 5)  // Radius of the circle
+            .attr("fill", party.color);  // Set color from the party color
+
+        // Append the text for the party name
+        legend.append("text")
+            .attr("x", columnIndex * itemWidth + 20)  // Position the text to the right of the circle
+            .attr("y", rowIndex * (legendItemHeight + 5) + 4)  // Align text vertically
+            .attr("font-size", "10px")  // Font size for the legend
+            .attr("fill", "black")  // Text color
+            .text(`${party.name} (${party.seats})`);
+
+        i++;  // Increment for next legend item
+    });
+
+    g.call(chart);
+    });
+</script>

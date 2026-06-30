@@ -1,0 +1,16 @@
+{% macro noticeCard(params) %}
+
+<div class="card">
+    <!-- TITLE CARD -->
+    <div id='notice-{{ params.notice.notice_id }}' class="card-section">
+        <!-- BODY -->
+        <div class="padding flex-col gap">
+            <!-- TITLE -->
+            <p class="bold">
+                <span>{{ params.notice.title_nl }}</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endmacro %}

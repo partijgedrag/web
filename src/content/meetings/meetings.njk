@@ -1,0 +1,380 @@
+---
+layout: layouts/page
+permalink: "meetings/"
+sitemap: true
+redirect_from:
+    - "/sessions/56/meetings/"
+title: "Vergaderingen"
+description: "Overzicht van alle plenaire vergaderingen en commissievergaderingen in het Belgische parlement, met agenda's en stemmingen."
+i18nHeader: "meetingsHeader"
+i18nSubheader: "meetingsSubheader"
+---
+
+<section id="meetings">
+    <!-- BENTO -->
+    <div class="bento">
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ meetings.meetings | plenary | length }}</h2>
+            <p data-i18n="plenaryMeetings">plenaire</p>
+        </div>
+
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ meetings.meetings | commission | length }}</h2>
+            <p data-i18n="commissionMeetings">commissie</p>
+        </div>
+
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ (meetings.meetings | filter("type", "plenary"))[0].date | date }}</h2>
+            <p data-i18n="mostRecentPlenary"></p>
+        </div>
+
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ (meetings.meetings | filter("type", "commission"))[0].date | date }}</h2>
+            <p data-i18n="mostRecentCommission"></p>
+        </div>
+
+        <div class="card padded flex-col gap-small bento-item-2">
+            <h3 style="margin: 0;" data-i18n="durationHistogramTitlePlenary">Duur van de plenaire vergadering</h3>
+            <svg id="plenaryDurationHistogram"></svg>
+        </div>
+
+        <div class="card padded flex-col gap-small bento-item-2">
+            <h3 style="margin: 0;" data-i18n="durationHistogramTitleCommission">Duur van de commissievergadering</h3>
+            <svg id="commissionDurationHistogram"></svg>
+        </div>
+    </div>
+
+    <h2 data-i18n="allMeetings" class="capitalize-first">Alle vergaderingen</h2>
+
+    <!-- FAQ -->
+    <ul class="faq-list">
+        <li class="card padded flex-col">
+            <details>
+                <summary>Wat zijn plenaire vergaderingen?</summary>
+                <p>Tijdens de plenaire vergaderingen komen de 150 kamerleden samen om vragen te stellen aan ministers, te debatteren over wetsontwerpen en te stemmen over wetsvoorstellen.</p>
+            </details>
+        </li>
+
+        <li class="card padded flex-col">
+            <details>
+                <summary>Wat zijn commissievergaderingen?</summary>
+                <p>De commissies bereiden het werk van de plenaire vergadering voor, zodat die sneller en efficiënter kan werken.</p>
+                <p>Ze behandelen wetsontwerpen en voorstellen, bespreken en stemmen over eventuele wijzigingen. Het eindverslag gaat daarna naar de plenaire vergadering.</p>
+                <p>Daarnaast controleren commissies de regering via interpellaties en mondelinge vragen.</p>
+            </details>
+        </li>
+
+        <li class="card padded flex-col">
+            <details>
+                <summary>Hoe wordt aanwezigheid berekend?</summary>
+                <p>De Kamer publiceert geen aanwezigheden. Voor een plenaire vergadering wordt de aanwezigheid berekend door te kijken naar wie gestemd heeft tijdens de eerste stemming van de vergadering. Voor commissievergaderingen en plenaire vergaderingen zonder stemmingen kan geen aanwezigheid worden berekend.</p>
+            </details>
+        </li>
+    </ul>
+
+    <!-- GRID -->
+    <div class="item-grid-2">
+    {% for meeting in meetings.meetings %}
+        <!-- CHECK IF EMPTY -->
+        {% set isEmpty = meeting.type == 'plenary' and meeting.questions.length == 0 and meeting.propositions.length == 0 and meeting.allVotes.length == 0 %}
+
+        <!-- CALCULATE ATTENDANCE -->
+        {% set attendance = meeting.attendance %}
+        {% set attendanceColor = "#ff4c40" %}
+        {% if attendance.ratio >= 0.85 %}
+        {% set attendanceColor = "#28a745" %}
+        {% elif attendance.ratio >= 0.65 %}
+        {% set attendanceColor = "#ff4c40" %}
+        {% endif %}
+
+        <!-- GET COMMISSION TYPE -->
+        {% set commission_type = meeting.commission_type | default('', true) | lower %}
+        {% set commission = commissionsMetadata[commission_type] or {} %}
+{% if meeting.type == 'commission' %}
+        {% set meetingUrl %}
+          /sessions/{{ meeting.session_id }}/meetings/C{{ meeting.meeting_id }}
+        {% endset %}
+{% elif meeting.type == 'plenary' %}
+    {% set meetingUrl %}
+          /sessions/{{ meeting.session_id }}/meetings/P{{ meeting.meeting_id }}
+        {% endset %}
+   {% endif %}
+
+        <!-- MEETING CARD -->
+        <a class="card flex-col" style="position: relative;" {% if not isEmpty %}href='{{ meetingUrl | trim }}'{% endif %}>
+            <!-- MAIN -->
+            <div class="card-section flex-col flex-grow">
+                <!-- HEADER -->
+                <div class="flex-row justify-content:space-between align-items:start">
+                    <div class="category">{% if meeting.type == 'plenary' %}Plenaire{% else %}Commissie{% endif %}</div>
+                    <div class="flex-col align-items:end" style="padding: 0.4rem; padding-bottom: 0;">
+                        <p class="bold margin:0">{{ meeting.date | date }}</p>
+                        <p>{{ meeting.start_time }}</p>
+                    </div>
+                </div>
+
+                <!-- BODY -->
+                <div class="flex-col justify-content:space-between flex-grow">
+                    <!-- CONTENT -->
+                    <div class="flex-col gap padded" style="margin-right: 4rem;">
+                        <!-- COMMISSION TYPE -->
+                        {% if meeting.type == 'commission' %}
+                        <p>Commissie {{ commission_type }}</p>
+                        {% endif %}
+
+                        <!-- ATTENDANCE -->
+                        {% if meeting.type == 'plenary' %}
+                        <div>
+                            <p class="bold capitalize-first" data-i18n="attendance"></p>
+                            <p>
+                            {% if meeting.allVotes.length > 0 %}
+                                {{ attendance.count }}/150 ({{ (attendance.ratio * 100) | round(0, 'floor') }}%)
+                            {% else %}
+                                onbekend
+                            {% endif %}
+                            </p>
+                            <div class="progress-bar rounded">
+                                <div class="bar-segment positive" style="width: {{ (attendance.ratio * 100) | round(0, 'floor') }}%; background-color: {{ attendanceColor }};"></div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- STATS -->
+            <div class="card-section padded-tight">
+                <div class="flex-row flex-wrap gap-small align-items:center">
+                    <!-- QUESTIONS -->
+                    <div class="flex-row align-items:center">
+                        <span class="icon-muted">{% icon "lucide:message-circle-question" %}</span>
+                        <span class="text-muted">{{ meeting.questions.length }} {{ 'vraag' if meeting.questions.length == 1 else 'vragen' }}</span>
+                    </div>
+
+                    {% if meeting.type == 'plenary' %}
+                    <!-- PROPOSITIONS -->
+                    <div class="flex-row align-items:center">
+                        <span class="icon-muted">{% icon "lucide:lightbulb" %}</span>
+                        <span class="text-muted">{{ meeting.propositions.length }} {{ 'voorstel' if meeting.propositions.length == 1 else 'voorstellen' }}</span>
+                    </div>
+
+                    <!-- VOTES -->
+                    <div class="flex-row align-items:center">
+                        <span class="icon-muted">{% icon "lucide:vote" %}</span>
+                        <span class="text-muted">{{ meeting.allVotes.length }} {{ 'stemming' if meeting.allVotes.length == 1 else 'stemmingen' }}</span>
+                    </div>
+
+                    <!-- NOTICES -->
+                    <div class="flex-row align-items:center">
+                        <span class="icon-muted">{% icon "lucide:message-square-text" %}</span>
+                        <span class="text-muted">{{ meeting.notices.length }} {{ 'mededeling' if meeting.notices.length == 1 else 'mededelingen' }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- CHEVRON -->
+            {% if not isEmpty %}
+            <div style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);">
+                {% icon "lucide:chevron-right" %}
+            </div>
+            {% endif %}
+        </a>
+    {% endfor %}
+</div>
+
+</section>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const durations = {{ meetings.durations.plenary | dump | safe }};
+
+        const margin = {top: 20, right: 0, bottom: 30, left: 30};
+        const container = document.getElementById("plenaryDurationHistogram").parentNode;
+        const width = container.clientWidth - margin.left - margin.right;
+        const height = 150;
+
+        const svg = d3.select("#plenaryDurationHistogram")
+            .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+            .attr("preserveAspectRatio", "xMidYMid meet")
+            .style("width", "100%")
+            .style("height", "auto");
+
+        const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const binGenerator = d3.bin()
+            .domain([0, d3.max(durations) + 50])  // Based on actual range
+            .thresholds(10); // Adjust bin count as needed
+
+        const bins = binGenerator(durations);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(bins, d => d.length) + 1])
+            .range([height, 0]);
+
+        const color = d3.scaleLinear()
+            .domain([0, d3.max(bins, d => d.length) / 2, d3.max(bins, d => d.length)])
+            .range(["#c6e48b", "#7bc96f", "#196127"]);
+
+        const x = d3.scaleBand()
+            .domain(bins.map(d => d.x0))
+            .range([0, width])
+            .padding(0.1);
+
+        g.append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .call(d3.axisBottom(x)
+                .tickValues(bins.map(d => d.x0))
+                .tickFormat(d => `${Math.round(d / 60)}h`)
+            )
+            .call(g => g.select(".domain").remove())  // Re
+            .call(g => g.selectAll("text").style("font-size", "0.75rem").style("fill", "#333"));
+
+        g.append("g")
+            .call(d3.axisLeft(y)
+                .ticks(10)
+                .tickSize(-width)
+                .tickFormat(d => d) // optional, in case you want to format
+            )
+            .call(g => g.select(".domain").remove()) // Re
+            .call(g => g.selectAll("text")
+                .style("font-size", "0.75rem")
+                .style("font-family", "sans-serif")
+                .style("fill", "#333"))
+            .call(g => g.selectAll(".tick line")
+                .attr("stroke", "#ddd")
+                .attr("stroke-dasharray", "2,2"));
+
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        const bars = g.selectAll(".bar")
+            .data(bins)
+            .enter()
+            .append("rect")
+            .attr("class", "bar")
+            .attr("x", d => x(d.x0) + x.bandwidth() * 0.5)
+            .attr("width", x.bandwidth())
+            .attr("y", y(0))
+            .attr("height", 0)
+            .attr("rx", 4)
+            .attr("ry", 4)
+            .attr("fill", d => color(d.length));
+
+        bars.transition()
+            .duration(800)
+            .attr("y", d => y(d.length))
+            .attr("height", d => height - y(d.length));
+
+        bars.on("mouseover", function (event, d) {
+            tooltip.transition().duration(200).style("opacity", 1);
+            tooltip.html(`<strong>${d.length}</strong> vergaderingen<br/>Duur: ${Math.round(d.x0)} - ${Math.round(d.x1)} min`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 30) + "px");
+            d3.select(this).attr("fill", "#0f3d18");
+        }).on("mouseout", function (event, d) {
+            tooltip.transition().duration(200).style("opacity", 0);
+            d3.select(this).attr("fill", color(d.length));
+        });
+    });
+</script>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const durations = {{ meetings.durations.commission | dump | safe }};
+
+
+        const margin = {top: 20, right: 0, bottom: 30, left: 30};
+        const container = document.getElementById("commissionDurationHistogram").parentNode;
+        const width = container.clientWidth - margin.left - margin.right;
+        const height = 150;
+
+        const svg = d3.select("#commissionDurationHistogram")
+            .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+            .attr("preserveAspectRatio", "xMidYMid meet")
+            .style("width", "100%")
+            .style("height", "auto");
+
+        const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const binGenerator = d3.bin()
+            .domain([0, d3.max(durations) + 50])  // Based on actual range
+            .thresholds(10); // Adjust bin count as needed
+
+        const bins = binGenerator(durations);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(bins, d => d.length) + 1])
+            .range([height, 0]);
+
+        const color = d3.scaleLinear()
+            .domain([0, d3.max(bins, d => d.length) / 2, d3.max(bins, d => d.length)])
+            .range(["#b0dbe4", "#61adea", "#1d4e89"]);
+
+        const x = d3.scaleBand()
+            .domain(bins.map(d => d.x0))
+            .range([0, width])
+            .padding(0.1);
+
+        g.append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .call(d3.axisBottom(x)
+                .tickValues(bins.map(d => d.x0))
+                .tickFormat(d => `${Math.round(d / 60)}h`)
+            )
+            .call(g => g.select(".domain").remove())  // Re
+            .call(g => g.selectAll("text").style("font-size", "0.75rem").style("fill", "#333"));
+
+        g.append("g")
+            .call(d3.axisLeft(y)
+                .ticks(10)
+                .tickSize(-width)
+                .tickFormat(d => d) // optional, in case you want to format
+            )
+            .call(g => g.select(".domain").remove()) // Re
+            .call(g => g.selectAll("text")
+                .style("font-size", "0.75rem")
+                .style("font-family", "sans-serif")
+                .style("fill", "#333"))
+            .call(g => g.selectAll(".tick line")
+                .attr("stroke", "#ddd")
+                .attr("stroke-dasharray", "2,2"));
+
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        const bars = g.selectAll(".bar")
+            .data(bins)
+            .enter()
+            .append("rect")
+            .attr("class", "bar")
+            .attr("x", d => x(d.x0) + x.bandwidth() * 0.5)
+            .attr("width", x.bandwidth())
+            .attr("y", y(0))
+            .attr("height", 0)
+            .attr("rx", 4)
+            .attr("ry", 4)
+            .attr("fill", d => color(d.length));
+
+        bars.transition()
+            .duration(800)
+            .attr("y", d => y(d.length))
+            .attr("height", d => height - y(d.length));
+
+        bars.on("mouseover", function (event, d) {
+            tooltip.transition().duration(200).style("opacity", 1);
+            tooltip.html(`<strong>${d.length}</strong> vergaderingen<br/>Duur: ${Math.round(d.x0)} - ${Math.round(d.x1)} min`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 30) + "px");
+            d3.select(this).attr("fill", "#163d6b");
+        }).on("mouseout", function (event, d) {
+            tooltip.transition().duration(200).style("opacity", 0);
+            d3.select(this).attr("fill", color(d.length));
+        });
+    });
+</script>

@@ -1,0 +1,133 @@
+---
+layout: layouts/meeting
+permalink: "fractions/{{ fraction.name | slugify }}/"
+sitemap: true
+pagination:
+    data: collections.fractions
+    size: 1
+    alias: fraction
+    addAllPagesToCollections: true
+eleventyComputed:
+    title: "{{ fraction.name | normaliseFraction }}"
+    description: "Stemgedrag en dossiers van {{ fraction.name | normaliseFraction }} in het Belgische parlement. Bekijk hoe deze fractie stemt over wetten en thema's."
+    i18nHeader: "fractionHeader"
+    i18nHeaderVars: {
+        name: "{{ fraction.name | normaliseFraction }}"
+    }
+    i18nSubheader: "fractionSubheader"
+    i18nSubheaderVars: {
+        name: "{{ fraction.name | normaliseFraction }}"
+    }
+---
+
+<!-- COMPONENTS -->
+{%- from "components/proposition-card.njk" import propositionCard -%}
+{%- from "components/question-card.njk" import questionCard -%}
+{%- from "components/activity-tabs.njk" import activityTabs -%}
+
+<!-- PAGEFIND METADATA -->
+<span style="display:none" data-pagefind-meta="title">{{ fraction.name | normaliseFraction }}</span>
+<span style="display:none" data-pagefind-body>Alles over de fractie {{ fraction.name | normaliseFraction }}. Bekijk stemmingen, vragen en wetsvoorstellen. Leden zijn: {% for member in fraction.members %}{{ member.first_name }} {{ member.last_name }}, {% endfor %}</span>
+
+<section id="fraction" class="flex-col gap">
+    <!-- INFO -->
+    <div class="card">
+        <div class="card-section padded flex-col gap-small">
+            <!-- HEADER -->
+            <div class="flex-row justify-content:space-between">
+                <h2 id="overzicht">Overzicht</h2>
+            </div>
+
+            <div class="flex-col gap">
+                <div class="flex-col gap">
+                    <p>Bekijk alles over de fractie {{ fraction.name | normaliseFraction }}. Bekijk leden en activiteit in de plenaire vergaderingen.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- DETAILS -->
+        <div class="card-section padded">
+            <div class="flex-col gap">
+                <div class="flex-row flex-wrap gap align-items:center">
+                    <!-- MEMBERS -->
+                    <div class="flex-row align-items:center">
+                        <span class="icon-muted">{% icon "lucide:users" %}</span>
+                        <span class="text-muted">{{ fraction.members | filter("active", "true") | length }} {{ 'actief lid' if fraction.members.length == 1 else 'actieve leden' }}</span>
+                    </div>
+
+                    <!-- QUESTIONS -->
+                    <div class="flex-row align-items:center">
+                        <span class="icon-muted">{% icon "lucide:message-circle-question" %}</span>
+                        <span class="text-muted">{{ fraction.questions.length }} {{ 'vraag' if fraction.questions.length == 1 else 'vragen' }}</span>
+                    </div>
+
+                    <!-- PROPOSITIONS -->
+                    <div class="flex-row align-items:center">
+                        <span class="icon-muted">{% icon "lucide:lightbulb" %}</span>
+                        <span class="text-muted">{{ fraction.propositions.length }} {{ 'voorstel' if fraction.propositions.length == 1 else 'voorstellen' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MEMBER GRID -->
+    <div>
+        <h2 id="members" class="capitalize-first" data-i18n="members">Leden</h2>
+        <div class="item-grid">
+            {% for member in fraction.members %}
+            <a class="card flex-col" href="/members/{{ member.first_name | slugify }}-{{ member.last_name | slugify }}" data-fraction="{{ member.fraction }}" data-constituency="{{ member.constituency }}" data-attendance="{{ member.attendance }}" data-normalized="{{ member.normalizedAttendance }}" data-outlier="{{ member.outlier }}" data-active="{{ member.active }}" style="color: inherit;">
+                <!-- BODY -->
+                <div class="flex-col justify-content:space-between flex-grow">
+                    <div class="flex-row gap padded justify-content:space-between align-items:center">
+                        <div class="flex-col gap align-items:start">
+                            {% if member.date_of_birth  %}
+                                <p class="member-name bold">{{ member.first_name }} {{ member.last_name }} ({{ member.date_of_birth | age }})</p>
+                            {% else %}
+                                <p class="member-name bold">{{ member.first_name }} {{ member.last_name }}</p>
+                            {% endif %}
+                            <p class="margin:0">
+                                {{ member.constituency }}
+                            </p>
+                            {% if member.active != "true" %}
+                                <span class="badge muted bold" data-i18n="inactive"></span>
+                            {% endif %}
+                        </div>
+                        {% icon "lucide:chevron-right" %}
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div>
+        <h2 id="activiteit" class="capitalize-first" data-i18n="plenaryActivity">Activiteit (plenaire vergaderingen)</h2>
+        <p>Bekijk al het parlementair werk van de fractie {{ fraction.name | normaliseFraction }} rond een specifiek onderwerp.</p>
+        {{ activityTabs({
+            questions: fraction.questions,
+            propositions: fraction.propositions,
+            name: fraction.name | normaliseFraction,
+            topics: topics,
+            functions: functions,
+            fractionColors: fractionColors,
+            showTopicFilter: true
+        }) }}
+    </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const filterSelect = document.getElementById("topic-filter");
+  const cards = document.querySelectorAll(".question-card-wrapper, .proposition-card-wrapper");
+
+  filterSelect.addEventListener("change", () => {
+    const selectedTopic = filterSelect.value;
+    cards.forEach(card => {
+      const topics = card.dataset.topics.split(',').map(t => t.trim());
+      const shouldShow = !selectedTopic || topics.includes(selectedTopic);
+      card.style.display = shouldShow ? "block" : "none";
+    });
+  });
+});
+</script>

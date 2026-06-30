@@ -1,0 +1,109 @@
+---
+layout: layouts/meeting
+permalink: "sessions/{{ meeting.session_id }}/meetings/C{{ meeting.meeting_id }}/"
+pagination:
+    data: collections.commissionMeetings
+    size: 1
+    alias: meeting
+    addAllPagesToCollections: true
+eleventyComputed:
+    title: "Commissievergadering {{ meeting.commission_type }} op {{ meeting.date | date }}"
+    description: "Bekijk het verslag van de commissievergadering van de commissie {{ meeting.commission_type }} op {{ meeting.date | date }}."
+    i18nHeader: "commissionMeetingHeader"
+    i18nHeaderVars: {
+        date: "{{ meeting.date | date }}"
+    }
+    i18nSubheader: "commissionMeetingSubHeader"
+    i18nSubheaderVars: {
+        date: "{{ meeting.date | date }}",
+        time_of_day: "{{ meeting.time_of_day | translate }}"
+    }
+---
+
+<!-- COMPONENTS -->
+{%- from "components/question-card.njk" import questionCard -%}
+
+<!-- VARIABLES -->
+{% set document_id = "IC" + (meeting.meeting_id | padLeft(3, '0')) + "X" %}
+
+<!-- PAGEFIND METADATA -->
+<span style="display:none" data-pagefind-meta="title">Commissievergadering op {{ meeting.date | date }}  ({{ meeting.commission_type }}) ({{ document_id }})</span>
+<span style="display:none" data-pagefind-body>Alle vragen van vergadering {{ document_id }}.</span>
+
+<section id="commission-meeting">
+    <div class="flex-col gap">
+        <!-- INFO -->
+        <div class="card">
+            <div class="card-section padded flex-col gap-small">
+                <!-- HEADER -->
+                <div class="flex-row justify-content:space-between">
+                    <h2 id="overzicht">Commissie {{ meeting.commission_type }}</h2>
+                    <a href="https://www.dekamer.be/doc/CCRI/html/{{ meeting.session_id }}/ic{{ meeting.meeting_id | padLeft(3, '0') }}x.html" target="_blank" class="flex-row gap-small align-items:center outlined padded-tight rounded">
+                        {% lucide "external-link" %}
+                        <span>Bron</span>
+                    </a>
+                </div>
+
+                <div class="flex-col gap">
+                    <!-- SUMMARY -->
+                    <p>Alles over deze commissievergadering.</p>
+                </div>
+            </div>
+
+            <!-- DETAILS -->
+            <div class="card-section padded">
+                <div class="flex-col gap">
+                    <div class="flex-row flex-wrap gap align-items:center">
+                        <!-- MEETING ID -->
+                        <div class="flex-row align-items:center">
+                            <span class="icon-muted">{% icon "lucide:file-text" %}</span>
+                            <span class="text-muted">{{ document_id }}</span>
+                        </div>
+
+                        <!-- DURATION -->
+                        <div class="flex-row align-items:center">
+                            <span class="icon-muted">{% icon "lucide:clock" %}</span>
+                            <span class="text-muted capitalize-first"><span data-i18n="from">van</span> {{ meeting.start_time }} <span data-i18n="until"></span> {{ meeting.end_time }} ({{ meeting.start_time | duration(meeting.end_time)}})</span>
+                        </div>
+
+                        <!-- CHAIR -->
+                        <div class="flex-row align-items:center">
+                            <span class="icon-muted">{% icon "lucide:user" %}</span>
+                            <span class="text-muted">
+                                Voorgezeten door
+                                {% for chair in meeting.chairs %}
+                                <a href="/members/{{ chair.name | slugify }}/">{{ chair.name }}</a>
+                                {% endfor %}
+                            </span>
+                        </div>
+
+                        <!-- QUESTIONS -->
+                        <div class="flex-row align-items:center">
+                            <span class="icon-muted">{% icon "lucide:message-circle-question" %}</span>
+                            <span class="text-muted">{{ meeting.questions.length }} vragen</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section data-pagefind-body>
+        <!-- QUESTIONS -->
+        <h2 id="mondelinge vragen" class="capitalize" data-i18n="oralQuestions">Mondelinge vragen</h2>
+        {% if meeting.questions.length == 0 %}
+            <p data-i18n="noQuestions">noQuestions</p>
+        {% else %}
+            <p data-i18n="questionsDescription">De vragen die gesteld werden tijdens deze vergadering.</p>
+            <ul class="flex-col gap padding:0">
+                {% for question in meeting.questions %}
+                {% set topicCounts = [question] | countTopics(topics) %}
+                {% set topic = topicCounts[0][0] %}
+                <li class="question-container">
+                    {{ questionCard({question: question, topic: topic, topics: topics, functions: functions, fractionColors: fractionColors, nolink: true }) }}
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
+</section>

@@ -1,0 +1,134 @@
+{
+  "sp.a-spirit": {
+    "primary": "#d70000",
+    "secondary": "#ff4d4d"
+  },
+  "ps": {
+    "primary": "#ff0000",
+    "secondary": "#ffdfdf"
+  },
+  "groen": {
+    "primary": "#02ad5b",
+    "secondary": "#d4eed3"
+  },
+  "ecolo-groen": {
+    "primary": "#02ad5b",
+    "secondary": "#d4eed3"
+  },
+  "groen!": {
+    "primary": "#92b70e",
+    "secondary": "#b3d800"
+  },
+  "les engagés": {
+    "primary": "#00c7b6",
+    "secondary": "#cdf2e5"
+  },
+  "vlaams belang": {
+    "primary": "#000000",
+    "secondary": "#f1f1f1"
+  },
+  "vb": {
+    "primary": "#000000",
+    "secondary": "#bebebe"
+  },
+  "vlaams blok": {
+    "primary": "#e98a2e",
+    "secondary": "#f1b07b"
+  },
+  "cd&v": {
+    "primary": "#ff6000",
+    "secondary": "#ffe9da"
+  },
+  "cdh": {
+    "primary": "#ae1a00",
+    "secondary": "#d44c44"
+  },
+  "cvp": {
+    "primary": "#f7810c",
+    "secondary": "#fba75b"
+  },
+  "agalev": {
+    "primary": "#017204",
+    "secondary": "#69b572"
+  },
+  "vld": {
+    "primary": "#005aa5",
+    "secondary": "#3387d0"
+  },
+  "open vld": {
+    "primary": "#0e5b83",
+    "secondary": "#d0ebf5"
+  },
+  "anders.": {
+    "primary": "#0e5b83",
+    "secondary": "#d0ebf5"
+  },
+  "mr": {
+    "primary": "#002df7",
+    "secondary": "#dbe3ff"
+  },
+  "vu": {
+    "primary": "#fcba02",
+    "secondary": "#fff8e4"
+  },
+  "n-va": {
+    "primary": "#fabe19",
+    "secondary": "#fff0c6"
+  },
+  "onafh": {
+    "primary": "black",
+    "secondary": "#eaeaea"
+  },
+  "vooruit": {
+    "primary": "#e72500",
+    "secondary": "#ffd5d5"
+  },
+  "pvda-ptb": {
+    "primary": "#ef4135",
+    "secondary": "#ffe4e3"
+  },
+  "ptb": {
+    "primary": "#ef4135",
+    "secondary": "#ffe4e3"
+  },
+  "ptb-pvda": {
+    "primary": "#ef4135",
+    "secondary": "#ffe4e3"
+  },
+  "pvda": {
+    "primary": "#ef4135",
+    "secondary": "#ffe4e3"
+  },
+  "ecolo": {
+    "primary": "#8dc63f",
+    "secondary": "#d7f2cd"
+  },
+  "défi": {
+    "primary": "#660099",
+    "secondary": "#dfbcff"
+  },
+  "pp": {
+    "primary": "#009900",
+    "secondary": "#66cc66"
+  },
+  "lijst de decker": {
+    "primary": "#3366cc",
+    "secondary": "#66a3ff"
+  },
+  "bub": {
+    "primary": "#666666",
+    "secondary": "#999999"
+  },
+  "volt": {
+    "primary": "#56288f",
+    "secondary": "#8e63c5"
+  },
+  "one brussels": {
+    "primary": "#ff007f",
+    "secondary": "#ff66b3"
+  },
+  "be.one": {
+    "primary": "#ffcc00",
+    "secondary": "#ffd966"
+  }
+}

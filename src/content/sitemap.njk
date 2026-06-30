@@ -1,0 +1,20 @@
+---
+permalink: /sitemap.xml
+eleventyExcludeFromCollections: true
+layout: null
+---
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {%- for page in collections.sitemap %}
+    {%- set draft = page.data.eleventyExcludeFromCollections %}
+    {%- if not draft  %}
+        {%- set absoluteUrl %}{{ page.url | url | absoluteUrl("https://partijgedrag.be/") }}{% endset %}
+        {%- set lastmod = page.date | sitemapDate("yyyy-MM-dd") %}
+        <url>
+            <loc>{{ absoluteUrl }}</loc>
+            <lastmod>{{ lastmod }}</lastmod>
+        </url>
+    {%- endif %}
+    {%- endfor %}
+</urlset>

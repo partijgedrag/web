@@ -1,0 +1,9 @@
+name = "partijgedrag"
+compatibility_date = "2026-05-20"
+main = "./worker.js"
+assets = { directory = "./_site", binding = "ASSETS" }
+
+[[d1_databases]]
+binding = "feedback_db"
+database_name = "feedback-db"
+database_id = "d7efa03c-9a01-4baa-9a75-dd68e6a66ca6"

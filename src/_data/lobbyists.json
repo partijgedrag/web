@@ -1,0 +1,686 @@
+{
+  "11.11.11": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "AbbVie": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "AB InBev": {
+    "sector": "Voeding & Dranken"
+  },
+  "ABR - BVI": {
+    "sector": "Financiële Diensten"
+  },
+  "ACODEV": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "ADEPT-Platform": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "AG Insurance": {
+    "sector": "Financiële Diensten"
+  },
+  "Agoria": {
+    "sector": "Technologie & Digitale Sector"
+  },
+  "Agoria Tax Consultants": {
+    "sector": "Financiële Diensten"
+  },
+  "Aidants Proches": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Akkanto": {
+    "sector": "Media, Communicatie & Public Affairs"
+  },
+  "Alcogroup": {
+    "sector": "Chemie & Energie"
+  },
+  "Alia Security": {
+    "sector": "Veiligheid & Beveiliging"
+  },
+  "AmCham Belgium": {
+    "sector": "Financiële Diensten"
+  },
+  "American Express Europe": {
+    "sector": "Financiële Diensten"
+  },
+  "Amnesty International Belgique": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Amnesty International Vlaanderen": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Antargaz Belgium": {
+    "sector": "Chemie & Energie"
+  },
+  "Antwerp World Diamond Centre": {
+    "sector": "Andere"
+  },
+  "Arcturus Group": {
+    "sector": "Andere"
+  },
+  "Assuralia": {
+    "sector": "Financiële Diensten"
+  },
+  "A&T Efficiency": {
+    "sector": "Andere"
+  },
+  "AVBB - VVJ": {
+    "sector": "Juridische Diensten"
+  },
+  "avocats.be": {
+    "sector": "Juridische Diensten"
+  },
+  "BA+": {
+    "sector": "Andere"
+  },
+  "BACHI (Belgian Association of the Consumer Healthcare Industry)": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "BAGO (Belgian Association of Gaming Operators)": {
+    "sector": "Kansspelen & Entertainment"
+  },
+  "BAM (Belgian Association of Marketing)": {
+    "sector": "Media, Communicatie & Public Affairs"
+  },
+  "Bapie": {
+    "sector": "Andere"
+  },
+  "Bayer": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "Bayer Crop Science": {
+    "sector": "Chemie & Energie"
+  },
+  "BELFertil": {
+    "sector": "Chemie & Energie"
+  },
+  "Belgian Association of Tax Lawyers": {
+    "sector": "Financiële Diensten"
+  },
+  "Belgian Bioethanol Association": {
+    "sector": "Chemie & Energie"
+  },
+  "Belgian BioPackaging": {
+    "sector": "Andere"
+  },
+  "Belgian Brain Council": {
+    "sector": "Andere"
+  },
+  "Belgian Brewers": {
+    "sector": "Voeding & Dranken"
+  },
+  "Belgian Offshore Platform": {
+    "sector": "Chemie & Energie"
+  },
+  "Belgische Alliantie voor Duurzame Palmolie": {
+    "sector": "Voeding & Dranken"
+  },
+  "Belgische Petroleum Federatie": {
+    "sector": "Chemie & Energie"
+  },
+  "BelgoCuba": {
+    "sector": "Andere"
+  },
+  "Belplant": {
+    "sector": "Andere"
+  },
+  "Beltug": {
+    "sector": "Juridische Diensten"
+  },
+  "beMedTech": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "Bepact": {
+    "sector": "Media, Communicatie & Public Affairs"
+  },
+  "Besix": {
+    "sector": "Bouw, Vastgoed & Infrastructuur"
+  },
+  "Bioplus - Probois": {
+    "sector": "Andere"
+  },
+  "BNP Paribas Fortis": {
+    "sector": "Financiële Diensten"
+  },
+  "Boehringer Ingelheim": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "bol.com": {
+    "sector": "Detailhandel, Diensten & KMO’s"
+  },
+  "Bond Beter Leefmilieu": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Bolt": {
+    "sector": "Andere"
+  },
+  "bpost": {
+    "sector": "Transport, Logistiek & Mobiliteit"
+  },
+  "Brafco": {
+    "sector": "Andere"
+  },
+  "Bristol-Myers Squibb": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "British American Tobacco Belgium": {
+    "sector": "Andere"
+  },
+  "Brussels Airport Company": {
+    "sector": "Transport, Logistiek & Mobiliteit"
+  },
+  "BVBO - APEG": {
+    "sector": "Andere"
+  },
+  "BVBO - UPOB": {
+    "sector": "Andere"
+  },
+  "BZB-Fedafin": {
+    "sector": "Financiële Diensten"
+  },
+  "CAE": {
+    "sector": "Andere"
+  },
+  "CC Strategies": {
+    "sector": "Andere"
+  },
+  "Centre de la Communication": {
+    "sector": "Media, Communicatie & Public Affairs"
+  },
+  "Communicatie Centrum": {
+    "sector": "Media, Communicatie & Public Affairs"
+  },
+  "Chiesi": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "CNCD-11.11.11": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Coca-Cola Europacific Partners Belux": {
+    "sector": "Voeding & Dranken"
+  },
+  "Comeos": {
+    "sector": "Detailhandel, Diensten & KMO’s"
+  },
+  "Co-Prev": {
+    "sector": "Andere"
+  },
+  "Cumuleo": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "DDPA": {
+    "sector": "Andere"
+  },
+  "Deliveroo": {
+    "sector": "Voeding & Dranken"
+  },
+  "deMens.nu [Unie Vrijzinnige Verenigingen]": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Dentons Global Advisors": {
+    "sector": "Juridische Diensten"
+  },
+  "Denuo": {
+    "sector": "Andere"
+  },
+  "Detic asbl": {
+    "sector": "Andere"
+  },
+  "DHL Aviation": {
+    "sector": "Transport, Logistiek & Mobiliteit"
+  },
+  "Diageo": {
+    "sector": "Voeding & Dranken"
+  },
+  "Dr2 Consultants": {
+    "sector": "Technologie & Digitale Sector"
+  },
+  "Eneco": {
+    "sector": "Chemie & Energie"
+  },
+  "Engie Electrabel": {
+    "sector": "Chemie & Energie"
+  },
+  "Essenscia": {
+    "sector": "Chemie & Energie"
+  },
+  "Ets L. Lacroix Fils": {
+    "sector": "Andere"
+  },
+  "Eurimag": {
+    "sector": "Andere"
+  },
+  "EV Belgium": {
+    "sector": "Andere"
+  },
+  "Event Confederation": {
+    "sector": "Andere"
+  },
+  "Evocaten bvba": {
+    "sector": "Andere"
+  },
+  "FAIB": {
+    "sector": "Andere"
+  },
+  "Febelfin": {
+    "sector": "Financiële Diensten"
+  },
+  "Febeliec": {
+    "sector": "Andere"
+  },
+  "Febelsafe": {
+    "sector": "Veiligheid & Beveiliging"
+  },
+  "Febetra": {
+    "sector": "Andere"
+  },
+  "Febiac vzw-asbl": {
+    "sector": "Andere"
+  },
+  "Fédération des maisons médicales": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Fédération royale du Notariat belge": {
+    "sector": "Juridische Diensten"
+  },
+  "Fediex": {
+    "sector": "Bouw, Vastgoed & Infrastructuur"
+  },
+  "Fedustria": {
+    "sector": "Andere"
+  },
+  "FEGC - FABA": {
+    "sector": "Bouw, Vastgoed & Infrastructuur"
+  },
+  "FVF": {
+    "sector": "Andere"
+  },
+  "G4S Secure Solutions": {
+    "sector": "Veiligheid & Beveiliging"
+  },
+  "Gaia": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Generation Maastricht": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Global Tamil Movement": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Google Belgium": {
+    "sector": "Technologie & Digitale Sector"
+  },
+  "Gosselin & de Walque": {
+    "sector": "Andere"
+  },
+  "Greenlane": {
+    "sector": "Technologie & Digitale Sector"
+  },
+  "Greenpeace Belgium": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Growth Inc.": {
+    "sector": "Technologie & Digitale Sector"
+  },
+  "Herman Herpelinck": {
+    "sector": "Andere"
+  },
+  "Hindu Forum": {
+    "sector": "Kunst, Cultuur & Religie"
+  },
+  "Horeca Vlaanderen vzw": {
+    "sector": "Detailhandel, Diensten & KMO’s"
+  },
+  "Huawei Belgique": {
+    "sector": "Technologie & Digitale Sector"
+  },
+  "ICC België": {
+    "sector": "Detailhandel, Diensten & KMO’s"
+  },
+  "Infrabel": {
+    "sector": "Bouw, Vastgoed & Infrastructuur"
+  },
+  "ING Belgium": {
+    "sector": "Financiële Diensten"
+  },
+  "Instituut voor bedrijfsjuristen": {
+    "sector": "Financiële Diensten"
+  },
+  "Institut des juristes d’entreprise": {
+    "sector": "Financiële Diensten"
+  },
+  "Inter-Environnement Wallonie": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "ISPA Belgium": {
+    "sector": "Andere"
+  },
+  "ITAA": {
+    "sector": "Technologie & Digitale Sector"
+  },
+  "JTI": {
+    "sector": "Andere"
+  },
+  "Juul Labs Belgium": {
+    "sector": "Andere"
+  },
+  "KBC": {
+    "sector": "Financiële Diensten"
+  },
+  "Kerk van Jezus Christus": {
+    "sector": "Kunst, Cultuur & Religie"
+  },
+  "Kindred Group": {
+    "sector": "Kansspelen & Entertainment"
+  },
+  "Knauf Insulation": {
+    "sector": "Andere"
+  },
+  "Kom op tegen Kanker": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Koninklijke Belgische Redersvereniging": {
+    "sector": "Andere"
+  },
+  "Kreab Brussels": {
+    "sector": "Andere"
+  },
+  "KVABB": {
+    "sector": "Andere"
+  },
+  "Landsbond Onafhankelijke Ziekenfondsen": {
+    "sector": "Andere"
+  },
+  "Ligue Bruxelloise pour la Santé Mentale": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Lobby Citoyen": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Lobco2care Rafiek MADANI": {
+    "sector": "Juridische Diensten"
+  },
+  "Marconsult": {
+    "sector": "Andere"
+  },
+  "Matexi": {
+    "sector": "Bouw, Vastgoed & Infrastructuur"
+  },
+  "Medaxes": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "Meer Democratie": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Microsoft": {
+    "sector": "Technologie & Digitale Sector"
+  },
+  "MSD": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "Napoleon Games": {
+    "sector": "Kansspelen & Entertainment"
+  },
+  "Nationale Kamer van Gerechtsdeurwaarders": {
+    "sector": "Juridische Diensten"
+  },
+  "Nelectra": {
+    "sector": "Bouw, Vastgoed & Infrastructuur"
+  },
+  "Nationale Loterij": {
+    "sector": "Kansspelen & Entertainment"
+  },
+  "Neutraal Syndicaat voor Zelfstandigen Syndicat Neutre pour indépendants": {
+    "sector": "Detailhandel, Diensten & KMO’s"
+  },
+  "Newpharma": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "NMBS - SNCB": {
+    "sector": "Transport, Logistiek & Mobiliteit"
+  },
+  "Novartis": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "N-square Consulting": {
+    "sector": "Andere"
+  },
+  "Nucleair Forum": {
+    "sector": "Andere"
+  },
+  "OncoDNA": {
+    "sector": "Andere"
+  },
+  "Ophaco": {
+    "sector": "Andere"
+  },
+  "Oxfam België Belgique": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Oxfam-Solidariteit": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Panache Productions": {
+    "sector": "Kunst, Cultuur & Religie"
+  },
+  "Payoke": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Pensioplus": {
+    "sector": "Financiële Diensten"
+  },
+  "Perstablo vzw": {
+    "sector": "Andere"
+  },
+  "Pfizer": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "pharma.be": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "Philip Morris Benelux B.V.": {
+    "sector": "Andere"
+  },
+  "Plan International Belgium": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Pluxee Belgium": {
+    "sector": "Andere"
+  },
+  "Political Intelligence": {
+    "sector": "Technologie & Digitale Sector"
+  },
+  "Primagaz": {
+    "sector": "Chemie & Energie"
+  },
+  "Procter & Gamble Services Company": {
+    "sector": "Andere"
+  },
+  "Prodipress": {
+    "sector": "Andere"
+  },
+  "Proximus": {
+    "sector": "Technologie & Digitale Sector"
+  },
+  "Renta": {
+    "sector": "Transport, Logistiek & Mobiliteit"
+  },
+  "Roche": {
+    "sector": "Andere"
+  },
+  "RPP Group": {
+    "sector": "Andere"
+  },
+  "RWE Offshore Belgium": {
+    "sector": "Chemie & Energie"
+  },
+  "Christophe Sanglier": {
+    "sector": "Andere"
+  },
+  "Sam Tes": {
+    "sector": "Andere"
+  },
+  "Sanofi": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "Shop Apotheke": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "Siemens Mobility": {
+    "sector": "Transport, Logistiek & Mobiliteit"
+  },
+  "Siemens NV": {
+    "sector": "Andere"
+  },
+  "SoWhatCommunications International": {
+    "sector": "Media, Communicatie & Public Affairs"
+  },
+  "StRaten-Generaal": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Sustainia": {
+    "sector": "Chemie & Energie"
+  },
+  "Sypol": {
+    "sector": "Veiligheid & Beveiliging"
+  },
+  "Takeaway.com European Operations": {
+    "sector": "Voeding & Dranken"
+  },
+  "Takeda Belgium": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "Tesla Motors Belgium": {
+    "sector": "Transport, Logistiek & Mobiliteit"
+  },
+  "Test Aankoop": {
+    "sector": "Detailhandel, Diensten & KMO’s"
+  },
+  "Test Achats": {
+    "sector": "Detailhandel, Diensten & KMO’s"
+  },
+  "Tiberghien Advocatenkantoor": {
+    "sector": "Juridische Diensten"
+  },
+  "Transparencia Belgium": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Transparency International Belgium": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Transport en logistiek Vlaanderen (TLV)": {
+    "sector": "Transport, Logistiek & Mobiliteit"
+  },
+  "Traxio": {
+    "sector": "Transport, Logistiek & Mobiliteit"
+  },
+  "Twitter": {
+    "sector": "Technologie & Digitale Sector"
+  },
+  "UBA Belgium": {
+    "sector": "Media, Communicatie & Public Affairs"
+  },
+  "Uber": {
+    "sector": "Transport, Logistiek & Mobiliteit"
+  },
+  "UBMP - BUPB": {
+    "sector": "Andere"
+  },
+  "UCB": {
+    "sector": "Andere"
+  },
+  "UCM": {
+    "sector": "Andere"
+  },
+  "Umedia": {
+    "sector": "Kansspelen & Entertainment"
+  },
+  "Unicef": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Unisoc": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "Unie Sociale Secretariaten": {
+    "sector": "Andere"
+  },
+  "Unie van Zelfstandige Ondernemers (Unizo)": {
+    "sector": "Detailhandel, Diensten & KMO’s"
+  },
+  "Union Bouddhiste de Belgique": {
+    "sector": "Kunst, Cultuur & Religie"
+  },
+  "Union Francophone des Huissiers de Justice (UFHJ)": {
+    "sector": "Juridische Diensten"
+  },
+  "Union professionnelle des agences de voyage (UPAV)": {
+    "sector": "Andere"
+  },
+  "UPS Belgium": {
+    "sector": "Transport, Logistiek & Mobiliteit"
+  },
+  "UPSI - BVS": {
+    "sector": "Bouw, Vastgoed & Infrastructuur"
+  },
+  "UPTR": {
+    "sector": "Transport, Logistiek & Mobiliteit"
+  },
+  "UVCW": {
+    "sector": "Andere"
+  },
+  "VDK bank": {
+    "sector": "Financiële Diensten"
+  },
+  "Vereniging Vlaamse Reisbureaus (VVR)": {
+    "sector": "Andere"
+  },
+  "VeGHO": {
+    "sector": "Transport, Logistiek & Mobiliteit"
+  },
+  "Vertex Pharmaceuticals": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "VIA": {
+    "sector": "Technologie & Digitale Sector"
+  },
+  "Via Don Bosco": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "Vias": {
+    "sector": "Transport, Logistiek & Mobiliteit"
+  },
+  "Vinum Et Spiritus": {
+    "sector": "Voeding & Dranken"
+  },
+  "Vlaams Coördinatiecentrum Mestverwerking (VCM)": {
+    "sector": "Milieu, Duurzaamheid en Landbouw"
+  },
+  "Vlaamse Vastgoedfederatie": {
+    "sector": "Bouw, Vastgoed & Infrastructuur"
+  },
+  "Voka": {
+    "sector": "Detailhandel, Diensten & KMO’s"
+  },
+  "Vrouwenraad": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  },
+  "VUB": {
+    "sector": "Onderwijs, Opleiding & Kennisinstellingen"
+  },
+  "We Media": {
+    "sector": "Media, Communicatie & Public Affairs"
+  },
+  "Whyte Corporate Affairs": {
+    "sector": "Andere"
+  },
+  "Kristof WILLEKENS": {
+    "sector": "Andere"
+  },
+  "Woluwe Vision Center": {
+    "sector": "Gezondheid & Farmacie"
+  },
+  "WWF": {
+    "sector": "NGOs, Internationale Solidariteit & Mensenrechten"
+  }
+}

@@ -1,0 +1,174 @@
+{% macro activityTabs(params) %}
+{#
+    params:
+        questions         - list of questions (pre-sorted or raw)
+        propositions      - list of propositions (pre-sorted or raw)
+        votes             - list of votes (member page only, omit for fraction page)
+        name              - display name (fraction name or member name)
+        topics            - topics object (for filter + topic lookup)
+        functions         - functions object
+        fractionColors    - fractionColors object
+        showTopicFilter   - boolean, show the topic <select> (fraction page)
+        showCategory      - passed through to questionCard (fraction page)
+        votes             - list of votes (member page only)
+        totalVotes        - votes.votes | length (member page only)
+#}
+
+{% set showVotesTab = params.votes and (params.votes | length) > 0 or params.totalVotes %}
+
+{%- from "components/proposition-card.njk" import propositionCard -%}
+{%- from "components/question-card.njk" import questionCard -%}
+
+{% if params.showTopicFilter %}
+<select id="topic-filter" style="margin-bottom: 2rem;">
+    <option value="">Alle onderwerpen</option>
+    {% for key in params.topics | keys %}
+    <option value="{{ key }}">{{ key }}</option>
+    {% for subtopic in params.topics[key].subtopics | keys %}
+    <option value="{{ subtopic }}">– {{ subtopic }}</option>
+    {% endfor %}
+    {% endfor %}
+</select>
+{% endif %}
+
+<div class="tabbed">
+    <input type="radio" name="tabset" id="tab-1" checked>
+    <input type="radio" name="tabset" id="tab-2">
+    {% if params.votes %}
+    <input type="radio" name="tabset" id="tab-3">
+    {% endif %}
+    <ul class="tabs" role="tablist">
+        <li role="presentation"><label for="tab-1">Vragen</label></li>
+        <li role="presentation"><label for="tab-2">Voorstellen</label></li>
+        {% if params.votes %}
+        <li role="presentation"><label for="tab-3">Stemmingen</label></li>
+        {% endif %}
+    </ul>
+
+    <!-- TAB 1 — QUESTIONS -->
+    <div id="tab-1-content" class="tab-content padded">
+        {% set questions = params.questions | sortDate('date', 'desc') | limit(20) %}
+        {% if questions | length > 0 %}
+            <p class="tab-intro">Vragen gesteld door {{ params.name }} in de plenaire vergaderingen.</p>
+            <ul class="flex-col gap padding:0">
+            {% for question in questions %}
+                {% if params.showTopicFilter %}
+                    {% set allTopics = question.topics_nl | getMatchedTopics(params.topics) %}
+                    <li class="question-card-wrapper" data-topics="{{ allTopics | join(',') }}">
+                        {{ questionCard({ question: question, topic: allTopics[0], topics: params.topics, functions: params.functions, fractionColors: params.fractionColors, showCategory: "true" }) }}
+                    </li>
+                {% else %}
+                    {% set topicCounts = [question] | countTopics(params.topics) %}
+                    {% set topic = topicCounts[0][0] %}
+                    <li>
+                        {{ questionCard({ question: question, topic: topic, topics: params.topics, functions: params.functions, fractionColors: params.fractionColors }) }}
+                    </li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>{{ params.name }} heeft nog geen vragen gesteld in de plenaire vergaderingen.</p>
+        {% endif %}
+    </div>
+
+    <!-- TAB 2 — PROPOSITIONS -->
+    <div id="tab-2-content" class="tab-content padding">
+        {% set propositions = params.propositions | sortDate('date', 'desc') | limit(20) %}
+        {% if propositions | length > 0 %}
+            <p class="tab-intro">Voorstellen ingediend door {{ params.name }} als hoofdauteur.</p>
+            {% if params.showTopicFilter %}
+            <div>
+                {% for proposition in propositions %}
+                {% set allTopics = proposition.title_nl | getMatchedTopics(params.topics) %}
+                <div class="proposition-card-wrapper" data-topics="{{ allTopics | join(',') }}">
+                    {{ propositionCard({ proposition: proposition, hideAuthors: "true" }) }}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <ul class="flex-col gap padding:0">
+                {% for proposition in propositions %}
+                <li>
+                    {{ propositionCard({ proposition: proposition, hideAuthors: "true" }) }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        {% else %}
+            <p>{{ params.name }} heeft nog geen voorstellen ingediend als hoofdauteur.</p>
+        {% endif %}
+    </div>
+
+    <!-- TAB 3 — VOTES (member page only) -->
+    {% if params.votes %}
+    <div id="tab-3-content" class="tab-content">
+        {% if params.votes | length > 0 %}
+            {% set total_votes = params.votes | length %}
+            {% set outlier_votes = params.votes | selectattr('outlier') | list | length %}
+            {% set outlier_percentage = (outlier_votes / total_votes * 100) | round(1) %}
+            <div class="padding">
+                <p class="tab-intro">Stemgedrag van {{ params.name }} in de kamer.</p>
+                <div class="card metric-card metric-card--inline">
+                    <span class="metric-card__number">{{ 100 - (outlier_percentage | int) }}%</span>
+                    <span class="metric-card__unit">overeenkomst met meerderheid van de partij</span>
+                </div>
+            </div>
+            <div class="votes-table-container">
+                <table class="votes-table">
+                    <thead>
+                        <tr>
+                            <th class="title-column" scope="col">Onderwerp</th>
+                            <th class="vote-column" scope="col">Stemming</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for vote in params.votes | sortDate('date', 'desc') %}
+                        {% set vote_label = { 'yes': 'ja', 'no': 'nee', 'abstain': 'onthouding' }[vote.vote] %}
+                        <tr>
+                            <td>
+                                <time class="vote-date" datetime="{{ vote.date }}">{{ vote.date | shortDate }}</time>
+                                <span class="vote-title">{{ vote.title_nl }}</span>
+                                <a class="vote-detail-link" target="_blank"
+                                href="/sessions/{{ vote.session_id }}/meetings/P{{ vote.meeting_id }}/votes/{{ vote.vote_id }}/">
+                                    Bekijk details →
+                                </a>
+                            </td>
+                            <td>
+                                <span class="vote-dot {{ vote.vote }}" aria-hidden="true"></span>
+                                {% if vote.outlier %}
+                                    <span class="vote-outlier">{{ vote_label }}</span>
+                                {% else %}
+                                    {{ vote_label }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>{{ params.name }} heeft nog niet gestemd in de kamer.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+
+{% if params.showTopicFilter %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const filterSelect = document.getElementById("topic-filter");
+  const cards = document.querySelectorAll(".question-card-wrapper, .proposition-card-wrapper");
+  filterSelect.addEventListener("change", () => {
+    const selectedTopic = filterSelect.value;
+    cards.forEach(card => {
+      const topics = card.dataset.topics.split(',').map(t => t.trim());
+      const shouldShow = !selectedTopic || topics.includes(selectedTopic);
+      card.style.display = shouldShow ? "block" : "none";
+    });
+  });
+});
+</script>
+{% endif %}
+
+{% endmacro %}

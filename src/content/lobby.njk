@@ -1,0 +1,43 @@
+---
+layout: layouts/page
+permalink: "lobby/"
+sitemap: true
+title: "Lobbyisten"
+description: "Overzicht van geregistreerde lobbyisten actief in het Belgische parlement. Transparantie over belangenvertegenwoordiging en contacten."
+i18nHeader: "lobbyHeader"
+i18nSubheader: "lobbySubheader"
+---
+
+<section id="lobby">
+    <!-- BENTO -->
+    <div class="bento">
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ lobby.lobby | length }}</h2>
+            <p data-i18n="lobbyists">lobbyists</p>
+        </div>
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ sectors | keys | length }}</h2>
+            <p data-i18n="sectors">sectors</p>
+        </div>
+    </div>
+
+    <h2 class="capitalize-first" data-i18n="allLobyists">Alle lobbyisten</h2>
+
+    <!-- TABLE -->
+    <table>
+        <tr>
+            <th data-i18n="organization">Organisatie</th>
+            <th data-i18n="sector">Sector</th>
+        </tr>
+        {% for member in lobby.lobby %}
+            <tr>
+                <td>
+                    <p><a href="https://{{member.url}}" target="_blank">{{ member.name }}</a></p>
+                </td>
+                <td>
+                    <p>{{sectors[lobbyists[member.name].sector].icon }} {{sectors[lobbyists[member.name].sector].name }}</p>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</section>

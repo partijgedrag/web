@@ -1,0 +1,381 @@
+---
+layout: layouts/page
+permalink: "members/"
+sitemap: true
+title: "Parlementsleden"
+description: "Overzicht van alle Belgische parlementsleden. Zoek op naam, partij of fractie en ontdek hun stemgedrag en dossiers."
+i18nHeader: "membersHeader"
+i18nSubheader: "membersSubheader"
+---
+
+<section id="members">
+    <!-- BENTO -->
+    <div class="bento">
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ members.members | filter("active", "true") | length }}</h2>
+            <p data-i18n="chamberMembers">chamberMembers</p>
+        </div>
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ members.members | map("fraction") | unique | length }}</h2>
+            <p data-i18n="fractions">fractions</p>
+        </div>
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ (members.members | youngest).date_of_birth | age }}
+                <span data-i18n="age">jaar</span>
+            </h2>
+            <p>{{ (members.members | youngest).first_name }}
+                {{ (members.members | youngest).last_name }},
+                <span data-i18n="youngestMember">jongste lid</span>
+            </p>
+        </div>
+        <div class="card padded flex-col gap-small bento-item-1">
+            <h2>{{ (members.members | oldest).date_of_birth | age }}
+                <span data-i18n="age">jaar</span>
+            </h2>
+            <p>{{ (members.members | oldest).first_name }}
+                {{ (members.members | oldest).last_name }},
+                <span data-i18n="oldestMember">oudste lid</span>
+            </p>
+        </div>
+
+         <div class="card padded flex-col gap-small bento-item-2">
+            <h3 style="margin-top: 0; margin-bottom: 0.4rem;" class="capitalize" data-i18n="ageDistributionTitle">Leeftijdverdeling</h3>
+            <p data-i18n="ageDistributionDescription">Wat is de leeftijdsverdeling van de kamerleden?</p>
+            <svg id="ageHistogram" style="margin-top: 1rem;"></svg>
+        </div>
+    </div>
+
+    <h2 class="capitalize-first" data-i18n="allChamberMembers">Alle leden</h2>
+    <p data-i18n="memberSearchInstruction">Zoek op naam, filter op fractie, kieskring of status.</p>
+
+    <!-- FILTERS -->
+    <div class="flex-col gap-small" style="margin-bottom: 1rem;">
+        <input class="width:100%" type="text" id="search-filter" placeholder="Zoek op naam...">
+        <div class="flex-row flex-wrap gap">
+            <select id="fraction-filter">
+                <option value="">-- alle fracties --</option>
+                {% for fraction in members.members | map("fraction") | unique | sortAlpha %}
+                    <option value="{{ fraction }}">{{ fraction }}</option>
+                {% endfor %}
+            </select>
+            <select id="constituency-filter">
+                <option value="">-- alle kieskringen --</option>
+                {% for constituency in members.members | map("constituency") | unique | sortAlpha %}
+                    <option value="{{ constituency }}">{{ constituency }}</option>
+                {% endfor %}
+            </select>
+            <select id="active-filter">
+                <option value="">-- alle statussen --</option>
+                <option value="true">actief</option>
+                <option value="false">inactief</option>
+            </select>
+            <select id="sort-filter">
+                <option value="">-- SORTEER --</option>
+                <option value="attendance-asc">Stemdeelname (stemmingen) laag-hoog</option>
+                <option value="attendance-desc">Stemdeelname (stemmingen) hoog-laag</option>
+                <option value="normalized-attendance-asc">Stemdeelname (dagen) laag-hoog</option>
+                <option value="normalized-attendance-desc">Stemdeelname (dagen) hoog-laag</option>
+                <option value="name-asc">Naam laag-hoog</option>
+                <option value="name-desc">Naam hoog-laag</option>
+                <option value="fraction-asc">Fractie laag-hoog</option>
+                <option value="fraction-desc">Fractie hoog-laag</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- GRID -->
+    <div id="members-grid" class="item-grid-2">
+        {% for member in members.members | filter("active", "true") | sort(attribute='fractions') %}
+        <!-- SET PROPERIES -->
+        {% set primaryColor = fractionColors[member.fraction | lower].primary or '#95a5a6' %}
+        {% set secondaryColor = fractionColors[member.fraction | lower].secondary or '#95a5a6' %}
+        {% set imgSrc = "../content/members/img/" + (member.first_name | slugify) + "-" + (member.last_name | slugify) + ".jpg" %}
+        {% set has_image = imgSrc | imageExists %}
+        <a class="card flex-col" href="/members/{{ member.first_name | slugify }}-{{ member.last_name | slugify }}" data-fraction="{{ member.fraction }}" data-constituency="{{ member.constituency }}" data-attendance="{{ member.attendance }}" data-normalized="{{ member.normalizedAttendance }}" data-outlier="{{ member.outlier }}" data-active="{{ member.active }}" style="color: inherit;">
+            <!-- HEADER -->
+            <div class="flex-row justify-content:space-between align-items:start">
+                <div class="category" style="max-width:50%; background-color: {{ secondaryColor }}; color: {{ primaryColor }};">
+                  {{ member.fraction | normaliseFraction }}
+                </div>
+            </div>
+
+            <!-- BODY -->
+            <div class="flex-col justify-content:space-between flex-grow">
+                <div class="flex-row gap padded justify-content:space-between align-items:center">
+                    <div class="flex-col gap">
+                        {% if member.date_of_birth  %}
+                            <p class="member-name bold">{{ member.first_name }} {{ member.last_name }} ({{ member.date_of_birth | age }})</p>
+                        {% else %}
+                            <p class="member-name bold">{{ member.first_name }} {{ member.last_name }}</p>
+                        {% endif %}
+                        <p class="margin:0">
+                            {{ member.constituency }}
+                        </p>
+                        {% if member.active != "true" %}
+                            <span class="badge bold" style="background-color: #e6e6e6; color: #6d6d6d; padding: 2px 4px; display: inline-block; border-radius: 5px;">
+                                inactief
+                            </span>
+                        {% endif %}
+                        <span class="attendance-note" style="display:none; margin-top: 0.4rem;">
+                            {% set attendance = member.attendance %}
+                            {% set normalizedAttendance = member.normalizedAttendance %}
+
+                            <p>Stemdeelname stemmingen ({{ (attendance * 100) | round(0, 'floor') }}%)</p>
+                            <div style="border-radius: 5px; background: #e0e0e0; height: 10px; overflow: hidden;">
+                                <div style=" width: {{ (attendance * 100) | round(0, 'floor') }}%; height: 100%; background-color: black; "></div>
+                            </div>
+                            <p style="margin-top: 0.4rem;">Stemdeelname dagen ({{ (normalizedAttendance * 100) | round(0, 'floor') }}%)</p>
+                            <div style="border-radius: 5px; background: #e0e0e0; height: 10px; overflow: hidden;">
+                                <div style=" width: {{ (normalizedAttendance * 100) | round(0, 'floor') }}%; height: 100%; background-color: black; "></div>
+                            </div>
+                        </span>
+                    </div>
+                    {% icon "lucide:chevron-right" %}
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+
+<script>
+
+    const fractionFilter = document.getElementById('fraction-filter');
+    const constituencyFilter = document.getElementById('constituency-filter');
+    const searchFilter = document.getElementById('search-filter');
+    const activeFilter = document.getElementById('active-filter');
+    const sortFilter = document.getElementById('sort-filter');
+    const membersGrid = document.getElementById('members-grid');
+    const allMembers = Array.from( document.querySelectorAll('#members-grid > a'));
+    function filterAndSortMembers() {
+        const fraction = fractionFilter.value.toLowerCase();
+        const constituency = constituencyFilter.value.toLowerCase();
+        const search = searchFilter.value.toLowerCase();
+        const active = activeFilter.value;
+        const sortOption = sortFilter.value;
+
+        // Filter
+        let filtered = allMembers.filter(member => {
+            const name = member
+                .querySelector(".member-name")
+                .textContent
+                .toLowerCase();
+            const matchesName = ! search || name.includes(search);
+            const matchesFraction = ! fraction || member
+                .dataset
+                .fraction
+                .toLowerCase() === fraction;
+            const matchesConstituency = ! constituency || member
+                .dataset
+                .constituency
+                .toLowerCase() === constituency;
+            const matchesActive = ! active || member.dataset.active === active;
+            return matchesName && matchesFraction && matchesConstituency && matchesActive;
+        });
+        // Sort
+        switch (sortOption) {
+            case "attendance-asc": filtered.sort((a, b) => Number(a.dataset.attendance) - Number(b.dataset.attendance));
+                break;
+            case "attendance-desc": filtered.sort((a, b) => Number(b.dataset.attendance) - Number(a.dataset.attendance));
+                break;
+                case "normalized-attendance-asc": filtered.sort((a, b) => Number(a.dataset.normalized) - Number(b.dataset.normalized));
+                    break;
+                case "normalized-attendance-desc": filtered.sort((a, b) => Number(b.dataset.normalized) - Number(a.dataset.normalized));
+                    break;
+            case "outlier-asc": filtered.sort((a, b) => Number(a.dataset.outlier) - Number(b.dataset.outlier));
+                break;
+            case "outlier-desc": filtered.sort((a, b) => Number(b.dataset.outlier) - Number(a.dataset.outlier));
+                break;
+            case "name-asc": filtered.sort(
+                    (a, b) => a
+                    .querySelector(".member-name")
+                    .textContent
+                    .localeCompare(b.querySelector(".member-name").textContent)
+                );
+                break;
+            case "name-desc": filtered.sort(
+                    (a, b) => b
+                    .querySelector(".member-name")
+                    .textContent
+                    .localeCompare(a.querySelector(".member-name").textContent)
+                );
+                break;
+            case "fraction-asc": filtered.sort((a, b) => a
+                    .dataset
+                    .fraction
+                    .localeCompare(b.dataset.fraction));
+                break;
+            case "fraction-desc": filtered.sort((a, b) => b
+                    .dataset
+                    .fraction
+                    .localeCompare(a.dataset.fraction));
+                break;
+        }
+
+        const notes = document.querySelectorAll('.attendance-note');
+            notes.forEach(note => {
+            note.style.display = (sortOption === "attendance-asc" || sortOption === "attendance-desc" || sortOption === "normalized-attendance-asc" || sortOption === "normalized-attendance-desc") ? "inline" : "none";
+            });
+
+
+
+
+        // Clear and re-render
+        membersGrid.innerHTML = '';
+        filtered.forEach(member => membersGrid.appendChild(member));
+    }
+    // Event listeners
+    fractionFilter.addEventListener('change', filterAndSortMembers);
+    constituencyFilter.addEventListener('change', filterAndSortMembers);
+    searchFilter.addEventListener('input', filterAndSortMembers);
+    activeFilter.addEventListener('change', filterAndSortMembers);
+    sortFilter.addEventListener('change', filterAndSortMembers);
+</script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const ages = {{ members.ages | dump | safe }}; // This is how you access the ages array
+        const membersTranslation = "kamerLeden";
+        const ageRangeTranslation = "leeftijdsVerdeling";
+        // Setup dimensions and margins
+        const margin = {
+            top: 5,
+            right: 0,
+            bottom: 30,
+            left: 30
+        };
+        const container = document.getElementById("ageHistogram").parentNode;
+        const width = container.clientWidth - margin.left - margin.right;
+        const height = 150;
+        const svg = d3
+            .select("#ageHistogram")
+            .attr(
+                "viewBox",
+                `0 0 ${
+                    width + margin.left + margin.right
+                } ${
+                    height + margin.top + margin.bottom
+                }`
+            )
+            .attr("preserveAspectRatio", "xMidYMid meet")
+            .style("width", "100%")
+            .style("height", "auto");
+        const g = svg.append("g").attr("transform", `translate(${
+            margin.left
+        },${
+            margin.top
+        })`);
+        // Create bins
+        const binGenerator = d3
+            .bin()
+            .domain([20, 85]) // Adjust as needed
+            .thresholds(10); // 10 bins
+        const bins = binGenerator(ages);
+        // Scales
+        const y = d3
+            .scaleLinear()
+            .domain([
+                0, d3.max(bins, d => d.length) + 5
+            ])
+            .range([height, 0]); // IMPORTANT: bottom (0) to top (max)
+        const color = d3
+            .scaleLinear()
+            .domain([
+                0, d3.max(bins, d => d.length)
+            ])
+            .range(["#cce5ff", "#004085"]);
+        // Axes
+        const x = d3
+            .scaleBand()
+            .domain(bins.map(d => d.x0)) // Use bin start (x0) for the domain
+            .range([0, width])
+            .padding(0.1); // Adjust the padding between bars Add the x-axis with ticks at the start of each bin
+        g
+            .append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .call(
+                d3
+                .axisBottom(x)
+                .tickValues(bins.map(d => d.x0)) // Place ticks at the start of each bin
+                .tickFormat(d => `${d}`) // Show ticks as bin ranges (e.g., 30, 35)
+            )
+            .call(g => g.select(".domain").remove()) // Remove axis line
+            .call(g => g
+                .selectAll("text")
+                .style("font-size", "0.75rem")
+                .style("fill", "#333"));
+        // Tooltip setup
+        const tooltip = d3
+            .select("body")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+        // Add the y-axis with grid lines
+        g
+            .append("g")
+            .call(
+                d3
+                .axisLeft(y)
+                .ticks(10)
+                .tickSize(- width) // Draw grid lines across the chart
+                .tickFormat(d => d) // optional, in case you want to format
+            )
+            .call(g => g.select(".domain").remove()) // Remove the vertical axis line
+            .call(
+                g => g
+                .selectAll("text")
+                .style("font-size", "0.75rem")
+                .style("font-family", "sans-serif")
+                .style("fill", "#333")
+            )
+            .call(
+                g => g
+                .selectAll(".tick line")
+                .attr("stroke", "#ddd") // Light grey lines
+                .attr("stroke-dasharray", "2,2") // Optional dashed lines
+            );
+        // Create the bars with correct positioning and width
+        const bars = g
+            .selectAll(".bar")
+            .data(bins)
+            .enter()
+            .append("rect")
+            .attr("class", "bar")
+            .attr("x", d => x(d.x0) + x.bandwidth() * 0.5)
+            .attr("width", x.bandwidth())
+            .attr("y", y(0)) // Start from bottom
+            .attr("height", 0) // No height at start
+            .attr("rx", 4)
+            .attr("ry", 4)
+            .attr("fill", d => color(d.length));
+        bars
+            .transition()
+            .duration(800)
+            .attr("y", d => y(d.length)) // Move upward
+            .attr("height", d => height - y(d.length)); // Stretch from bottom up Tooltip functionality
+        bars.on("mouseover", function (event, d) {
+            tooltip
+                .transition()
+                .duration(200)
+                .style("opacity", 1);
+            tooltip
+                .html(`<strong>${
+                    d.length
+                }</strong> ${membersTranslation}<br/>${ageRangeTranslation}: ${
+                    d.x0
+                } - ${
+                    d.x1 - 1
+                }`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 30) + "px");
+            d3.select(this).attr("fill", "#0056b3");
+        }).on("mouseout", function (event, d) {
+            tooltip
+                .transition()
+                .duration(200)
+                .style("opacity", 0);
+            d3.select(this).attr("fill", color(d.length)); // Correct reference to `d` here
+        }); // Event handler should work now
+    });
+</script>

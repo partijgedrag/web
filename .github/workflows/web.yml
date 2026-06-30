@@ -1,0 +1,60 @@
+name: web
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Every weekday (Mon–Fri) at 11PM Belgian time = 9PM UTC
+    - cron: "0 21 * * 1-5"
+  push:
+    branches:
+      - main
+    paths:
+      - "!README.md"
+      - "src/**"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    name: Build and deploy
+
+    steps:
+      - name: 📥 Checkout web repo
+        uses: actions/checkout@v6
+
+      - name: 📥 Checkout data repo
+        uses: actions/checkout@v6
+        with:
+          repository: partijgedrag/data
+          path: data
+          token: ${{ secrets.CORE_REPO_TOKEN }}
+
+      - name: 🔗 Link into src
+        run: |
+          rm -rf src/data
+          ln -s ../data/data src/data
+
+      - name: ⚙️ Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: 🦕 Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+          cache: true
+
+      - name: 💽 Install web dependencies
+        run: |
+          deno install
+
+      - name: 🔨 Build
+        run: |
+          deno task build
+
+      - name: 🚀 Deploy
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_EDIT_WORKERS }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy

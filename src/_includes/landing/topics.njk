@@ -1,0 +1,17 @@
+<h2 data-i18n="topicsTitle">Onderwerpen en themas</h2>
+<p data-i18n="topicsSubtitle">Bekijk op welke manier De Kamer werkt rond de onderwerpen die u belangrijk vindt.</p>
+
+<ul class="flex-row gap-small flex-wrap">
+    {% for key in topics | keys %}
+    <li>
+        {% set iconName = 'lucide:search' %}
+        {% if topics[key].icon %}
+          {% set iconName = 'lucide:' ~ topics[key].icon %}
+        {% endif %}
+        <a href="/topics/{{ key | slugify }}/" class="badge secondary flex-row gap-small align-items:center padded"
+          {% icon iconName %}
+          <span>{{ key }}</span>
+        </a>
+    </li>
+    {% endfor %}
+</ul>

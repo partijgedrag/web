@@ -1,0 +1,26 @@
+---
+layout: layouts/page
+permalink: "/government/"
+sitemap: true
+title: "Federale Regering"
+description: "Overzicht van de huidige leden van de Belgische federale regering. Bekijk ministers en hun bevoegdheden."
+i18nHeader: "governmentHeader"
+i18nSubheader: "governmentSubheader"
+---
+
+<section id="government">
+    <div class="item-grid-2">
+        {% for name, mandates in functions %}
+        {% set active = mandates | getActive(page.date) %}
+        {% if active %}
+            <div class="card padded flex-col gap align-items:start">
+                {% set primaryColor = fractionColors[active.fraction | lower].primary or '#95a5a6' %}
+                {% set secondaryColor = fractionColors[active.fraction | lower].secondary or '#95a5a6' %}
+                <h3 class="margin:0">{{ name }}</h3>
+                <p>{{ active.function }}</p>
+                <a href="/fractions/{{ active.fraction | slugify }}/" class="badge bold" style="--bg: {{ secondaryColor }}; color: {{ primaryColor }}; background-color: {{ secondaryColor }};">{{ active.fraction }}</a>
+            </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</section>

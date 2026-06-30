@@ -1,0 +1,88 @@
+<section id="footer">
+    <footer class="flex-col gap" style="padding: 1rem 2rem; margin-top: 3rem;">
+        <div class="flex-row flex-wrap justify-content:space-between">
+            <!-- NEWSLETTER -->
+            <div class="newsletter-form flex-col gap">
+                <p class="bold" data-i18n="newsletterUpdates">Wil je updates ontvangen?</p>
+                <form class="subscribe-row" onsubmit="handleSubscribe(event)">
+                    <input
+                        type="email"
+                        id="newsletter-email"
+                        placeholder="my@email.be"
+                        required
+                        autocomplete="email"
+                    />
+                    <button type="submit" data-i18n="subscribe">Inschrijven</button>
+                </form>
+                <p class="subscribe-status" id="subscribe-status" aria-live="polite"></p>
+            </div>
+
+            <!-- LINKS -->
+            <div class="flex-col gap links" style="margin-bottom: 2rem;">
+                <h3>Meer informatie</h3>
+                <ul class="flex-col gap">
+                    <li><a href="/about/" data-i18n="footerAbout">Over partijgedrag.be</a></li>
+                    <li><a href="/feedback/" data-i18n="footerFeedback">Feedback</a></li>
+                    <li><a href="/newsletter/" data-i18n="footerNewsletter">Nieuwsbrief</a></li>
+                    <li><a href="/privacy/" data-i18n="footerPrivacy">Privacy</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ABOUT -->
+        <p class="bold">Over De Kamer van volksvertegenwoordigers</p>
+        <p>De Kamer van Volksvertegenwoordigers is het federale parlement van België en vormt samen met de Senaat de wetgevende macht van het land. De Kamer van Volksvertegenwoordigers bestaat uit 150 rechtstreeks verkozen leden die wetten goedkeuren, de federale regering controleren en beslissingen nemen over belangrijke nationale thema’s zoals economie, justitie en sociale zekerheid. Als centraal onderdeel van de Belgische democratie vertegenwoordigt de Kamer de Belgische bevolking en speelt zij een cruciale rol in het politieke besluitvormingsproces van België.</p>
+
+        <!-- DISCLAIMER -->
+        <p class="bold" data-i18n="footerDisclaimer">Disclaimer</p>
+        <p><span data-i18n="footerSource">Bron</span>: <a href="https://dekamer.be" target="_blank">dekamer.be</a></p>
+        <p data-i18n="sourceDisclaimer" class="capitalize-first">
+            De op deze website weergegeven informatie is gebaseerd uit officiële parlementaire bronnen. Bij verschillen tussen deze website en de officiële publicaties van de Kamer van Volksvertegenwoordigers geldt steeds de officiële publicatie. Aan de inhoud van deze website kunnen geen rechten worden ontleend.
+        </p>
+        <p data-i18n="accuracyDisclaimer" class="capitalize-first">
+            Wij doen ons best om de gegevens op deze website zo correct en volledig mogelijk weer te geven. Ondanks zorgvuldige werking kunnen fouten of onvolledigheden voorkomen. Meld eventuele fouten via de feedbackpagina.
+        </p>
+    </footer>
+</section>
+
+<script>
+async function handleSubscribe(event) {
+    event.preventDefault();
+    const email = document.getElementById("newsletter-email").value;
+    const status = document.getElementById("subscribe-status");
+    const btn = event.target.querySelector("button");
+
+    btn.disabled = true;
+    btn.textContent = "…";
+    status.textContent = "";
+
+    try {
+        const res = await fetch("https://www.rumicat.com/api/subscribe/partijgedrag", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+        });
+
+        if (res.ok) {
+            status.textContent = "✓ Bevestigingsmail verzonden!";
+            status.style.borderRadius = "0.4rem";
+            status.style.padding = "0.2rem 0.4rem";
+            status.style.color = "var(--color-on-positive)";
+            status.style.backgroundColor = "var(--color-positive)";
+            event.target.reset();
+        } else {
+            status.textContent = "Er ging iets mis. Probeer opnieuw.";
+            status.style.borderRadius = "0.4rem";
+            status.style.padding = "0.2rem 0.4rem";
+            status.style.color = "var(--color-on-negative)";
+            status.style.backgroundColor = "var(--color-negative)";
+        }
+    } catch {
+        status.textContent = "Geen verbinding. Probeer opnieuw.";
+        status.style.color = "red";
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "Inschrijven";
+    }
+}
+</script>

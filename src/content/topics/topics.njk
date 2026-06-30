@@ -1,0 +1,27 @@
+---
+layout: layouts/page
+permalink: "topics/"
+title: "Thema's"
+description: "Alle thema's behandeld in het Belgische parlement. Van klimaat tot begroting, ontdek hoe partijen stemmen per onderwerp."
+i18nHeader: "topicsHeader"
+i18nSubheader: "topicsSubheader"
+---
+
+<section id="topic">
+    <h2 data-i18n="allTopics" class="capitalize-first">Alle onderwerpen</h2>
+
+    <ul class="flex-row gap-small flex-wrap">
+        {% for key in topics | keys %}
+        <li>
+            {% set iconName = 'lucide:search' %}
+            {% if topics[key].icon %}
+              {% set iconName = 'lucide:' ~ topics[key].icon %}
+            {% endif %}
+            <a href="/topics/{{ key | slugify }}/" class="badge secondary flex-row gap-small align-items:center padded"
+              {% icon iconName %}
+              <span>{{ key }}</span>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</section>

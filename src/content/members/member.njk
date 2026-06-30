@@ -1,0 +1,271 @@
+---
+layout: layouts/meeting
+permalink: "/members/{{ member.first_name | slugify }}-{{ member.last_name | slugify }}/"
+sitemap: true
+pagination:
+    data: collections.members
+    size: 1
+    alias: member
+    addAllPagesToCollections: true
+eleventyComputed:
+    title: "{{ member.first_name }} {{ member.last_name }} ({{ member.fraction | normaliseFraction }})"
+    description: "Stemgedrag van {{ member.first_name }} {{ member.last_name }}, parlementslid voor {{ member.fraction | normaliseFraction }}. Bekijk mondelinge vragen, stemmingen en ingediende dossiers."
+    i18nHeader: "memberHeader"
+    i18nHeaderVars: {
+        name: "{{ member.first_name }} {{ member.last_name }}"
+    }
+    i18nSubheader: "memberSubheader"
+    i18nSubheaderVars: {
+        name: "{{ member.first_name }} {{ member.last_name }}"
+    }
+---
+
+<!-- VARIABLES -->
+{% set name = member.first_name + " " + member.last_name %}
+{% set primaryColor = fractionColors[member.fraction | lower].primary or '#95a5a6' %}
+{% set secondaryColor = fractionColors[member.fraction | lower].secondary or '#95a5a6' %}
+
+<!-- COMPONENTS -->
+{%- from "components/proposition-card.njk" import propositionCard -%}
+{%- from "components/question-card.njk" import questionCard -%}
+{%- from "components/activity-tabs.njk" import activityTabs -%}
+
+<!-- PAGEFIND METADATA -->
+<span style="display:none" data-pagefind-meta="title, fraction:{{ member.fraction | normaliseFraction }}">{{ member.first_name }} {{ member.last_name }}</span>
+<span style="display:none" data-pagefind-body>{{ member.first_name }} {{ member.last_name }} is lid van {{ member.fraction | normaliseFraction }}. Bekijk stemmingen, vragen en wetsvoorstellen.</span>
+
+<section id="member">
+    <div class="flex-col gap">
+        <!-- INFO -->
+        <div class="card">
+            <div class="card-section padded flex-col gap-small">
+                <!-- HEADER -->
+                <div class="flex-row justify-content:space-between">
+                    <h2 id="overzicht">Overzicht</h2>
+                    <a href="https://www.dekamer.be/kvvcr/showpage.cfm?section=/depute&language=nl&cfm=cvview54.cfm?key={{ member.member_id }}&lactivity=56" target="_blank" class="flex-row gap-small align-items:center outlined padded-tight rounded">
+                        {% lucide "external-link" %}
+                        <span>Bron</span>
+                    </a>
+                </div>
+
+                <div class="flex-col gap">
+                    <div class="flex-col gap">
+                        <p>Alles over kamerlid {{ member.first_name }} {{ member.last_name }}.</p>
+                    </div>
+
+                    <!-- FRACTION -->
+                    <div class="flex-row gap-small flex-wrap">
+                        <a href="/fractions/{{ member.fraction | slugify }}/" class="badge" style="--bg: {{ secondaryColor }}; background-color: {{ secondaryColor }}; color: {{ primaryColor }};">{{ member.fraction | normaliseFraction }}</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DETAILS -->
+            <div class="card-section padded">
+                <div class="flex-col gap">
+                    <div class="flex-row flex-wrap gap align-items:center">
+                        <!-- DATE OF BIRTH -->
+                        <div class="flex-row align-items:center">
+                            <span class="icon-muted">{% icon "lucide:cake" %}</span>
+                            <span class="text-muted">{{ member.place_of_birth }}, {{ member.date_of_birth | date }} ({{ member.date_of_birth | age }} jaar)</span>
+                        </div>
+
+                        <!-- CONSTITUENCY -->
+                        <div class="flex-row align-items:center">
+                            <span class="icon-muted">{% icon "lucide:vote" %}</span>
+                            <span class="text-muted">{{ member.constituency }}{% if member.language == 'nl' %}, Nederlands{% elseif member.language == 'fr' %}, Frans{% endif %}</span>
+                        </div>
+
+                        <!-- CONSTITUENCY -->
+                        <div class="flex-row align-items:center">
+                            <span class="icon-muted">{% icon "lucide:calendar-1" %}</span>
+                            <span class="text-muted">Parlementslid sinds {{ member.start_date | date }}</span>
+                        </div>
+
+                        <!-- FUNCTIONS -->
+                        {% if functions[name] %}
+                        <div class="flex-row align-items:center">
+                            <span class="icon-muted">{% icon "lucide:briefcase-business" %}</span>
+                            {% for func in functions[name] %}
+                            <li>{{ func.function }} <span class="text-muted">({{ func.start_date | date }} – {{ func.end_date }})</span></li>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="card flex-row padded justify-content:space-between">
+            <div class="flex-col gap">
+                <p class="subtitle uppercase" data-i18n="oralQuestions">Mondelinge vragen</p>
+                <div class="flex-row gap">
+                    <div>
+                        <span class="metric-card__number">{{ member.questions | asQuestioner | length }}</span>
+                        <span class="metric-card__unit" data-i18n="plenary">plenaire</span>
+                    </div>
+                    <div class="metric-card__divider" aria-hidden="true"></div>
+                    <div>
+                        <span class="metric-card__number">{{ member.commissionQuestions | asQuestioner | length }}</span>
+                        <span class="metric-card__unit" data-i18n="commission">commissie</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-col gap">
+                <p class="subtitle uppercase" data-i18n="legislativeProposals">Wetsvoorstellen</p>
+                <div class="flex-row gap">
+                    <div>
+                        <span class="metric-card__number">{{ member.propositions | length }}</span>
+                        <span class="metric-card__unit" data-i18n="propositions">voorstellen</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ATTENDANCE -->
+        <div class="card flex-col gap-small padded">
+            {% set attendance = member.attendance %}
+            {% set normalizedAttendance = member.normalizedAttendance %}
+            <p class="subtitle uppercase" data-i18n="voteParticipation">Stemdeelname</p>
+            <div class="flex-row gap">
+                <div>
+                    <span class="metric-card__number">{{ member.votes | length }}</span>
+                    <span class="metric-card__unit">/ {{ votes.votes | length }} <span data-i18n="votes">stemmingen</span></span>
+                </div>
+            </div>
+            <div class="attendance-bars">
+                <div class="attendance-bar-row">
+                    <span class="attendance-bar__label capitalize-first" data-i18n="perVote">Per stemming</span>
+                    <span class="attendance-bar__pct">{{ (attendance * 100) | round(0, 'floor') }}%</span>
+                    <div class="attendance-bar" role="progressbar"
+                            aria-valuenow="{{ (attendance * 100) | round(0, 'floor') }}"
+                            aria-valuemin="0" aria-valuemax="100">
+                        <div class="attendance-bar__fill" style="width: {{ (attendance * 100) | round(0, 'floor') }}%;"></div>
+                    </div>
+                </div>
+                <div class="attendance-bar-row">
+                    <span class="attendance-bar__label capitalize-first" data-i18n="perDay">Per dag</span>
+                    <span class="attendance-bar__pct">{{ (normalizedAttendance * 100) | round(0, 'floor') }}%</span>
+                    <div class="attendance-bar" role="progressbar"
+                            aria-valuenow="{{ (normalizedAttendance * 100) | round(0, 'floor') }}"
+                            aria-valuemin="0" aria-valuemax="100">
+                        <div class="attendance-bar__fill" style="width: {{ (normalizedAttendance * 100) | round(0, 'floor') }}%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <ul class="faq-list">
+            <li class="card padded flex-col">
+                <details>
+                    <summary>Hoe wordt stemdeelname berekend?</summary>
+                    <p>De Kamer publiceert geen aanwezigheden. Aanwezigheid wordt benaderd via stemdeelname: het aandeel stemdagen (of stemmingen) waaraan een lid sinds zijn/haar startdatum heeft deelgenomen. Er kunnen legitieme redenen zijn voor afwezigheid, zoals ziekte, zwangerschap, ouderschapsverlof of officiële verplichtingen.</p>
+                    <p>De stemdeelname <em>per dag</em> laat elke stemdag evenveel meetellen. De stemdeelname <em>per stemming</em> neemt elke individuele stemming in rekening: afwezigheid op een drukke dag telt zo harder door.</p>
+            </details>
+            </li>
+        </ul>
+    </div>
+
+    <!-- QUESTIONS -->
+    <h2 id="mondelinge vragen" class="capitalize-first" data-i18n="oralQuestions">Mondelinge vragen</h2>
+    {% if member.questions.length == 0 %}
+        <p>{{ member.first_name }} {{ member.last_name }} heeft nog geen vragen gesteld in de plenaire vergaderingen.</p>
+    {% else %}
+        <p>Vragen gesteld door {{ member.first_name }} {{ member.last_name }} in de plenaire vergaderingen.</p>
+        <ul class="flex-col gap padding:0">
+            {% for question in member.questions | asQuestioner %}
+            {% set topicCounts = [question] | countTopics(topics) %}
+            {% set topic = topicCounts[0][0] %}
+            <li class="question-container">
+                {{ questionCard({question: question, topic: topic, topics: topics, functions: functions, fractionColors: fractionColors, nolink: true, hideAuthors: true }) }}
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- PROPOSITIONS -->
+    <h2 id="voorstellen" class="capitalize-first" data-18n="propositions">Voorstellen</h2>
+    {% if member.propositions.length == 0 %}
+        <p>{{ member.first_name }} {{ member.last_name }} heeft nog geen voorstellen ingediend als hoofdauteur.</p>
+    {% else %}
+        <p>Voorstellen ingediend door {{ member.first_name }} {{ member.last_name }} als hoofdauteur.</p>
+        <ul class="flex-col gap padding:0">
+            {% for proposition in member.propositions | sortDate('date', 'desc') | limit(10) %}
+            <li class="proposition-container">
+                {{ propositionCard({proposition: proposition, fractionColors: fractionColors, federalGovernment: federalGovernment }) }}
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- VOTES -->
+    <h2 id="stemmingen" class="capitalize-first">Stemmingen</h2>
+
+    {% if member.votes and member.votes.length > 0 %}
+        <p>Recente stemmingen van {{ member.first_name }} {{ member.last_name }} in de plenaire vergadering.</p>
+
+        {% set totalVotes = member.votes | length %}
+        {% set outlierVotes = member.votes | selectattr('outlier') | list | length %}
+        {% set outlierPercentage = (outlierVotes / totalVotes * 100) | round(1) if totalVotes > 0 else 0 %}
+
+        <div class="card metric-card metric-card--inline">
+            <span class="metric-card__number">{{ 100 - (outlierPercentage | int) }}%</span>
+            <span class="metric-card__unit">overeenkomst met partijlijn</span>
+        </div>
+
+        <div class="votes-table-container">
+            <table class="votes-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Onderwerp</th>
+                        <th scope="col">Stemming</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vote in member.votes | sortDate('date', 'desc') | limit(10) %}
+                        {% set vote_label = { 'yes': 'ja', 'no': 'nee', 'abstain': 'onthouding' }[vote.vote] %}
+
+                        <tr>
+                            <td>
+                                <time datetime="{{ vote.date }}">{{ vote.date | shortDate }}</time>
+                                <span class="vote-title">{{ vote.title_nl }}</span>
+                                <a class="vote-detail-link" target="_blank"
+                                   href="/sessions/{{ vote.session_id }}/meetings/P{{ vote.meeting_id }}/votes/{{ vote.vote_id }}/">
+                                    details →
+                                </a>
+                            </td>
+
+                            <td>
+                                <span class="vote-dot {{ vote.vote }}" aria-hidden="true"></span>
+
+                                {% if vote.outlier %}
+                                    <span class="vote-outlier">{{ vote_label }}</span>
+                                {% else %}
+                                    {{ vote_label }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% else %}
+        <p>{{ member.first_name }} {{ member.last_name }} heeft nog niet gestemd in de kamer.</p>
+    {% endif %}
+
+    <!-- COMMISSIONS -->
+    {% if member.commissions.length != 0 %}
+        <h2 id="commissies" class="capitalize-first" data-18n="commissions">Commissies</h2>
+        <p>{{ member.first_name }} {{ member.last_name }} is lid van de volgende commissies.
+        <div class="flex-row gap-small flex-wrap">
+            {% for commission in member.commissions %}
+                {% set metadata = commissionsMetadata[commission.commission] or {} %}
+                <a href="/commissions/" class="badge secondary capitalize-first">{{ metadata.name }}</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>

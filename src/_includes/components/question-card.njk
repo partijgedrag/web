@@ -1,0 +1,143 @@
+{% macro questionCard(params) %}
+
+<div class="card">
+    <!-- QUESTIONERS -->
+    <div id="question-{{ params.question.question_id }}" class="card-section">
+        <!-- PAGEFIND -->
+        {% set internal_ids_list = params.question.internal_ids | split(",") %}
+        {% for topic in params.question.topics_nl %}
+        <h3 id="question-{{ params.question.question_id }}" style="position:absolute; visibility:hidden; pointer-events:none;">
+            Vraag: {{ topic }} {% if internal_ids_list[loop.index0] %}({{ internal_ids_list[loop.index0] | trim }}){% endif %}
+        </h3>
+        {% endfor %}
+
+        <!-- TOPIC -->
+        {% if params.topic %}
+        <div class="category">
+            {{ params.topic }}
+        </div>
+        {% endif %}
+
+        <!-- BODY -->
+        <div class="padded flex-col gap">
+            <!-- TOPICS -->
+            <h3 class="bold">
+                <span class="{% if params.question.topics_summary_nl %}hide-when-summary{% endif %}">
+                {% for topic in params.question.topics_nl %}
+                    {{ topic }}<br>
+                {% endfor %}
+                </span>
+                {% if params.question.topics_summary_nl %}
+                <span class="flex-row gap align-items:center summarized highlight show-when-summary">{{ params.question.topics_summary_nl }} <span class="tooltip" style="height: 16px;">{% lucide "bot-message-square" %}<span class="tooltip-text" data-i18n="topicSummaryExplanation">summaryExplanation</span></span></span>
+                {% endif %}
+            </h3>
+
+            <!-- AUTHORS -->
+            {% if params.hideAuthors != true and params.hideAuthors != 'true' %}
+            <div class="flex-col">
+                {% if (params.question.questioners | length) > 1 %}
+                <p>Gesteld door</p>
+                <p>
+                    {% for questioner in params.question.questioners %}
+                    {% set fraction = questioner.fraction | lower %}
+                    {% set primaryColor = params.fractionColors[fraction].primary or '#95a5a6' %}
+                    {% set secondaryColor = params.fractionColors[fraction].secondary or '#95a5a6' %}
+                    <span class="badge bold" style="--bg: {{ secondaryColor }}; color: {{ primaryColor }}; background-color: {{ secondaryColor }};">{{ questioner.fraction | normaliseFraction }}</span>
+                    <!--<a href="/fractions/{{ questioner.fraction | slugify }}/" class="badge bold" style="--bg: {{ secondaryColor }}; color: {{ primaryColor }}; background-color: {{ secondaryColor }};">{{ questioner.fraction | normaliseFraction }}</a>-->
+                    <span><a href="/members/{{ questioner.name | slugify }}/">{{ questioner.name }}</a></span><br>
+                    {% endfor %}
+                </p>
+                {% else %}
+                <p>Gesteld door</p>
+                <p>
+                    {% set fraction = params.question.questioners[0].fraction | lower %}
+                    {% set primaryColor = params.fractionColors[fraction].primary or '#95a5a6' %}
+                    {% set secondaryColor = params.fractionColors[fraction].secondary or '#95a5a6' %}
+                    <a href="/fractions/{{ params.question.questioners[0].fraction | slugify }}" class="badge bold" style="--bg: {{ secondaryColor }}; color: {{ primaryColor }}; background-color: {{ secondaryColor }};">{{ params.question.questioners[0].fraction | normaliseFraction }}</a>
+                    <span><a href="/members/{{ params.question.questioners[0].name | slugify }}/">{{ params.question.questioners[0].name }}</a></span><br>
+                </p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- QUESTIONEES -->
+    {% set cardHref = "/sessions/" + params.question.session_id + "/meetings/" + params.question.type + "/" + params.question.meeting_id + "/#question-" + params.question.question_id %}
+    <div class="card-section card-link-wrapper">
+        <div class="padded flex-row align-items:center justify-content:space-between">
+            <div class="flex-col">
+                <p>Gesteld aan</p>
+                <p>
+                    {% for respondent in params.question.respondents %}
+                    {% set function = params.functions[respondent.name] | getActive(params.question.date) %}
+                    {% set fraction = function.fraction %}
+                    {% set primaryColor = params.fractionColors[fraction | lower].primary or '#95a5a6' %}
+                    {% set secondaryColor = params.fractionColors[fraction | lower].secondary or '#95a5a6' %}
+                    <a href="/fractions/{{ fraction | slugify }}/" class="badge bold" style="--bg: {{ secondaryColor }}; color: {{ primaryColor }}; background-color: {{ secondaryColor }};">{{ fraction | normaliseFraction }}</a>
+                    <span><a href="/government/">{{ respondent.name }}</a>{% if function %} ({{ function.function }}){% endif %}</span><br>
+                    {% endfor %}
+                </p>
+                <p>op {{ params.question.date | date }}</p>
+            </div>
+            {% if params.nolink != true and params.nolink != 'true' %}
+            {% lucide "chevron-right" %}
+            {% endif %}
+        </div>
+        {% if params.nolink != true and params.nolink != 'true' %}
+        <a href="{{ cardHref }}" class="card-primary-link" aria-label="Bekijk vergadering"></a>
+        {% endif %}
+    </div>
+
+    <!-- DISCUSSION TOGGLE -->
+    <div class="card-section padded">
+        <div class="flex-row gap">
+            <p>Bekijk antwoord</p>
+            <button
+              class="show-more"
+              data-target="discussion-{{ params.question.question_id }}"
+            >
+                {% lucide "chevron-down" %}
+            </button>
+        </div>
+    </div>
+
+    <!-- DISCUSSION -->
+    {% set respondent_names = params.question.respondents | map('name') | list %}
+    <div id="discussion-{{ params.question.question_id }}" class="card-section hidden flex-col gap overflow:hidden padded discussion-panel">
+        {% if params.question.discussion_summary_nl %}
+        <div class="message-container ai-discussion-summary show-when-summary">
+            <div class="speech summarized">
+                <p class="flex-row gap bold align-items:center margin:0">
+                    Samenvatting <span class="tooltip" style="height: 16px;">{% lucide "bot-message-square" %}<span class="tooltip-text" data-i18n="discussionSummaryExplanation">summaryExplanation</span></span></p>
+                <div><p>{{ params.question.discussion_summary_nl }}</p></div>
+            </div>
+        </div>
+        {% endif %}
+        {% for x in params.question.discussion %}
+        {% set speakerName = x.speaker.name if x.speaker and x.speaker.name else x.speaker %}
+        <div class="message-container">
+            <div class="speech
+                    {% if speakerName in respondent_names %}response
+                    {% elif speakerName == 'Voorzitter' %}moderator
+                    {% else %}question{% endif %}">
+
+                {% if speakerName == 'Voorzitter' %}
+                <p class="bold margin:0 capitalize-first">Voorzitter:</p>
+                {% else %}
+                <p class="bold margin:0">{{ speakerName }}:</p>
+                {% endif %}
+
+                {% set paragraphs = x.text.trim().split("NEWPARAGRAPH") %}
+                <div>
+                    {% for part in paragraphs %}
+                    <p>{{ part.trim() }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endmacro %}

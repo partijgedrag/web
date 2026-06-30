@@ -1,0 +1,260 @@
+---
+layout: layouts/meeting
+permalink: "topics/{% if topic.type == 'subtopic' %}{{ topic.parent | slugify }}/{% endif %}{{ topic.name | slugify }}/index.html"
+pagination:
+    data: collections.mainTopics
+    size: 1
+    alias: topic
+    addAllPagesToCollections: true
+eleventyComputed:
+    title: "{{ topic.name }}"
+    description: "Parlementaire dossiers en stemmen over {{ topic.name }}. Bekijk hoe Belgische partijen zich positioneren rond dit thema."
+    i18nHeader: "topicHeader"
+    i18nHeaderVars: {
+        topic: "{{ topic.name }}"
+    }
+    i18nSubheader: "topicSubheader"
+    i18nSubheaderVars: {
+        topic: "{{ topic.name }}"
+    }
+---
+
+<!-- COMPONENTS -->
+{%- from "components/proposition-card.njk" import propositionCard -%}
+{%- from "components/question-card.njk" import questionCard -%}
+
+<!-- VARIABLES -->
+{% set topicQuestions = questions.questions | filterQuestionsByTopic(topic, topics) %}
+{% set topicPropositions = propositions.propositions | filterPropositionsByTopic(topic, topics) %}
+{% set subtopics = topics | getSubtopics(topic.name) %}
+
+<section id="topic" class="flex-col gap">
+    <!-- INFO -->
+    <div class="card">
+        <div class="card-section padded flex-col gap-small">
+            <!-- HEADER -->
+            <div class="flex-row justify-content:space-between">
+                <h2 id="overzicht">Alles over {{ topic.name }}</h2>
+            </div>
+
+            <div class="flex-col gap">
+                <div class="flex-col gap">
+                    <p>Parlementaire activiteit over {{ topic.name }}{% if subtopics | length > 0 %} en gerelateerde deelonderwerpen{% endif %}.</p>
+                </div>
+
+                <!-- SUBTOPICS -->
+                {% if subtopics | length > 0 %}
+                <div class="flex-row gap-small flex-wrap">
+                    {% for subtopic in subtopics %}
+                        <span class="badge secondary capitalize-first">{{ subtopic.name }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- DETAILS -->
+        <div class="card-section padded">
+            <div class="flex-col gap">
+                <div class="flex-row flex-wrap gap align-items:center">
+                    <!-- QUESTIONS -->
+                    <div class="flex-row align-items:center">
+                        <span class="icon-muted">{% icon "lucide:message-circle-question" %}</span>
+                        <span class="text-muted">{{ topicQuestions.length }} {{ 'vraag' if topicQuestions.length == 1 else 'vragen' }}</span>
+                    </div>
+
+                    <!-- PROPOSITIONS -->
+                    <div class="flex-row align-items:center">
+                        <span class="icon-muted">{% icon "lucide:lightbulb" %}</span>
+                        <span class="text-muted">{{ topicPropositions.length }} {{ 'voorstel' if topicPropositions.length == 1 else 'voorstellen' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="card padded flex-col gap-small">
+        <h3 style="margin-top: 0; margin-bottom: 0.4rem;" class="capitalize" data-i18n="mostContributionsTitle"></h3>
+        <p data-i18n="mostContributionsDescription"></p>
+        <svg id="topMembersChart" style="margin-top: 1rem;"></svg>
+    </div>
+
+    <!-- ACTIVITY -->
+    <div>
+        <h2 id="activiteit" class="capitalize-first" data-i18n="plenaryActivity">Activiteit</h2>
+        <div class="tabbed" style="margin-top: 2rem;">
+            <input type="radio" name="tabset" id="tab-1" checked>
+            <input type="radio" name="tabset" id="tab-2">
+
+            <ul class="tabs">
+                <li><label for="tab-1">Vragen</label></li>
+                <li><label for="tab-2">Voorstellen</label></li>
+            </ul>
+
+            <!-- TAB 1 — QUESTIONS -->
+            <div id="tab-1-content" class="tab-content padded">
+                <div>
+                    <ul class="flex-col gap padding:0">
+                        {% for question in topicQuestions | sortDate('date', "desc") | limit(20) %}
+                        {% set topicCounts = [question] | countTopics(topics) %}
+                        {% set topic = topicCounts[0][0] %}
+                        <li>
+                            {{ questionCard({ question: question, topics: topics, functions: functions, fractionColors: fractionColors }) }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- TAB 2 — PROPOSITIONS -->
+            <div id="tab-2-content" class="tab-content padding">
+            <div>
+                    {% for proposition in topicPropositions| sortDate('date', "desc") | limit(20) %}
+                        <div>
+                            {{ propositionCard({proposition: proposition, fractionColors: fractionColors }) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+
+        const data = {{ members.topContributorsByTopic[topic.name] | dump | safe }};
+
+        // Expected format: [{ name: "Alice", count: 5 }, ...]
+
+        // Create a temporary SVG to measure text width
+        const tempSvg = d3.select("body")
+            .append("svg")
+            .style("visibility", "hidden")
+            .style("position", "absolute");
+
+        const tempText = tempSvg.selectAll("text")
+            .data(data)
+            .enter()
+            .append("text")
+            .text(d => d.name + " (" + d.fraction + ")")
+            .style("font-size", "0.75rem")
+            .style("font-family", "sans-serif");
+
+        const maxLabelWidth = Array.from(tempText.nodes())
+            .reduce((max, node) => Math.max(max, node.getBBox().width), 0);
+
+        tempSvg.remove();
+
+// Adjust margin.left based on text width with a bit of padding
+        const margin = { top: 10, right: 20, bottom: 40, left: maxLabelWidth + 10 };
+
+        const container = document.getElementById("topMembersChart").parentNode;
+        const width = container.clientWidth - margin.left - margin.right;
+        const height = data.length * 25 + margin.top + margin.bottom;
+
+        const svg = d3.select("#topMembersChart")
+            .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height}`)
+            .attr("preserveAspectRatio", "xMidYMid meet")
+            .style("width", "100%")
+            .style("height", "auto");
+
+        const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const y = d3.scaleBand()
+            .domain(data.map(d => d.name + " (" + d.fraction + ")"))
+            .range([0, height - margin.top - margin.bottom])
+            .padding(0.2);
+
+        const x = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d.questions + d.propositions) + 1])
+                .range([0, width]);
+
+        const color = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d.questions + d.propositions)])
+            .range(["#cce5ff", "#004085"]);
+
+
+        // Y-axis (names)
+        g.append("g")
+            .call(d3.axisLeft(y))
+            .call(g => g.selectAll("text")
+                .style("font-size", "0.75rem")
+                .style("fill", "#333"))
+            .call(g => g.select(".domain").remove());
+
+        g.append("g")
+            .attr("transform", `translate(0, ${height - margin.top - margin.bottom})`)
+            .call(
+                d3.axisBottom(x)
+                    .ticks(5) // adjust tick count if needed
+                    .tickSize(-height) // grid lines go upward
+                    .tickFormat(d => d)
+            )
+            .call(g => g.select(".domain").remove()) // remove axis line
+            .call(g => g.selectAll("text")
+                .style("font-size", "0.75rem")
+                .style("font-family", "sans-serif")
+                .style("fill", "#333"))
+            .call(g => g.selectAll(".tick line")
+                .attr("stroke", "#ddd")
+                .attr("stroke-dasharray", "2,2")); // optional dashed lines
+
+
+
+
+        // Tooltip
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        // Bars
+        const bars = g.selectAll(".bar")
+            .data(data)
+            .enter()
+            .append("rect")
+            .attr("class", "bar")
+            .attr("x", 0)
+            .attr("y", d => y(d.name + " (" + d.fraction + ")"))
+            .attr("width", 0) // Animate width from 0
+            .attr("height", y.bandwidth())
+            .attr("rx", 4)
+            .attr("ry", 4)
+            .attr("fill", d => color(d.questions + d.propositions));
+
+        bars.transition()
+            .duration(800)
+            .attr("width", d => x(d.questions + d.propositions))
+
+        // Tooltip behavior
+        bars.on("mouseover", function (event, d) {
+            tooltip.transition().duration(200).style("opacity", 1);
+            tooltip.html(`<strong>${d.name}</strong><br/>${d.questions} vragen, ${d.propositions} voorstellen`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 30) + "px");
+
+            d3.select(this).attr("fill", "#0056b3");
+        })
+            .on("mouseout", function (event, d) {
+                tooltip.transition().duration(200).style("opacity", 0);
+                d3.select(this).attr("fill", color(d.questions + d.propositions));
+            });
+
+        // Add labels at the end of each bar
+        // g.selectAll(".label")
+        //     .data(data)
+        //     .enter()
+        //     .append("text")
+        //     .attr("x", d => x(d.questions + d.propositions) + 5) // position just to the right of the bar
+        //     .attr("y", d => y(d.name) + y.bandwidth() / 2)
+        //     .attr("dy", "0.35em")
+        //     .text(d => d.questions + d.propositions)
+        //     .style("font-size", "0.7rem")
+        //     .style("fill", "#333")
+        //     .style("font-family", "sans-serif");
+
+    });
+</script>

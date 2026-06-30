@@ -1,0 +1,69 @@
+{% macro voteCard(params) %}
+
+{% set totalVotes = (params.vote.yes_count | int) + (params.vote.no_count | int) + (params.vote.abstain_count | int) %}
+{% set passed = (params.vote.yes_count | int) > ((params.vote.no_count | int) + (params.vote.abstain_count | int)) %}
+
+<div class="card">
+    <div id='vote-{{ params.vote.vote_id }}' class="card-section">
+        <!-- HEADER -->
+        <div class="flex-row justify-content:space-between align-items:start">
+            <!-- VOTE OUTCOME -->
+            {% if passed %}
+            <span data-i18n="passed" class="category on-positive"></span>
+            {% else %}
+            <span data-i18n="failed" class="category on-negative"></span>
+            {% endif %}
+        </div>
+
+        <!-- BODY -->
+        <div class="padded flex-col gap">
+            <!-- TITLE -->
+            <p>
+                <span>
+                    {{ params.vote.title_nl | highlightWord("verwerping") | safe }}
+                    {% if params.vote.dossier_id and params.vote.document_id %}
+                    ({{ params.vote.dossier_id }}/{{ params.vote.document_id }})
+                    {% endif %}
+                </span>
+            </p>
+
+            <!-- VOTE BAR -->
+            <div class="progress-bar">
+                <div class="bar-segment on-positive" style="width: {{ (params.vote.yes_count / totalVotes * 100).toFixed(1) }}%">
+                    {% if params.vote.yes_count > 0 %}
+                        <span class="bar-label">{{ (params.vote.yes_count / totalVotes * 100).toFixed(1) }}%</span>
+                    {% endif %}
+                </div>
+                <div class="bar-segment on-negative" style="width: {{ (params.vote.no_count / totalVotes * 100).toFixed(1) }}%">
+                    {% if params.vote.no_count > 0 %}
+                        <span class="bar-label">{{ (params.vote.no_count / totalVotes * 100).toFixed(1) }}%</span>
+                    {% endif %}
+                </div>
+                <div class="bar-segment on-neutral" style="width: {{ (params.vote.abstain_count / totalVotes * 100).toFixed(1) }}%">
+                    {% if params.vote.abstain_count > 0 %}
+                        <span class="bar-label">{{ (params.vote.abstain_count / totalVotes * 100).toFixed(1) }}%</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- VOTE NUMBERS -->
+            <div class="flex-col gap">
+                <div class="flex-row gap-small align-items:center">
+                    <span class="flex-row align-items:center"><span class="dot on-positive"></span><span><span data-i18n="yes">yes</span> ({{ params.vote.yes_count }})</span></span>
+                    <span class="flex-row align-items:center"><span class="dot on-negative"></span><span><span data-i18n="no" >no</span> ({{ params.vote.no_count }})</span></span>
+                    <span class="flex-row align-items:center"><span class="dot on-neutral"></span><span><span data-i18n="abstain">abstain</span> ({{ params.vote.abstain_count }})</span></span>
+                </div>
+                <span id="total-votes"><span data-i18n="totalVotes">totalVotes</span><span>: {{ (params.vote.yes_count | int) + (params.vote.no_count | int) + (params.vote.abstain_count | int) }}/150</span>
+            </div>
+        </div>
+    </div>
+
+    {% if params.hideVoteLink !== "true"%}
+    <!-- VOTE LINK -->
+    <a href="/sessions/{{ params.vote.session_id }}/meetings/P{{ params.vote.meeting_id }}/votes/{{ params.vote.vote_id }}/" class="flex-row justify-content:space-between card-section padded">
+        <p>Bekijk stemmingsdetails</p>
+        {% lucide "chevron-right" %}
+    </a>
+    {% endif %}
+</div>
+{% endmacro %}

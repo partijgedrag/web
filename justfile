@@ -1,0 +1,2 @@
+run:
+    deno task dev

@@ -1,0 +1,239 @@
+/* PROGRESS BAR */
+.progress-bar {
+    display: flex;
+    background: #e0e0e0;
+    height: 12px;
+    overflow: hidden;
+}
+
+.progress-bar .rounded {
+    border-radius: 5px;
+}
+
+.progress-bar .bar-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 100%;
+    white-space: nowrap;
+}
+
+.progress-bar .bar-label {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    color: white;
+    font-size: x-small;
+    padding: 0.2rem;
+}
+
+/* FAQ LIST */
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin: 0;
+    margin-bottom: 1rem;
+}
+
+.faq-list li:hover {
+    cursor: pointer;
+}
+
+.faq-list details {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.faq-list p {
+    margin-block: 1rem;
+}
+
+.faq-list p:last-of-type {
+    margin-bottom: 0;
+}
+
+/* DOT */
+.dot {
+    display: inline-block;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    margin-right: 0.3em;
+    vertical-align: middle;
+}
+
+.dot.active {
+    background-color: black;
+}
+
+/* TOOLTIPS */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 28rem;
+    background-color: var(--color-on-surface);
+    color: var(--color-surface);
+    text-align: left;
+    border-radius: 4px;
+    padding: 0.6rem;
+    position: absolute;
+    font-weight: normal;
+    z-index: 1;
+    top: 160%;
+    left: 65%;
+    margin-left: -65px;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+}
+
+.category {
+    font-size: small;
+    font-weight: bold;
+    margin: 0;
+    border-bottom-right-radius: 0.2rem;
+    padding-left: 0.4rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    padding-right: 0.6rem;
+    max-width: fit-content;
+    color: var(--color-surface);
+    background-color: var(--color-on-surface);
+}
+
+.category a {
+    text-decoration: none;
+    border-bottom: 2px dotted rgba(0, 0, 0, 1);
+    opacity: 1;
+}
+
+.category a:hover {
+    background-color: black;
+    color: white;
+    transition: color 0.2s ease;
+    font-weight: bold;
+    opacity: 1;
+}
+
+.category:has(+ .category) {
+    border-radius: 0;
+}
+
+/* BADGE */
+.badge {
+    padding: 2px 8px;
+    font-size: small;
+    text-wrap: auto;
+    border-radius: 4px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.badge.padded {
+    padding: 6px 12px;
+}
+
+a.badge {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    transition: filter 0.15s ease-in-out;
+}
+
+a.badge:hover {
+    background-color: color-mix(in oklab, var(--bg) 98%, black 2%) !important;
+}
+
+a.badge.secondary:hover {
+    background-color: color-mix(
+        in oklab,
+        var(--color-secondary),
+        black 2%
+    ) !important;
+}
+
+/* CARDS */
+.card {
+    border: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+    box-shadow: inset 0 -2px color-mix(in srgb, currentColor 5%, transparent);
+    border-radius: 0.4rem;
+    overflow: hidden;
+}
+
+.card-section + .card-section {
+    border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.card-section.hidden {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    flex-direction: column;
+    list-style-type: none;
+    padding: 0;
+    box-shadow: none;
+}
+
+.card-section.hidden:not(.open) {
+    border-top: none;
+}
+
+.card-section.hidden.open {
+    border-radius: 0 0 0.4rem 0.4rem;
+    max-height: 26rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.card-section.hidden.open.padded {
+    padding: 0.4rem;
+}
+
+a.card:hover {
+    background-color: color-mix(in oklab, var(--color-surface), black 5%);
+}
+
+a.card-section:hover {
+    background-color: color-mix(in oklab, var(--color-surface), black 5%);
+}
+
+.card summary::marker {
+    margin-right: 0.4rem;
+}
+
+.card-link-wrapper {
+    position: relative;
+}
+
+.card-primary-link {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+/* The "invisible" full-card link */
+.card-link-wrapper .card-primary-link::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+/* Real links inside float above the overlay */
+.card-link-wrapper a:not(.card-primary-link) {
+    position: relative;
+    z-index: 1;
+}
+
+.card-link-wrapper:has(.card-primary-link:hover) .card {
+    background-color: color-mix(in oklab, var(--color-surface), black 5%);
+}
