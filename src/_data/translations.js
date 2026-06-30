@@ -10,7 +10,8 @@ export default {
     heroStat3: "Transparent and independent",
     // INDEX - NEWS
     newsTitle: "News from the Chamber",
-    newsSubtitle: "View recent plenary meetings and committee meetings.",
+    newsSubtitle:
+      "Every Thursday, Members of Parliament meet for the plenary session. Throughout the week, committee meetings are also held on more specific topics. Below you can see which meetings have been held recently.",
     seeMeetingDetails: "View the full report",
     // INDEX - LINKS
     linksTitle: "Reports and information",
@@ -355,7 +356,7 @@ export default {
     heroStat3: "Transparent et indépendant",
     newsTitle: "Actualités de la Chambre",
     newsSubtitle:
-      "Consultez les récentes séances plénières et réunions de commission.",
+      "Chaque jeudi, les députés se réunissent en séance plénière. Tout au long de la semaine, des réunions de commissions sont également organisées sur des sujets plus spécifiques. Vous trouverez ci-dessous la liste des réunions qui se sont tenues récemment.",
     seeMeetingDetails: "Voir le rapport complet",
     linksTitle: "Rapports et informations",
     linksSubtitle: "Un aperçu de tous les documents et rapports de la Chambre.",
@@ -496,7 +497,7 @@ export default {
     // INDEX - NEWS
     newsTitle: "Nieuws uit De Kamer",
     newsSubtitle:
-      "Bekijk recente plenaire vergaderingen en commissievergaderingen.",
+      "Elke donderdag komen de kamerleden samen tijdens de plenaire vergadering. Doorheen de week vinden ook commissievergaderingen plaats over specifiekere onderwerpen. Hierond ziet u welke vergadering recent werden gehouden.",
     seeMeetingDetails: "Bekijk het volledig verslag",
     // INDEX - LINKS
     linksTitle: "Verslagen en informatie",
