@@ -208,7 +208,7 @@ eleventyComputed:
     {% endif %}
 
     <!-- PLENARY VOTE -->
-    <div>
+    <div class="flex-col gap">
         <h2 id="stemresultaten" class="capitalize" data-i18n="voteResults">Stemresultaten</h2>
         {% set vote = dossier.plenaryVote %}
         {% if dossier.vote_date %}
@@ -220,7 +220,110 @@ eleventyComputed:
             {% endif%}
             tijdens <a href='/sessions/56/meetings/P{{ vote.meeting_id }}'>de plenaire vergadering op {{ dossier.vote_date | date }}</a>.</p>
 
-            {{ voteCard({ vote: vote, fractionColors: fractionColors, federalGovernment: federalGovernment }) }}
+            {{ voteCard({ vote: vote, fractionColors: fractionColors, federalGovernment: federalGovernment, hideVoteLink: "true" }) }}
+
+            <!-- PER FRACTION -->
+            <div class="flex-col gap">
+                <h3>Resultaten per fractie.</h3>
+                <div class="card padded">
+                    {% for fraction, counts in vote.votes_by_fraction %}
+                    {% set total = counts.yes + counts.no + counts.abstain %}
+                    <div class="flex-row justify-content:space-between align-items:center gap">
+                        <div style="width:40%; text-align: end;">
+                            {% if federalGovernment | contains(fraction) %}
+                            <p class="flex-row federal-government-after align-items:center margin:0">{{ fraction }}</p>
+                            {% else %}
+                            <p class="flex-row align-items:center margin:0">{{ fraction }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="progress-bar" style="width: 60%;">
+                            <div class="bar-segment on-positive" style="width: {{ (counts.yes / total * 100).toFixed(1) }}%">
+                                {% if counts.yes > 0 %}<span
+                                    class="bar-label">{{ (counts.yes / total * 100).toFixed(1) }}%</span>{% endif %}
+                            </div>
+                            <div class="bar-segment on-negative" style="width: {{ (counts.no / total * 100).toFixed(1) }}%">
+                                {% if counts.no > 0 %}<span class="bar-label">{{ (counts.no / total * 100).toFixed(1) }}%</span>{%
+                                endif %}
+                            </div>
+                            <div class="bar-segment on-neutral" style="width: {{ (counts.abstain / total * 100).toFixed(1) }}%">
+                                {% if counts.abstain > 0 %}<span class="bar-label">{{ (counts.abstain / total * 100).toFixed(1) }}%</span>{%
+                                endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <p class="federal-government-before" style="margin-top: 2rem;">= lid van de huidige federale regering</p>
+                </div>
+            </div>
+
+            <!-- PER MEMBER -->
+            <div class="flex-col gap">
+                <h3>Resultaten per kamerlid.</h3>
+                <div class="card padded">
+                    <div class="votes-table-container" style="border-top: 1px solid #dddddd;">
+                        <table class="votes-table">
+                            <thead>
+                                <tr>
+                                    <th>Partij</th>
+                                    <th>Kamerlid</th>
+                                    <th style="text-align: end;">Stemming</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for member in vote.yes_members %}
+                                {% set primaryColor = fractionColors[member.fraction].primary or '#95a5a6' %}
+                                {% set secondaryColor = fractionColors[member.fraction].secondary or '#95a5a6' %}
+                                <tr>
+                                    <td>
+                                        <span class="badge bold" style="color: {{primaryColor}};background-color: {{ secondaryColor }};">{{ member.fraction }}</span>
+                                        <!--<a href="/fractions/{{ member.fraction | slugify }}/" class="badge bold" style="color: {{primaryColor}};background-color: {{ secondaryColor }};">{{ member.fraction }}</a>-->
+                                    </td>
+                                    <td>
+                                        <a href="/members/{{member.name | slugify }}">{{ member.name }}</a>
+                                    </td>
+                                    <td style="text-align: end;">
+                                        <span class="vote-dot yes"></span>ja
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                                {% for member in vote.no_members %}
+                                {% set primaryColor = fractionColors[member.fraction].primary or '#95a5a6' %}
+                                {% set secondaryColor = fractionColors[member.fraction].secondary or '#95a5a6' %}
+                                <tr>
+                                    <td>
+                                        <a href="/fractions/{{ member.fraction | slugify }}/" class="badge bold" style="color: {{primaryColor}}; background-color: {{ secondaryColor }};">{{ member.fraction }}</a>
+                                    </td>
+                                    <td>
+                                        <a href="/members/{{member.name | slugify }}">{{ member.name }}</a>
+                                    </td>
+                                    <td style="text-align: end;">
+                                        <span class="vote-dot no"></span>nee
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                                {% for member in vote.abstain_members %}
+                                {% set primaryColor = fractionColors[member.fraction].primary or '#95a5a6' %}
+                                {% set secondaryColor = fractionColors[member.fraction].secondary or '#95a5a6' %}
+                                <tr>
+                                    <td>
+                                        <a href="/fractions/{{ member.fraction | slugify }}/" class="badge bold" style="color: {{primaryColor}};background-color: {{ secondaryColor }};">{{ member.fraction }}</a>
+                                    </td>
+                                    <td>
+                                        <a href="/members/{{member.name | slugify }}">{{ member.name }}</a>
+                                    </td>
+                                    <td style="text-align: end;">
+                                        <span class="vote-dot abstain"></span>onthouding
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         {% else %}
             <p>Nog geen aangenomen artikelen</p>
         {% endif %}
