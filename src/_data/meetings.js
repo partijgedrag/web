@@ -45,8 +45,8 @@ const buildQuestionFromRow = (
 ) => {
   const [questionId, sessionId, meetingId] = row;
   const date = dateMap.get(`${sessionId}-${meetingId}`) ?? null;
-  const rawTopicsNl = row[5] || "";
-  const rawDiscussion = row[7] || "";
+  const rawTopicsNl = row[6] || "";
+  const rawDiscussion = row[8] || "";
   const discussion = JSON.parse(rawDiscussion || "[]").map((d) => ({
     speaker: withFraction(d.speaker, fractionLookup),
     text: d.text,
@@ -62,9 +62,10 @@ const buildQuestionFromRow = (
     meeting_id: meetingId,
     date,
     questioners: parseMembers(row[3], fractionLookup),
-    respondents: parseMembers(row[4], fractionLookup),
+    questionees: parseMembers(row[4], fractionLookup),
+    respondents: parseMembers(row[5], fractionLookup),
     topics_nl: rawTopicsNl.split(";").map((t) => t.trim()),
-    topics_fr: (row[6] || "").split(";").map((t) => t.trim()),
+    topics_fr: (row[7] || "").split(";").map((t) => t.trim()),
     topics_summary_nl: rawTopicsNl
       ? (summaryByHash[hashText(rawTopicsNl)] ?? null)
       : null,
@@ -72,9 +73,9 @@ const buildQuestionFromRow = (
       ? (summaryByHash[hashText(rawTopicsNl)] ?? null)
       : null,
     discussion,
-    discussion_ids: (row[7] || "").split(",").map((d) => d.trim()),
+    discussion_ids: (row[8] || "").split(",").map((d) => d.trim()),
     discussion_summary_nl,
-    internal_ids: row[8].split(","),
+    internal_ids: row[9].split(","),
   };
 };
 

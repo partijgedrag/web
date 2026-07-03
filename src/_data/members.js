@@ -67,14 +67,15 @@ const buildQuestion = (row, type, dateMap, fractionLookup, summaryByHash) => {
   const [questionId, sessionId, meetingId] = row;
   const date = dateMap.get(`${sessionId}-${meetingId}`) ?? null;
   const questioners = parseNames(row[3], fractionLookup);
-  const respondents = parseNames(row[4], fractionLookup);
-  const topics_nl = (row[5] || "").split(";").map((t) => t.trim());
-  const topics_fr = (row[6] || "").split(";").map((t) => t.trim());
-  const rawTopicsNl = row[5] || "";
+  const questionees = parseNames(row[4], fractionLookup);
+  const respondents = parseNames(row[5], fractionLookup);
+  const topics_nl = (row[6] || "").split(";").map((t) => t.trim());
+  const topics_fr = (row[7] || "").split(";").map((t) => t.trim());
+  const rawTopicsNl = row[6] || "";
   const topics_summary_nl = rawTopicsNl
     ? (summaryByHash[hashText(rawTopicsNl)] ?? null)
     : null;
-  const rawDiscussion = row[7] || "";
+  const rawDiscussion = row[8] || "";
   const discussion = JSON.parse(rawDiscussion || "[]").map((d) => ({
     speaker: d.speaker,
     text: d.text,
@@ -122,6 +123,7 @@ const pushQuestion = (
     topics_fr: question.topics_fr,
     topics_summary_nl: question.topics_summary_nl,
     questioners: question.questioners,
+    questionees: question.questionees,
     respondents: question.respondents,
     discussion: question.discussion,
     discussion_summary_nl: question.discussion_summary_nl,

@@ -32,8 +32,8 @@ const buildQuestionFromRow = (
   fractionLookup,
   summaryByHash,
 ) => {
-  const rawTopicsNl = row[5] || "";
-  const rawDiscussion = row[7] || "";
+  const rawTopicsNl = row[6] || "";
+  const rawDiscussion = row[8] || "";
 
   const discussion = JSON.parse(rawDiscussion || "[]").map((d) => ({
     speaker: withFraction(d.speaker, fractionLookup),
@@ -54,9 +54,10 @@ const buildQuestionFromRow = (
     meeting_id: row[2],
     date,
     questioners: parseMembers(row[3], fractionLookup),
-    respondents: parseMembers(row[4], fractionLookup),
+    questionees: parseMembers(row[4], fractionLookup),
+    respondents: parseMembers(row[5], fractionLookup),
     topics_nl: rawTopicsNl.split(";").map((t) => t.trim()),
-    topics_fr: (row[6] || "").split(";").map((t) => t.trim()),
+    topics_fr: (row[7] || "").split(";").map((t) => t.trim()),
     topics_summary_nl: rawTopicsNl
       ? (summaryByHash[hashText(rawTopicsNl)] ?? null)
       : null,

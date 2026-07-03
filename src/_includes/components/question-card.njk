@@ -63,11 +63,20 @@
     </div>
 
     <!-- QUESTIONEES -->
-    {% set cardHref = "/sessions/" + params.question.session_id + "/meetings/" + params.question.type + "/" + params.question.meeting_id + "/#question-" + params.question.question_id %}
+    {% if params.question.type == 'commission' %}
+    {% set cardHref %}
+        /sessions/{{ params.question.session_id }}/meetings/C{{ params.question.meeting_id }}/#question-{{ params.question.question_id }}
+    {% endset %}
+    {% elif params.question.type == 'plenary' %}
+    {% set cardHref %}
+        /sessions/{{ params.question.session_id }}/meetings/P{{ params.question.meeting_id }}/#question-{{ params.question.question_id }}
+    {% endset %}
+    {% endif %}
+
     <div class="card-section card-link-wrapper">
         <div class="padded flex-row align-items:center justify-content:space-between">
             <div class="flex-col">
-                <p>Gesteld aan</p>
+                <p>Beantwoord door</p>
                 <p>
                     {% for respondent in params.question.respondents %}
                     {% set function = params.functions[respondent.name] | getActive(params.question.date) %}

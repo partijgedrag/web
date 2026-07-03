@@ -122,14 +122,15 @@ export default async function () {
         const [questionId, sessionId, meetingId] = q;
         const date = meetingDateMap.get(`${sessionId}-${meetingId}`) ?? null;
         const rawQuestioners = q[3]?.split(",") ?? [];
-        const rawRespondents = q[4]?.split(",") ?? [];
-        const topicsNl = q[5]?.split(";").map((t) => t.trim()) ?? [];
-        const topicsFr = q[6]?.split(";").map((t) => t.trim()) ?? [];
-        const rawTopicsNl = q[5] || "";
+        const rawQuestionees = q[4]?.split(",") ?? [];
+        const rawRespondents = q[5]?.split(",") ?? [];
+        const topicsNl = q[6]?.split(";").map((t) => t.trim()) ?? [];
+        const topicsFr = q[7]?.split(";").map((t) => t.trim()) ?? [];
+        const rawTopicsNl = q[6] || "";
         const topics_summary_nl = rawTopicsNl
           ? (summaryByHash[hashText(rawTopicsNl)] ?? null)
           : null;
-        const rawDiscussion = q[7] || "";
+        const rawDiscussion = q[8] || "";
         const discussion_summary_nl =
           rawDiscussion.trim() && rawDiscussion.trim() !== "[]"
             ? (summaryByHash[hashText(rawDiscussion)] ?? null)
@@ -138,7 +139,7 @@ export default async function () {
           speaker: d.speaker,
           text: d.text,
         }));
-        const discussionIds = q[8]?.split(",").map((d) => d.trim()) ?? [];
+        const discussionIds = q[9]?.split(",").map((d) => d.trim()) ?? [];
 
         const questionDetails = {
           question_id: questionId,
@@ -147,6 +148,12 @@ export default async function () {
           type: "plenary",
           date,
           questioners: rawQuestioners.map((n) => ({
+            name: n.trim(),
+            fraction:
+              memberFractionMap[n.trim().toLowerCase().replace(/\s+/g, "-")] ??
+                "Unknown",
+          })),
+          questionees: rawQuestionees.map((n) => ({
             name: n.trim(),
             fraction:
               memberFractionMap[n.trim().toLowerCase().replace(/\s+/g, "-")] ??
