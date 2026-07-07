@@ -1,6 +1,6 @@
 ---
 layout: layouts/meeting
-permalink: "sessions/{{ vote.session_id }}/meetings/P{{ vote.meeting_id }}/votes/{{ vote.vote_id }}/"
+permalink: "sessions/{{ vote.session_id }}/meetings/p{{ vote.meeting_id }}/votes/{{ vote.vote_id }}/"
 pagination:
     data: collections.votes
     size: 1
@@ -45,7 +45,7 @@ eleventyComputed:
 
             <div class="flex-col gap">
                 <!-- SUMMARY -->
-                <p>Deze stemming werd {% if passed %}<span data-i18n="passed"></span>{% else %}<span data-i18n="failed"></span>{% endif %} tijdens <a href='/sessions/56/meetings/P{{ vote.meeting_id }}'>de plenaire vergadering op {{ vote.date | date }}</a>.</p>
+                <p>Deze stemming werd {% if passed %}<span data-i18n="passed"></span>{% else %}<span data-i18n="failed"></span>{% endif %} tijdens <a href='/sessions/56/meetings/p{{ vote.meeting_id }}'>de plenaire vergadering op {{ vote.date | date }}</a>.</p>
                 {% if vote.dossier_id and vote.document_id %}
                 <p>Deze stemming is gelinkt aan <a href='/sessions/56/dossiers/{{ vote.dossier_id }}'>dossier {{ vote.dossier_id }}, subdocument {{ vote.document_id }}</a>.</p>
                 {% endif %}

@@ -92,11 +92,11 @@ i18nSubheader: "meetingsSubheader"
         {% set commission = commissionsMetadata[commission_type] or {} %}
 {% if meeting.type == 'commission' %}
         {% set meetingUrl %}
-          /sessions/{{ meeting.session_id }}/meetings/C{{ meeting.meeting_id }}
+          /sessions/{{ meeting.session_id }}/meetings/c{{ meeting.meeting_id }}
         {% endset %}
 {% elif meeting.type == 'plenary' %}
     {% set meetingUrl %}
-          /sessions/{{ meeting.session_id }}/meetings/P{{ meeting.meeting_id }}
+          /sessions/{{ meeting.session_id }}/meetings/p{{ meeting.meeting_id }}
         {% endset %}
    {% endif %}
 

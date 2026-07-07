@@ -65,11 +65,11 @@
     <!-- QUESTIONEES -->
     {% if params.question.type == 'commission' %}
     {% set cardHref %}
-        /sessions/{{ params.question.session_id }}/meetings/C{{ params.question.meeting_id }}/#question-{{ params.question.question_id }}
+        /sessions/{{ params.question.session_id }}/meetings/c{{ params.question.meeting_id }}/#question-{{ params.question.question_id }}
     {% endset %}
     {% elif params.question.type == 'plenary' %}
     {% set cardHref %}
-        /sessions/{{ params.question.session_id }}/meetings/P{{ params.question.meeting_id }}/#question-{{ params.question.question_id }}
+        /sessions/{{ params.question.session_id }}/meetings/p{{ params.question.meeting_id }}/#question-{{ params.question.question_id }}
     {% endset %}
     {% endif %}
 

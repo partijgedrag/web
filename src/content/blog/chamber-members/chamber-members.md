@@ -1,11 +1,9 @@
 ---
 title: Wie zijn de 150 Belgische parlementsleden?
 subtitle: Een kijkje in De Kamer. Wie zijn de 150 kamerleden?
-description: Een kijkje in De Kamer. Wie zijn de 150 kamerleden?
+description: Een kijkje in De Kamer. Wie zijn de 150 kamerleden, hoe oud zijn ze en van welke fracties maken ze deel uit?
 date: 2026-06-30
 ---
-
-# Wie zijn de 150 Belgische parlementsleden?
 
 De Belgische Kamer van Volksvertegenwoordigers telt **{{ members.members | filter("active", "true") | length }} leden**. Zij vertegenwoordigen de Belgische bevolking en beslissen mee over alle federale wetgeving: van begrotingen tot pensioenen, van justitie tot mobiliteit. Maar wie zijn deze 150 mensen eigenlijk? In dit artikel werpen we een blik op de samenstelling van de Kamer: hun leeftijd, hun fracties en hoe divers (of net niet) deze groep eigenlijk is.
 

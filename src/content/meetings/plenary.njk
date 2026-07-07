@@ -1,6 +1,6 @@
 ---
 layout: layouts/meeting
-permalink: "sessions/{{ meeting.session_id }}/meetings/P{{ meeting.meeting_id }}/"
+permalink: "sessions/{{ meeting.session_id }}/meetings/p{{ meeting.meeting_id }}/"
 sitemap: true
 pagination:
     data: collections.plenaryMeetings
@@ -225,7 +225,7 @@ eleventyComputed:
                     <a
                         class="card padded flex-col gap-small"
                           style="flex: 1 1 100%; width: 100%;"
-                        href="/sessions/{{ meeting.previousMeeting.session_id }}/meetings/P{{ meeting.previousMeeting.meeting_id | padLeft(3, '0') }}/"
+                        href="/sessions/{{ meeting.previousMeeting.session_id }}/meetings/p{{ meeting.previousMeeting.meeting_id | padLeft(3, '0') }}/"
                     >
                         <span class="text-muted">← Vorige vergadering</span>
                         <span class="bold">{{ meeting.previousMeeting.date | date }}</span>
@@ -236,7 +236,7 @@ eleventyComputed:
                     <a
                         class="card padded flex-col gap-small"
                           style="flex: 1 1 100%; width: 100%;"
-                        href="/sessions/{{ meeting.nextMeeting.session_id }}/meetings/P{{ meeting.nextMeeting.meeting_id | padLeft(3, '0') }}/"
+                        href="/sessions/{{ meeting.nextMeeting.session_id }}/meetings/p{{ meeting.nextMeeting.meeting_id | padLeft(3, '0') }}/"
                     >
                         <span class="text-muted">Volgende vergadering →</span>
                         <span class="bold">{{ meeting.nextMeeting.date | date }}</span>

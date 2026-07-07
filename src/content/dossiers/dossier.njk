@@ -218,7 +218,7 @@ eleventyComputed:
             {% elseif dossier.status == "Verworpen" %}
             <span class="badge on-negative" data-i18n="failed">failed</span>
             {% endif%}
-            tijdens <a href='/sessions/56/meetings/P{{ vote.meeting_id }}'>de plenaire vergadering op {{ dossier.vote_date | date }}</a>.</p>
+            tijdens <a href='/sessions/56/meetings/p{{ vote.meeting_id }}'>de plenaire vergadering op {{ dossier.vote_date | date }}</a>.</p>
 
             {{ voteCard({ vote: vote, fractionColors: fractionColors, federalGovernment: federalGovernment, hideVoteLink: "true" }) }}
 
