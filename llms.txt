@@ -1,0 +1,29 @@
+# Partijgedrag.be
+
+> Partijgedrag.be ("party behavior") is an independent, non-commercial website that tracks and visualizes how the Belgian Chamber of Representatives (Belgische Kamer van Volksvertegenwoordigers / Chambre des représentants de Belgique) and its 150 members vote. It aggregates official parliamentary data from dekamer.be into a clear, browsable, and machine-readable overview of votes, legislative dossiers, members of parliament, party groups, meetings, topics, the federal government, and the lobby register.
+
+The site is available in Dutch (default), French, and English. It has no affiliation with, or funding from, the Chamber, and is not commercial. Some pages offer an AI-summarized "beknopte versie" (concise version) of official texts; such AI-generated content is always visually marked (underlined in purple) and is not a verbatim statement by the people involved.
+
+## Core sections
+
+- [Members of parliament](https://partijgedrag.be/members/): Overview of all 150 sitting members, searchable by name, party, or fraction. Individual profiles at `/members/{first-name}-{last-name}/` show voting behavior, oral questions, and submitted dossiers per member.
+- [Fractions (party groups)](https://partijgedrag.be/fractions/): Overview of all party groups represented in the Chamber. Individual profiles at `/fractions/{fraction-slug}/` show a fraction's voting behavior and dossiers.
+- [Dossiers](https://partijgedrag.be/dossiers/): Legislative dossiers (bills, proposals) from submission to final vote. Individual pages at `/sessions/{session_id}/dossiers/{dossier_id}/` list related votes, involved members, and plenary treatment.
+- [Meetings](https://partijgedrag.be/meetings/): Overview of plenary and committee meetings. Plenary reports at `/sessions/{session_id}/meetings/p{meeting_id}/`, committee reports at `/sessions/{session_id}/meetings/c{meeting_id}/`. Individual roll-call votes live at `/sessions/{session_id}/meetings/p{meeting_id}/votes/{vote_id}/`.
+- [Topics](https://partijgedrag.be/topics/): Dossiers and votes grouped by theme (e.g. climate, budget, justice), showing how parties position themselves per subject. Individual topic pages at `/topics/{topic-slug}/` (subtopics nested under their parent topic).
+- [Commissions](https://partijgedrag.be/commissions/): Overview of parliamentary committees, their chairs, and members.
+- [Federal government](https://partijgedrag.be/government/): Current ministers of the Belgian federal government and their portfolios.
+- [Lobby register](https://partijgedrag.be/lobby/): Registered lobbyists and organizations active in parliament, grouped by sector.
+- [Blog](https://partijgedrag.be/blog/): Articles explaining how the Chamber and this website work, plus site updates.
+
+## About & policies
+
+- [About](https://partijgedrag.be/about/): Explains the site's purpose, data sources, FAQ, and data/usage terms (most parliamentary data has no copyright under Belgian law and may be freely reproduced).
+- [Privacy](https://partijgedrag.be/privacy/): Privacy policy; the site collects minimal personal data.
+- [Feedback](https://partijgedrag.be/feedback/): Form to report data errors or suggest improvements.
+- [Newsletter](https://partijgedrag.be/newsletter/): Subscribe for updates on parliamentary voting behavior.
+
+## Optional
+
+- [Sitemap](https://partijgedrag.be/sitemap.xml): Full, up-to-date list of every page on the site (all members, fractions, dossiers, meetings, votes, and topics).
+- [Original source](https://dekamer.be): Official website of the Belgian Chamber of Representatives, the primary source for most data on this site.

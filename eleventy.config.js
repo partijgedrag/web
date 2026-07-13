@@ -18,26 +18,9 @@ export default async function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "./src/assets/js": "assets/js" });
   eleventyConfig.addPassthroughCopy({ "./src/assets/css": "assets/css" });
   eleventyConfig.addPassthroughCopy({ "./src/assets/fonts": "assets/fonts" });
-  eleventyConfig.addPassthroughCopy({
-    "./src/data/members.parquet": "data/members.parquet",
-  });
-  eleventyConfig.addPassthroughCopy({
-    "./src/data/meetings.parquet": "data/meetings.parquet",
-  });
-  eleventyConfig.addPassthroughCopy({
-    "./src/data/questions.parquet": "data/questions.parquet",
-  });
-  eleventyConfig.addPassthroughCopy({
-    "./src/data/propositions.parquet": "data/propositions.parquet",
-  });
-  eleventyConfig.addPassthroughCopy({
-    "./src/data/votes.parquet": "data/votes.parquet",
-  });
-  eleventyConfig.addPassthroughCopy({
-    "./src/data/remunerations.parquet": "data/remunerations.parquet",
-  });
   eleventyConfig.addPassthroughCopy({ "./src/metadata/": "metadata" });
   eleventyConfig.addPassthroughCopy("robots.txt");
+  eleventyConfig.addPassthroughCopy("llms.txt");
   eleventyConfig.addPassthroughCopy("sitemap.xsl");
   eleventyConfig.addPassthroughCopy("google20354ba7c9e75d27.html");
 

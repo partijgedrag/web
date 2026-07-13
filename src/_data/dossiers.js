@@ -163,6 +163,7 @@ export default async function () {
         const acceptedTypes = [
           "AangenomenTekst",
           "ArtikelenBijEersteStemmingAangenomen",
+          "VoorstelReglement",
         ];
 
         // Try to find a vote on an accepted-type subdocument whose outcome matches status
