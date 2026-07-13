@@ -38,7 +38,7 @@ eleventyComputed:
     "name": "Plenaire vergadering van de Kamer van Volksvertegenwoordigers op " + (meeting.date | date),
     "description": meeting | meetingDescription,
     "startDate": (meeting.date | isoDate) + "T" + (meeting.start_time | replace('h', ':')),
-    "endDate": (meeting.date | isoDate) + "T" + (meeting.end_time | replace('h', ':')),
+    "endDate": meeting.date | isoEndDateTime(meeting.start_time, meeting.end_time),
     "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
     "eventStatus": "https://schema.org/EventScheduled",
     "location": {

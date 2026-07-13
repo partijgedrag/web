@@ -1,5 +1,6 @@
 <!-- COMPONENTS -->
 {%- from "components/plenary-news-item.njk" import plenaryNewsItem -%}
+{%- from "components/json-ld.njk" import jsonLd -%}
 
 {% set plenaries = meetings.meetings | activePlenaries %}
 {% set plenary = plenaries[0] %}
@@ -8,6 +9,100 @@
 
 {% set attendance = plenary.attendance %}
 {% set attendance2 = plenary2.attendance %}
+
+<!-- STRUCTURED DATA -->
+<!-- These Event entries mirror the meetings shown in the cards below, using
+     the same schema as the dedicated meeting pages, so the meetings that are
+     visible on the homepage are also eligible as Event rich results. -->
+{% if plenary %}
+{% set plenaryEventSchema = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "Plenaire vergadering van de Kamer van Volksvertegenwoordigers op " + (plenary.date | date),
+    "description": plenary | meetingDescription,
+    "startDate": (plenary.date | isoDate) + "T" + (plenary.start_time | replace('h', ':')),
+    "endDate": plenary.date | isoEndDateTime(plenary.start_time, plenary.end_time),
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "location": {
+        "@type": "Place",
+        "name": "Paleis der Natie",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Natieplein 2",
+            "addressLocality": "Brussel",
+            "postalCode": "1008",
+            "addressCountry": "BE"
+        }
+    },
+    "organizer": {
+        "@type": "GovernmentOrganization",
+        "name": "Belgische Kamer van Volksvertegenwoordigers",
+        "url": "https://www.dekamer.be"
+    },
+    "url": "https://partijgedrag.be/sessions/56/meetings/p" + plenary.meeting_id + "/"
+} %}
+{{ jsonLd(plenaryEventSchema) }}
+{% endif %}
+{% if plenary2 %}
+{% set plenary2EventSchema = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "Plenaire vergadering van de Kamer van Volksvertegenwoordigers op " + (plenary2.date | date),
+    "description": plenary2 | meetingDescription,
+    "startDate": (plenary2.date | isoDate) + "T" + (plenary2.start_time | replace('h', ':')),
+    "endDate": plenary2.date | isoEndDateTime(plenary2.start_time, plenary2.end_time),
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "location": {
+        "@type": "Place",
+        "name": "Paleis der Natie",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Natieplein 2",
+            "addressLocality": "Brussel",
+            "postalCode": "1008",
+            "addressCountry": "BE"
+        }
+    },
+    "organizer": {
+        "@type": "GovernmentOrganization",
+        "name": "Belgische Kamer van Volksvertegenwoordigers",
+        "url": "https://www.dekamer.be"
+    },
+    "url": "https://partijgedrag.be/sessions/56/meetings/p" + plenary2.meeting_id + "/"
+} %}
+{{ jsonLd(plenary2EventSchema) }}
+{% endif %}
+{% if commission %}
+{% set commissionEventSchema = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "Commissievergadering " + commission.commission_type + " op " + (commission.date | date),
+    "startDate": (commission.date | isoDate) + "T" + (commission.start_time | replace('h', ':')),
+    "endDate": commission.date | isoEndDateTime(commission.start_time, commission.end_time),
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "location": {
+        "@type": "Place",
+        "name": "Paleis der Natie",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Natieplein 2",
+            "addressLocality": "Brussel",
+            "postalCode": "1008",
+            "addressCountry": "BE"
+        }
+    },
+    "organizer": {
+        "@type": "GovernmentOrganization",
+        "name": "Belgische Kamer van Volksvertegenwoordigers",
+        "url": "https://www.dekamer.be"
+    },
+    "url": "https://partijgedrag.be/sessions/56/meetings/c" + commission.meeting_id + "/"
+} %}
+{{ jsonLd(commissionEventSchema) }}
+{% endif %}
 
 <h2 data-i18n="newsTitle">Nieuws uit De Kamer</h2>
 <p data-i18n="newsSubtitle">Bekijk recente plenaire vergaderingen en commissievergaderingen.</p>

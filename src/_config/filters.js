@@ -721,6 +721,23 @@ export default function (eleventyConfig) {
     return d.toISOString().slice(0, 10);
   });
 
+  // Builds the ISO 8601 end datetime for a meeting/event, rolling over to the
+  // next calendar day when the end time is earlier than the start time (i.e.
+  // the meeting ran past midnight). Without this, structured data for late
+  // plenary sessions would end up with an `endDate` earlier than `startDate`,
+  // which Google's Rich Results validator flags as invalid Event markup.
+  eleventyConfig.addFilter("isoEndDateTime", function (value, startTime, endTime) {
+    if (!value || !startTime || !endTime) return "";
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return "";
+    const start = startTime.replace("h", ":");
+    const end = endTime.replace("h", ":");
+    if (end < start) {
+      d.setUTCDate(d.getUTCDate() + 1);
+    }
+    return `${d.toISOString().slice(0, 10)}T${end}`;
+  });
+
   // Recursively strips null/undefined/empty values from a JSON-LD object so
   // optional schema.org fields can be included unconditionally in templates.
   eleventyConfig.addFilter("compactJsonLd", function compactJsonLd(value) {

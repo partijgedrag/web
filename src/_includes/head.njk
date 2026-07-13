@@ -47,10 +47,12 @@
 -->
 
 <!-- OPEN GRAPH PROTOCOL -->
-<meta property="og:url" content="https://partijgedrag.be{{ page.url }}"">
+<meta property="og:url" content="https://partijgedrag.be{{ page.url }}">
 <meta property="og:title" content="{{ title }}">
 <meta property="og:description" content="{{ description or title }}">
-<meta property="og:type" content="article">
+<meta property="og:type" content="{{ ogType or 'website' }}">
+<meta property="og:locale" content="nl_BE">
+<meta property="og:site_name" content="Partijgedrag">
 {% ogImage "./og-image.og.njk", { title: title } %}
 
 <!-- TWITTER -->
