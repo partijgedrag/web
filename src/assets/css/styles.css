@@ -1649,6 +1649,14 @@ a {
         background-color: #091f47;
     }
 
+    /* RECESS */
+    .calendar .squares li.recess[data-level="0"] {
+        background-color: #d9d9d9;
+    }
+    .calendar .squares li.recess[data-level="0"]:hover {
+        background-color: grey;
+    }
+
     #calendars .legend-row {
         display: flex;
         gap: var(--square-gap);
@@ -1663,6 +1671,10 @@ a {
         border-radius: 2px;
         background-color: #ebedf0;
         display: inline-block;
+    }
+
+    #calendars .legend-row li.recess[data-level="0"] {
+        background-color: grey;
     }
 
     #calendars .legend-row li[data-level="1"] {
@@ -1693,7 +1705,6 @@ a {
         background-color: #0f3d18;
     }
 
-    /* ✅ Commission intensity: Blue shades */
     #calendars .legend-row li.commission[data-level="1"] {
         background-color: #b0dbe4;
     }

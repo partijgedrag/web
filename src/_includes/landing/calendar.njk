@@ -1,7 +1,6 @@
 <section id="calendar">
     <h2 data-i18n="calendarTitle">Kalender</h2>
     <p data-i18n="calendarSubtitle">Een overzicht van wanneer de leden van de kamer samen zijn gekomen in 2026 tijdens plenaire -of commissievergaderingen.</p>
-
     <div>
         <div id="calendars">
             <div class="calendar">
@@ -28,17 +27,26 @@
                     <li>za</li>
                     <li>zo</li>
                 </ul>
-
                 <ul class="squares">
                     {% for i in range(0, 3) %}
                         <li class="empty"></li>
                     {% endfor %}
-
                     {% for day in range(0, 365) %}
                     {% set cGroup = meetings.commissionsByDay[day] %}
                     {% set mGroup = meetings.meetingsByDay[day] %}
-
-                        {% if cGroup %}
+                    {% set isRecess =
+                        (day >= 46 and day <= 50) or
+                        (day >= 96 and day <= 99) or
+                        (day >= 123 and day <= 127) or
+                        (day >= 199 and day <= 251) or
+                        (day >= 298 and day <= 304) or
+                        (day >= 354 and day <= 364)
+                    %}
+                        {% if isRecess %}
+                        <li class="recess"
+                            data-level="0"
+                            title="Reces"></li>
+                        {% elif cGroup %}
                         <li class="commission"
                             data-level="{{ cGroup | length }}"
                             title='{{ cGroup | length }} commissievergaderingen op {{ cGroup[0].date | date("YYYY-MM-DD") }}'></li>
@@ -52,7 +60,6 @@
                     {% endfor %}
                 </ul>
             </div>
-
             <!-- LEGEND -->
             <div class="legend-row flex-row align-items:center"margin-top: 2rem;">
                 <span style="margin-right: 0.4rem;" data-i18n="less">minder</span>
@@ -74,9 +81,18 @@
                 </ul>
                 <span style="margin-left: 0.4rem"><span data-i18n="more">meer</span> <span data-i18n="commissionMeetings">commissievergaderingen</span></span>
             </div>
+            <div class="legend-row flex-row align-items:center">
+                <ul>
+                    <li class="recess" data-level="0"></li>
+                </ul>
+                <span style="margin-left: 0.4rem" data-i18n="summerRecess">recessen/vakanties</span>
+            </div>
         </div>
-
+        <h3>Wat gebeurt er tijdens de plenaire vergaderingen?</h3>
         <p data-i18n="calendarPlenaryExplanation">calendarPlenaryExplanation</p>
+        <h3>Wat gebeurt er tijdens de commissievergaderingen?</h3>
         <p data-i18n="calendarCommissionExplanation">calendarCommissionExplanation</p>
+         <h3>Werken de parlementsleden het hele jaar door?</h3>
+         <p>Ook parlementsleden nemen vakantie. Tijdens de zomer is er een zogenaamd `zomerreces`. Dit start in 2026 op 19 juli en eindigt op 9 september. Ook is er een herfstreces, kerstreces, krokusreces, paasreces en lentereces.</p>
     </div>
 </section>
