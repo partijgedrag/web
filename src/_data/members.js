@@ -183,15 +183,15 @@ export default async function () {
       const dossierById = {};
       const dossierMap = new Map();
       dossiersRows.forEach((d) => {
-        const authors = (d[3] || "").split(",").map((a) => toKey(a)).filter(
+        const authors = (d[4] || "").split(",").map((a) => toKey(a)).filter(
           Boolean,
         );
-        dossierMap.set(d[1], { sessionId: d[0], title: d[2], authors });
+        dossierMap.set(d[1], { sessionId: d[0], title: d[3], authors });
         dossierById[d[1]] = {
           authors,
-          document_type: d[7],
-          status: d[8],
-          vote_date: convertDate(d[6]),
+          document_type: d[8],
+          status: d[9],
+          vote_date: convertDate(d[7]),
         };
       });
 
