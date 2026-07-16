@@ -29,7 +29,17 @@ i18nSubheader: "dossiersSubheader"
                 <div class="flex-row justify-content:space-between align-items:start">
                     <div class="category capitalize-first" style="max-width:50%;" data-i18n="{{ dossier.document_type | lowercase }}"></div>
                     <div class="flex-col align-items:end" style="padding: 0.4rem; padding-bottom: 0;">
-                      <p class="bold margin:0">{{ dossier.submission_date | date }}</p>
+                        {% if dossier.vote_date %}
+                        {% if dossier.status == "Aangenomen" %}
+                        <p class="bold margin:0">Aangenomen op {{ dossier.vote_date | date }}</p>
+                        {% elseif dossier.status == "Verworpen" %}
+                        <p class="bold margin:0">Verworpen op {{ dossier.vote_date | date }}</p>
+                        {% else %}
+                        <p class="bold margin:0">{{ dossier.vote_date | date }}</p>
+                        {% endif %}
+                        {% else %}
+                        <p class="bold margin:0">Ingediend op {{ dossier.submission_date | date }}</p>
+                        {% endif %}
                     </div>
                 </div>
                 <!-- BODY -->
