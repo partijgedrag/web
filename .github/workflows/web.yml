@@ -24,7 +24,7 @@ jobs:
       - name: 📥 Checkout data repo
         uses: actions/checkout@v6
         with:
-          repository: partijgedrag/data
+          repository: partijgedragbe/data
           path: data
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
 
