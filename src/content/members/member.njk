@@ -194,9 +194,9 @@ eleventyComputed:
     {% if member.questions.length == 0 %}
         <p>{{ member.first_name }} {{ member.last_name }} heeft nog geen vragen gesteld in de plenaire vergaderingen.</p>
     {% else %}
-        <p>Vragen gesteld door {{ member.first_name }} {{ member.last_name }} in de plenaire vergaderingen.</p>
+        <p>De 10 meest recente vragen gesteld door {{ member.first_name }} {{ member.last_name }} in de plenaire vergaderingen.</p>
         <ul class="flex-col gap padding:0">
-            {% for question in member.questions | asQuestioner %}
+            {% for question in member.questions | asQuestioner | sortDate('date', 'desc') | limit(10) %}
             {% set topicCounts = [question] | countTopics(topics) %}
             {% set topic = topicCounts[0][0] %}
             <li class="question-container">
