@@ -16,6 +16,11 @@ layout: layouts/base.njk
                 {{ content | toc | safe }}
             </nav>
 
+            <section class="card padded flex-col gap">
+                <p>Bij verschillen tussen deze website en de officiële publicaties van de Kamer van Volksvertegenwoordigers geldt steeds de officiële publicatie.</p>
+                <p>Wij doen ons best om de gegevens op deze website zo correct en volledig mogelijk weer te geven.</p>
+            </section>
+
             {% if meeting.allVotes.length > 0 %}
                 <section id="attendance-summary" class="card padded flex-col gap">
                     <h2 class="capitalize-first" data-i18n="attendance">Aanwezigheid</h2>

@@ -210,8 +210,10 @@ eleventyComputed:
     <h2 id="voorstellen" class="capitalize-first" data-18n="propositions">Voorstellen</h2>
     {% if member.propositions.length == 0 %}
         <p>{{ member.first_name }} {{ member.last_name }} heeft nog geen voorstellen ingediend als hoofdauteur.</p>
+        <p>Slechts een deel van alle voorstellen wordt getoond. Lopende voorstellen die nog niet zijn gestemd geweest worden niet weergegeven.</p>
     {% else %}
         <p>Voorstellen ingediend door {{ member.first_name }} {{ member.last_name }} als hoofdauteur.</p>
+        <p>Slechts een deel van alle voorstellen wordt getoond. Lopende voorstellen die nog niet zijn gestemd geweest worden niet weergegeven.</p>
         <ul class="flex-col gap padding:0">
             {% for proposition in member.propositions | sortDate('date', 'desc') | limit(10) %}
             <li class="proposition-container">
